@@ -1,0 +1,12 @@
+#ifndef GAME_ENUM_H
+#define GAME_ENUM_H
+
+enum eTextureList {
+    BACKGROUND_TEXTURE = 0,
+    TREE_FORM_1_TEXTURE = 1,
+    TREE_FROM_2_TEXTURE = 2,
+    TREE_FORM_3_TEXTURE = 3,
+    APPLE_TEXTURE = 4,
+    TOTAL_TEXTURE = 5
+};
+#endif /* GAME_ENUM_H*/
