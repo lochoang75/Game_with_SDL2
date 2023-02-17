@@ -1,0 +1,6 @@
+#ifndef GAME_CONSTANT_H
+#define GAME_CONSTANT_H
+    #define SCREEN_WIDTH (640)
+    #define SCREEEN_HEIGHT (480)
+    #define GROUND_POSITION (SCREEEN_HEIGHT - 125)
+#endif /* GAME CONSTANT */

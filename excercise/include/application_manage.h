@@ -2,8 +2,6 @@
 #define APPLICATION_MANAGE_H
 #include <SDL2/SDL.h>
 #include <iostream>
-#define SCREEN_WIDTH 640 
-#define SCREEN_HEIGHT 480 
 
 class ApplicationManageBase
 {
