@@ -8,6 +8,8 @@
 #include "fruit.h"
 #include "tree.h"
 
+Game *Game::mInstance = NULL;
+
 
 Game *Game::get_instance()
 {
@@ -46,6 +48,11 @@ void Game:: render()
 {
     SDL_RenderClear(mRenderer);
     SDL_RenderPresent(mRenderer);
+}
+
+SDL_Renderer* Game::get_renderer()
+{
+    return mRenderer;
 }
 
 

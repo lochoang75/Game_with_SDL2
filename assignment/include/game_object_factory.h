@@ -1,8 +1,8 @@
 #ifndef GAME_OBJECT_FACTORY
 #define GAME_OBJECT_FACTORY
 #include <iostream>
-#include <spdlog/spdlog.h>
 
+#include "log_wrapper.h"
 #include "game_enum.h"
 #include "game_object.h"
 
@@ -11,7 +11,7 @@ class BaseCreator
     public:
         BaseCreator() {};
         virtual ~BaseCreator(){};
-        virtual GameObject *create_object() = 0;
+        virtual GameObject *create_object() const = 0;
 };
 
 class GameObjectFactory

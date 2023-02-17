@@ -16,10 +16,10 @@ class FruitCreator: public BaseCreator
     public:
         FruitCreator(): BaseCreator(){};
         ~FruitCreator(){};
-        GameObject* create_object() override;
+        GameObject* create_object() const override;
 };
 
-GameObject* FruitCreator:: create_object()
+GameObject* FruitCreator:: create_object() const
 {
     FruitObject *new_object = new FruitObject();
     return (GameObject*) new_object;

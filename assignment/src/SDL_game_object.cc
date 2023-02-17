@@ -17,7 +17,7 @@ void SDLGameObject::draw()
     GameTexture *texture = TextureManager::get_instance()->get_texture(id);
     if (texture == NULL)
     {
-        spdlog::error("Error occur when get texture for id %d", id);
+        LogError("Error occur when get texture for id %d", id);
     }
     else
     {

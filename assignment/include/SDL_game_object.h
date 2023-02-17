@@ -12,7 +12,7 @@ class SDLGameObject: GameObject
     public:
         SDLGameObject(): GameObject(), mPosition(0,0), mVelocity(0,0), mAcceleration(0,0){};
         SDLGameObject(enum eGameObjectType type): GameObject(type), mPosition(0,0), mVelocity(0,0), mAcceleration(0,0) {};
-        virtual ~SDLGameObject();
+        virtual ~SDLGameObject(){clean_up();};
         virtual void draw() override;
         virtual void update() override;
         virtual void clean_up() override;

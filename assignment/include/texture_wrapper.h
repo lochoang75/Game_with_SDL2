@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdbool.h>
 
-#include <spdlog/spdlog.h>
+#include "log_wrapper.h"
 
 class GameTexture
 {

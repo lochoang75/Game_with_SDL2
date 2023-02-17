@@ -2,8 +2,8 @@
 #define TEXTURE_MANAGER_H
 #include <SDL2/SDL.h>
 #include <iostream>
-#include <spdlog/spdlog.h>
 
+#include "log_wrapper.h"
 #include "texture_wrapper.h"
 #include "game_enum.h"
 

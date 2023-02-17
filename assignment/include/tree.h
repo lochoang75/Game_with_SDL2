@@ -17,10 +17,10 @@ class TreeCreator: public BaseCreator
     public:
         TreeCreator(): BaseCreator(){};
         ~TreeCreator(){};
-        GameObject* create_object() override;
+        GameObject* create_object() const override;
 };
 
-GameObject* TreeCreator:: create_object()
+GameObject* TreeCreator:: create_object() const
 {
     TreeObject *new_object = new TreeObject();
     return (GameObject*)new_object;

@@ -2,12 +2,12 @@
 #define GAME_ENUM_H
 
 enum eTextureTypeList {
-    BACKGROUND_TEXTURE = 0,
-    TREE_FORM_1_TEXTURE = 1,
-    TREE_FROM_2_TEXTURE = 2,
-    TREE_FORM_3_TEXTURE = 3,
-    APPLE_TEXTURE = 4,
-    TOTAL_TEXTURE = 5
+    eTEXTURE_BACKGROUND = 0,
+    eTEXTURE_TREE_FORM_1 = 1,
+    eTEXTURE_TREE_FORM_2 = 2,
+    eTEXTURE_TREE_FORM_3 = 3,
+    eTEXTURE_APPLE = 4,
+    eTEXTURE_TOTAL = 5
 };
 
 enum eGameObjectType {

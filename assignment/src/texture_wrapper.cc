@@ -43,14 +43,14 @@ bool GameTexture:: load_from_file(std::string path, int id, SDL_Renderer *pRende
     SDL_Surface *loaded_surface = IMG_Load(path.c_str());
     if (loaded_surface == NULL)
     {
-        spdlog::error("SDL image error on load image %s, IMG error: %s\n", path.c_str(), IMG_GetError());
+        LogError("SDL image error on load image %s, IMG error: %s", path.c_str(), IMG_GetError());
     }
     else
     {        
         mTexture = SDL_CreateTextureFromSurface(pRenderer, loaded_surface);
         if (mTexture == NULL)
         {
-            spdlog::error("SDL texture create failed, SDL error %s\n", SDL_GetError());
+            LogError("SDL texture create failed, SDL error %s", SDL_GetError());
         }
 
         SDL_FreeSurface(loaded_surface);

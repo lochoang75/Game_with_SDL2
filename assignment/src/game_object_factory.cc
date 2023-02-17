@@ -1,5 +1,7 @@
 #include "game_object_factory.h"
 
+GameObjectFactory * GameObjectFactory::mInstance = NULL;
+
 GameObjectFactory:: GameObjectFactory()
 {
     for (int i = 0; i < TOTAL_OBJECT; i++)
@@ -12,17 +14,18 @@ void GameObjectFactory:: creator_register(enum eGameObjectType type, BaseCreator
 {
     if (type >= TOTAL_OBJECT)
     {
-        spdlog::error("Failed to set object to type %d, index out of range", type);
+        LogError("Failed to set object to type %d, index out of range", type);
         return;
     }
 
     if (creator_list[type] != NULL)
     {
+        LogError("You are set new creator for type %d it may cause memory leak here", type);
         creator_list[type] = pCreator;
     }
     else
     {
-        spdlog::warn("You are set new creator for type %d it may cause memory leak here", type);
+        LogDebug("Creator <%p> has registered to create object type %d", pCreator, type);
         creator_list[type] = pCreator;
     }
 }
@@ -32,7 +35,7 @@ GameObject* GameObjectFactory::create_object(enum eGameObjectType type) const
     GameObject *created_object = NULL;
     if (type >= TOTAL_OBJECT)
     {
-        spdlog::error("Failed to create object with type %d, it's not supported",type);
+        LogWarning("Failed to create object with type %d, it's not supported", type);
         return NULL;
     }
     else

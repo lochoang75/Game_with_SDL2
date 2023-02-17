@@ -10,7 +10,7 @@ class Game
     public:
         static Game* get_instance();
         SDL_Renderer* get_renderer();
-        bool init( const char *title, int xpos, int ypos, int flags);
+        bool init(const char *title, int xpos, int ypos, int flags);
         void close();
 
         bool load_media();
