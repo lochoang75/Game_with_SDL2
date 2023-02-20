@@ -10,17 +10,14 @@ TextureManager::TextureManager()
     }
 }
 
-TextureManager* TextureManager:: get_instance()
+TextureManager* TextureManager:: Instance()
 {
     if (mInstance == NULL)
     {
         LogInfo("Instance a texture manager");
         mInstance = new TextureManager();
     }
-    else
-    {
-        LogInfo("Reuse texture manager");
-    }
+
     return mInstance;
 }
 

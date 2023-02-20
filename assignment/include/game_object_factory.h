@@ -32,7 +32,7 @@ class GameObjectFactory
         GameObjectFactory(); 
         ~GameObjectFactory(){};
         static GameObjectFactory *mInstance;
-        BaseCreator* creator_list[TOTAL_OBJECT];
+        BaseCreator* creator_list[eTOTAL_OBJECT];
 };
 
 

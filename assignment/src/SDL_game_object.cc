@@ -14,7 +14,7 @@ void SDLGameObject::draw()
 {
     SDL_Renderer *p_renderer = Game::get_instance()->get_renderer();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
-    GameTexture *texture = TextureManager::get_instance()->get_texture(id);
+    GameTexture *texture = TextureManager::Instance()->get_texture(id);
     if (texture == NULL)
     {
         LogError("Error occur when get texture for id %d", id);

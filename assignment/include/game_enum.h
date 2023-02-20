@@ -7,13 +7,23 @@ enum eTextureTypeList {
     eTEXTURE_TREE_FORM_2 = 2,
     eTEXTURE_TREE_FORM_3 = 3,
     eTEXTURE_APPLE = 4,
-    eTEXTURE_TOTAL = 5
+    eTEXTURE_BASKET = 5,
+    eTEXTURE_TOTAL = 6
 };
 
 enum eGameObjectType {
-    FRUIT_OBJECT = 0,
-    TREE_OBJECT = 1,
-    BASKET_OBJECT = 2,
-    TOTAL_OBJECT = 3
+    eFRUIT_OBJECT = 0,
+    eTREE_OBJECT = 1,
+    eBASKET_OBJECT = 2,
+    eBACKGROUND_OBJECT = 3,
+    eTOTAL_OBJECT = 4
 };
+
+enum eGameEventEnum {
+    eGAME_EVENT_UNSET = 0,
+    eGAME_EVENT_MOUSE_DONW,
+    eGAME_EVENT_MOUSE_RELEASE,
+    eGAME_EVENT_MOUSE_MOVE,
+};
+
 #endif /* GAME_ENUM_H*/

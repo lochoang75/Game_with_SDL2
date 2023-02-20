@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <iostream>
+#include "game_constant.h"
 #include "game_object.h"
 
 class Game
@@ -10,17 +11,21 @@ class Game
     public:
         static Game* get_instance();
         SDL_Renderer* get_renderer();
-        bool init(const char *title, int xpos, int ypos, int flags);
-        void close();
+        ErrorCode_t init(const char *title, int xpos, int ypos, int flags);
 
-        bool load_media();
+        ErrorCode_t load_media();
+        ErrorCode_t create_object();
         void update();
         void clean_up();
         void render();
+        void handle_event(enum eGameEventEnum);
+        void close();
     
     private:
         Game(){};
         ~Game(){};
+        ErrorCode_t create_static_object();
+        ErrorCode_t create_dynamic_object();
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
         static Game *mInstance;

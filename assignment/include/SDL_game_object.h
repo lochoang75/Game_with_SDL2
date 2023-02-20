@@ -7,7 +7,7 @@
 #include "texture_manager.h"
 #include "game_manage.h"
 
-class SDLGameObject: GameObject
+class SDLGameObject: public GameObject
 {
     public:
         SDLGameObject(): GameObject(), mPosition(0,0), mVelocity(0,0), mAcceleration(0,0){};

@@ -8,7 +8,7 @@
 class TreeObject: public SDLGameObject
 {
     public:
-        TreeObject(): SDLGameObject(TREE_OBJECT){};
+        TreeObject(): SDLGameObject(eTREE_OBJECT){};
         ~TreeObject(){};
 };
 
