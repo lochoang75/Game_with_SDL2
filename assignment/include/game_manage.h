@@ -14,6 +14,7 @@ class Game
         ErrorCode_t init(const char *title, int xpos, int ypos, int flags);
 
         ErrorCode_t load_media();
+        ErrorCode_t load_animation();
         ErrorCode_t create_object();
         void update();
         void clean_up();

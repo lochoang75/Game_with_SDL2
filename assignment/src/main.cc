@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 {
     Game::get_instance()->init("Fruit Picking", 0, 0, SDL_WINDOW_SHOWN);
     Game::get_instance()->load_media();
+    Game::get_instance()->load_animation();
     Game::get_instance()->create_object();
     SDL_Event e;
     bool quit = false;

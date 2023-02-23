@@ -8,7 +8,9 @@ enum eTextureTypeList {
     eTEXTURE_TREE_FORM_3 = 3,
     eTEXTURE_APPLE = 4,
     eTEXTURE_BASKET = 5,
-    eTEXTURE_TOTAL = 6
+    eTEXTURE_BIRDS = 6,
+    eTEXTURE_KIDS = 7,
+    eTEXTURE_TOTAL
 };
 
 enum eGameObjectType {
@@ -16,7 +18,9 @@ enum eGameObjectType {
     eTREE_OBJECT = 1,
     eBASKET_OBJECT = 2,
     eBACKGROUND_OBJECT = 3,
-    eTOTAL_OBJECT = 4
+    eBIRD_OBJECT = 4,
+    eKID_OBJECT = 5,
+    eTOTAL_OBJECT
 };
 
 enum eGameEventEnum {

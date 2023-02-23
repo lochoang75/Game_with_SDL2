@@ -15,6 +15,7 @@ class GameTexture
         bool load_from_file(std:: string path, int id, SDL_Renderer *renderer);
         void free();
         void draw(int x, int y, int width, int height, SDL_Renderer *pRenderer, SDL_RendererFlip flip);
+        void draw(int x, int y, int src_x, int src_y, int width, int height, SDL_Renderer*, SDL_RendererFlip);
         int get_width();
         int get_height();
         int get_texture_id() const {return mId;};

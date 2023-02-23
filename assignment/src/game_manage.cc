@@ -7,8 +7,11 @@
 #include "game_object_factory.h"
 #include "fruit.h"
 #include "tree.h"
+#include "bird.h"
+#include "kids.h"
 #include "background.h"
 #include "basket.h"
+#include "animation_manage.h"
 
 Game *Game::mInstance = NULL;
 
@@ -50,6 +53,8 @@ ErrorCode_t Game::init( const char *title, int xpos, int ypos, int flags)
     GameObjectFactory::Instance()->creator_register(eTREE_OBJECT, new TreeCreator());
     GameObjectFactory::Instance()->creator_register(eBACKGROUND_OBJECT, new BackgroundCreator());
     GameObjectFactory::Instance()->creator_register(eBASKET_OBJECT, new BasketCreator());
+    GameObjectFactory::Instance()->creator_register(eBIRD_OBJECT, new BirdCreator());
+    GameObjectFactory::Instance()->creator_register(eKID_OBJECT, new KidCreator());
     return kSUCCESS;
 }
 
@@ -61,6 +66,15 @@ ErrorCode_t Game::load_media()
     TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_3, "resources/tree_3.png", mRenderer);
     TextureManager::Instance()->load_texture(eTEXTURE_BACKGROUND, "resources/background.png", mRenderer);
     TextureManager::Instance()->load_texture(eTEXTURE_BASKET, "resources/basket.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_BIRDS, "resources/birds.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_KIDS, "resources/kids.png", mRenderer);
+    return kSUCCESS;
+}
+
+ErrorCode_t Game::load_animation()
+{
+    AnimationManage::Instance()->animation_register(eBIRD_OBJECT, new BirdAnimationPool());
+    AnimationManage::Instance()->animation_register(eKID_OBJECT, new KidAnimationPool());
     return kSUCCESS;
 }
 
@@ -74,9 +88,11 @@ ErrorCode_t Game::create_static_object()
     }
     else
     {
-        LoaderParams params = LoaderParams(0, 0, 640, 480, eTEXTURE_BACKGROUND);
+        LogDebug("Create background sucess ");
+        LoaderParams params = LoaderParams(0, 0, SCREEN_WIDTH, SCREEEN_HEIGHT, eTEXTURE_BACKGROUND);
         background->load(&params);
         mGameObjectVector.push_back(background);
+        LogDebug("Create background sucess ");
     }
 
     GameObject *tree_object = GameObjectFactory::Instance()->create_object(eTREE_OBJECT);
@@ -90,6 +106,7 @@ ErrorCode_t Game::create_static_object()
         LoaderParams params = LoaderParams(10, GROUND_POSITION - 300, 300, 300, eTEXTURE_TREE_FORM_1);
         tree_object->load(&params);
         mGameObjectVector.push_back(tree_object);
+        LogDebug("Create tree success");
     }
     return kSUCCESS;
 }
@@ -130,22 +147,53 @@ ErrorCode_t Game::create_dynamic_object()
             LoaderParams params = LoaderParams(new_fruit_x_pos, new_fruit_y_pos, 32, 32, eTEXTURE_APPLE);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
+            LogDebug("Create fruit %d success", i);
         }
     }
 
-    GameObject *basket_object = GameObjectFactory::Instance()->create_object(eBASKET_OBJECT);
-    if (basket_object == NULL)
+    // GameObject *basket_object = GameObjectFactory::Instance()->create_object(eBASKET_OBJECT);
+    // if (basket_object == NULL)
+    // {
+    //     LogError("Unable to allocate memory for basket object");
+    //     return kNO_MEM;
+    // }
+    // else
+    // {
+    //     LoaderParams params = LoaderParams(400, GROUND_POSITION - 75, 80, 75, eTEXTURE_BASKET);
+    //     basket_object->load(&params);
+    //     mGameObjectVector.push_back(basket_object);
+    //     LogDebug("Create basket success");
+    // }
+
+    for (int i = 0; i < 3; i++)
     {
-        LogError("Unable to allocate memory for basket object");
-        return kNO_MEM;
+        GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
+        if (bird_object == NULL)
+        {
+            LogError("Unable to allocate memory for bird object");
+        } 
+        else
+        {
+            LoaderParams params = LoaderParams(550 + i * 30, 100 + i * 30, 0, 0, eTEXTURE_BIRDS);
+            bird_object->load(&params);
+            mGameObjectVector.push_back(bird_object);
+            LogDebug("Create bird success");
+        }
     }
+
+    GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
+    if (kid_object == NULL)
+    {
+        LogError("Unable to allocate memory for kid object");
+    } 
     else
     {
-        LoaderParams params = LoaderParams(400, GROUND_POSITION - 75, 80, 75, eTEXTURE_BASKET);
-        basket_object->load(&params);
-        mGameObjectVector.push_back(basket_object);
+        LoaderParams params = LoaderParams(550, GROUND_POSITION - 70, 0, 0, eTEXTURE_KIDS);
+        kid_object->load(&params);
+        mGameObjectVector.push_back(kid_object);
+        LogDebug("Create kid success");
     }
-    
+   
     return kSUCCESS;
 }
 
@@ -156,7 +204,6 @@ ErrorCode_t Game::create_object()
     {
         error = create_dynamic_object();
     }
-
     return error;
 }
 
