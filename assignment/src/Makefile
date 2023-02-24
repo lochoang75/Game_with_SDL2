@@ -295,30 +295,6 @@ game_object_factory.cc.s:
 	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.s
 .PHONY : game_object_factory.cc.s
 
-loader_params.o: loader_params.cc.o
-.PHONY : loader_params.o
-
-# target to build an object file
-loader_params.cc.o:
-	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.o
-.PHONY : loader_params.cc.o
-
-loader_params.i: loader_params.cc.i
-.PHONY : loader_params.i
-
-# target to preprocess a source file
-loader_params.cc.i:
-	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.i
-.PHONY : loader_params.cc.i
-
-loader_params.s: loader_params.cc.s
-.PHONY : loader_params.s
-
-# target to generate assembly for a file
-loader_params.cc.s:
-	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.s
-.PHONY : loader_params.cc.s
-
 main.o: main.cc.o
 .PHONY : main.o
 
@@ -419,9 +395,6 @@ help:
 	@echo "... game_object_factory.o"
 	@echo "... game_object_factory.i"
 	@echo "... game_object_factory.s"
-	@echo "... loader_params.o"
-	@echo "... loader_params.i"
-	@echo "... loader_params.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

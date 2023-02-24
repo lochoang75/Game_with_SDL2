@@ -37,6 +37,31 @@ void SDLGameObject:: clean_up()
     world_instance->DestroyBody(mBody);
 }
 
+void SDLGameObject::physic_paramter_load(enum ePhysicalShape shape, float density, float friction, float restitution)
+{
+    if (shape == ePOLYGON_SHAPE)
+    {
+        b2PolygonShape object_shape;
+        float w_plat = mWidth / MET2PIX;
+        float h_plat = mHeight / MET2PIX;
+        object_shape.SetAsBox()
+    }
+    switch (shape)
+    {
+        case ePOLYGON_SHAPE:
+            break;
+        case eCHAIN_SHAPE:
+            break;
+        case eEDGE_SHAPE:
+            break;
+        case eCIRCEL_SHAPE:
+            break;
+        default:
+            break;
+    }
+}
+
+
 void SDLGameObject::update()
 {
 }
