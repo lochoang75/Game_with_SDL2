@@ -101,14 +101,10 @@ BirdObject::BirdObject(): SDLGameObject(eBIRD_OBJECT)
 
 void BirdObject::update()
 {
-    mUpdateCounter++;
-    if (mUpdateCounter == 7)
-    {
-        mAcceleration.setY(-1);
-        frame = animation->get_frame(mState, mFrameIdx);
-        SDLGameObject::update();
-        mUpdateCounter = 0;
-    }
+    mAcceleration.setY(-1);
+    frame = animation->get_frame(mState, mFrameIdx);
+    SDLGameObject::update();
+    mUpdateCounter = 0;
 }
 
 void BirdObject::draw()
