@@ -17,13 +17,11 @@ enum ePhysicalShape {
 class GameObjectPhysicsInterface
 {
     public:
-        virtual void physic_paramter_load(enum ePhysicalShape shape, float *density, float friction, float restitution) = 0;
-        virtual void set_velocity(float x_vel, float y_vel);
+        virtual void physic_paramter_load(enum ePhysicalShape shape, float density, float friction, float restitution) = 0;
+        virtual void set_velocity(float x_vel, float y_vel) = 0;
 
     protected:
-        virtual void create_body() = 0;
-        virtual int get_x() const = 0;
-        virtual int get_y() const = 0;
-        virtual float get_angle() const = 0;
+        virtual void get_current_position(int &x, int &y) const = 0;
+        virtual double get_angle() const = 0;
 };
 #endif /*GAME_OBJECT_PHYS_H*/

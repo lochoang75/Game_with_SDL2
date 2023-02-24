@@ -25,7 +25,7 @@ class Game
         void close();
     
     private:
-        Game(){};
+        Game();
         ~Game(){};
         ErrorCode_t create_static_object();
         ErrorCode_t create_dynamic_object();

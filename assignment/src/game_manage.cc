@@ -50,17 +50,18 @@ ErrorCode_t Game::init(const char *title)
 void Game::physics_init()
 {
     b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0.0f, -10.0f);
+    groundBodyDef.type = b2_staticBody;
+    groundBodyDef.position.Set(10.0f, 10.0f);
+    groundBodyDef.angle = 0;
     mGroundBody = mWorld->CreateBody(&groundBodyDef);
     b2PolygonShape groundBox;
-    groundBox.SetAsBox(50.0f, 10.0f);
     mGroundBody->CreateFixture(&groundBox, 0.0f);
 }
 
 ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
-    mWindow = SDL_CreateWindow(title, xpos, ypos, SCREEN_WIDTH, SCREEEN_HEIGHT, flags);
+    mWindow = SDL_CreateWindow(title, xpos, ypos, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
     if (mWindow == NULL)
     {
         LogError("Unable to create windows, SDL Error: %s", SDL_GetError());
@@ -124,8 +125,7 @@ ErrorCode_t Game::create_static_object()
     }
     else
     {
-        LogDebug("Create background sucess ");
-        LoaderParams params = LoaderParams(0, 0, SCREEN_WIDTH, SCREEEN_HEIGHT, eTEXTURE_BACKGROUND);
+        LoaderParams params = LoaderParams(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, eTEXTURE_BACKGROUND);
         background->load(&params);
         mGameObjectVector.push_back(background);
         LogDebug("Create background sucess ");
@@ -139,7 +139,7 @@ ErrorCode_t Game::create_static_object()
     }
     else
     {
-        LoaderParams params = LoaderParams(10, GROUND_POSITION - 300, 300, 300, eTEXTURE_TREE_FORM_1);
+        LoaderParams params = LoaderParams(0, 0, 300, 300, eTEXTURE_TREE_FORM_1);
         tree_object->load(&params);
         mGameObjectVector.push_back(tree_object);
         LogDebug("Create tree success");
@@ -157,7 +157,7 @@ ErrorCode_t Game::create_dynamic_object()
     int x_fruit_offset = 0;
     int y_fruit_offset = 0;
     srand(time(NULL));
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         GameObject *fruit_object = GameObjectFactory::Instance()->create_object(eFRUIT_OBJECT);
         if (fruit_object == NULL)
@@ -180,7 +180,8 @@ ErrorCode_t Game::create_dynamic_object()
             
             int new_fruit_x_pos = tree_base_position_x + x_fruit_offset;
             int new_fruit_y_pos = tree_base_position_y + y_fruit_offset;
-            LoaderParams params = LoaderParams(new_fruit_x_pos, new_fruit_y_pos, 32, 32, eTEXTURE_APPLE);
+            LoaderParams params = LoaderParams(0, 1, 32, 32, eTEXTURE_APPLE);
+            params.add_physical_object_type(ePHYSIC_DYNAMIC);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
             LogDebug("Create fruit %d success", i);
@@ -201,34 +202,36 @@ ErrorCode_t Game::create_dynamic_object()
     //     LogDebug("Create basket success");
     // }
 
-    for (int i = 0; i < 3; i++)
-    {
-        GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
-        if (bird_object == NULL)
-        {
-            LogError("Unable to allocate memory for bird object");
-        } 
-        else
-        {
-            LoaderParams params = LoaderParams(550 + i * 30, 100 + i * 30, 0, 0, eTEXTURE_BIRDS);
-            bird_object->load(&params);
-            mGameObjectVector.push_back(bird_object);
-            LogDebug("Create bird success");
-        }
-    }
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
+    //     if (bird_object == NULL)
+    //     {
+    //         LogError("Unable to allocate memory for bird object");
+    //     } 
+    //     else
+    //     {
+    //         LoaderParams params = LoaderParams(0, 0, 32, 32, eTEXTURE_BIRDS);
+    //         params.add_physical_object_type(ePHYSIC_DYNAMIC);
+    //         bird_object->load(&params);
+    //         mGameObjectVector.push_back(bird_object);
+    //         LogDebug("Create bird success");
+    //     }
+    // }
 
-    GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
-    if (kid_object == NULL)
-    {
-        LogError("Unable to allocate memory for kid object");
-    } 
-    else
-    {
-        LoaderParams params = LoaderParams(550, GROUND_POSITION - 70, 0, 0, eTEXTURE_KIDS);
-        kid_object->load(&params);
-        mGameObjectVector.push_back(kid_object);
-        LogDebug("Create kid success");
-    }
+    // GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
+    // if (kid_object == NULL)
+    // {
+    //     LogError("Unable to allocate memory for kid object");
+    // } 
+    // else
+    // {
+    //     LoaderParams params = LoaderParams(0, 0, 32, 32, eTEXTURE_KIDS);
+    //     params.add_physical_object_type(ePHYSIC_DYNAMIC);
+    //     kid_object->load(&params);
+    //     mGameObjectVector.push_back(kid_object);
+    //     LogDebug("Create kid success");
+    // }
    
     return kSUCCESS;
 }
@@ -316,6 +319,11 @@ void Game:: render()
 SDL_Renderer* Game::get_renderer()
 {
     return mRenderer;
+}
+
+b2World* Game::get_world()
+{
+    return mWorld;
 }
 
 

@@ -18,22 +18,20 @@ class SDLGameObject: public GameObject, public GameObjectPhysicsInterface
         virtual void update() override;
         virtual void clean_up() override;
         virtual void load(const LoaderParams *pParams) override;
-        void physic_paramter_load(enum ePhysicalShape shape, float density, float friction, float restitution) override;
-
+        void physic_paramter_load(enum ePhysicalShape shape, float, float, float) override;
+        void set_velocity(float x_vel, float y_vel) override;
 
         int get_width() const {return mWidth;};
         int get_height() const {return mHeight;};
         enum eTextureTypeList get_id() const {return id;};
     protected:
-        void create_body() override;
-        int get_x() const override;
-        int get_y() const override;
-        float get_angle() const override;
+        void get_current_position(int &x, int &y) const override;
+        double get_angle() const override;
 
-        int mWidth;
-        int mHeight;
         int x;
         int y;
+        int mWidth;
+        int mHeight;
         b2Body *mBody;
         enum eTextureTypeList id;
 };

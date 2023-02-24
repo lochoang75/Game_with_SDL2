@@ -112,7 +112,15 @@ void BirdObject::update()
 
 void BirdObject::draw()
 {
-    SDL_Renderer *p_renderer = Game::get_instance()->get_renderer();
+    double angle = SDLGameObject::get_angle();
+    int pos_x, pos_y;
+    SDLGameObject::get_current_position(pos_x, pos_y);
+    SDL_Rect src_rect;
+    src_rect.x = frame->get_x();
+    src_rect.y = frame->get_y();
+    src_rect.w = frame->get_width();
+    src_rect.h = frame->get_height();
+    SDL_Renderer *p_renderer = Game::Instance()->get_renderer();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     GameTexture *texture = TextureManager::Instance()->get_texture(id);
     if (texture == NULL)
@@ -121,8 +129,7 @@ void BirdObject::draw()
     }
     else
     {
-        texture->draw(x, y, frame->get_x(), frame->get_y(), 
-                        frame->get_width(), frame->get_height(), p_renderer, flip);
+        texture->draw(pos_x, pos_y, &src_rect, angle, p_renderer, flip);
     }
     return;
 }
