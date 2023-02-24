@@ -23,11 +23,6 @@ enum eGameObjectType {
     eTOTAL_OBJECT
 };
 
-enum eGameObjectPhysic {
-    ePHYSIC_STATIC = 0,
-    ePHYSIC_DYNAMIC
-};
-
 enum eGameEventEnum {
     eGAME_EVENT_UNSET = 0,
     eGAME_EVENT_MOUSE_DONW,

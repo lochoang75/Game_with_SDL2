@@ -45,7 +45,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/loc/workspace/Game_with_SDL2/assignment/src/cmake_install.cmake")
-  include("/home/loc/workspace/Game_with_SDL2/assignment/box2d/cmake_install.cmake")
 
 endif()
 

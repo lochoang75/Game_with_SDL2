@@ -1,14 +1,8 @@
 #ifndef GAME_CONSTANT_H
 #define GAME_CONSTANT_H
-#include <cmath>
-    #define SCREEN_WIDTH (854)
-    #define SCREEN_HEIGHT (480)
-    #define GROUND_POSITION (SCREEN_HEIGHT - 100)
-
-    const int MET2PIX = (80);
-    const int SCALED_WIDTH = (SCREEN_WIDTH/ MET2PIX);
-    const int SCALED_HEIGH = (SCREEN_HEIGHT/ MET2PIX);
-    const float RAD2DEG = 180/M_PI;
+    #define SCREEN_WIDTH (480)
+    #define SCREEEN_HEIGHT (854)
+    #define GROUND_POSITION (SCREEN_WIDTH - 100)
 
 typedef enum kErrorCode {
     kSUCCESS = 0,

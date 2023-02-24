@@ -104,6 +104,7 @@ void BirdObject::update()
     mUpdateCounter++;
     if (mUpdateCounter == 7)
     {
+        mAcceleration.setY(-1);
         frame = animation->get_frame(mState, mFrameIdx);
         SDLGameObject::update();
         mUpdateCounter = 0;
@@ -113,7 +114,7 @@ void BirdObject::update()
 void BirdObject::draw()
 {
     SDL_Renderer *p_renderer = Game::get_instance()->get_renderer();
-    SDL_RendererFlip flip = SDL_FLIP_NONE;
+    SDL_RendererFlip flip = SDL_FLIP_VERTICAL;
     GameTexture *texture = TextureManager::Instance()->get_texture(id);
     if (texture == NULL)
     {
@@ -121,7 +122,7 @@ void BirdObject::draw()
     }
     else
     {
-        texture->draw(x, y, frame->get_x(), frame->get_y(), 
+        texture->draw(mPosition.getX(), mPosition.getY(), frame->get_x(), frame->get_y(), 
                         frame->get_width(), frame->get_height(), p_renderer, flip);
     }
     return;

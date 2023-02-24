@@ -3,31 +3,33 @@
 #include <SDL2/SDL.h>
 #include "game_object.h"
 #include "game_enum.h"
+#include "vector_2d.h"
 #include "texture_manager.h"
 #include "game_manage.h"
-#include "box2d.h"
 
 class SDLGameObject: public GameObject
 {
     public:
-        SDLGameObject(): GameObject(), x(0), y(0), mWidth(0), mHeight(0), mBody(NULL){};
-        SDLGameObject(enum eGameObjectType type): GameObject(type), x(0), y(0), mWidth(0), mHeight(0), mBody(NULL){};
+        SDLGameObject(): GameObject(), mPosition(0,0), mVelocity(0,0), mAcceleration(0,0){};
+        SDLGameObject(enum eGameObjectType type): GameObject(type), mPosition(0,0), mVelocity(0,0), mAcceleration(0,0) {};
         virtual ~SDLGameObject(){clean_up();};
         virtual void draw() override;
         virtual void update() override;
         virtual void clean_up() override;
-        virtual void load(const LoaderParams *pParams) override;
+        void load(const LoaderParams *pParams) override;
 
+        Vector2D *get_position() {return &mPosition;};
         int get_width() const {return mWidth;};
         int get_height() const {return mHeight;};
         enum eTextureTypeList get_id() const {return id;};
     protected:
         int mWidth;
         int mHeight;
-        int x;
-        int y;
-        b2Body *mBody;
         enum eTextureTypeList id;
+        Vector2D mPosition;
+
+        Vector2D mVelocity;
+        Vector2D mAcceleration;
 };
 
 #endif /* SDL_GAME_OBJECT_H*/

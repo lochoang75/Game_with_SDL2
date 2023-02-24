@@ -33,10 +33,18 @@ void FruitObject:: update()
         case eFRUIT_ON_THE_TREE:
             break;
         case eFRUIT_RELEASED:
+            mAcceleration.setX(-10);
+            mAcceleration.setY(0);
             mFruitState = eFRUIT_FALLING;
             /*Through*/
         case eFRUIT_FALLING:
             SDLGameObject::update();
+            if (mPosition.getX() >= (GROUND_POSITION))
+            {
+                mAcceleration.setX(0);
+                mPosition.setX(GROUND_POSITION);
+                mFruitState = eFRUIT_ON_THE_GROUND;
+            }
             break;
         case eFRUIT_ON_THE_GROUND:
             break;
@@ -59,6 +67,8 @@ void FruitObject::handle_event(enum eGameEventEnum event)
                 break;
             }
             SDL_GetMouseState(&mouse_x, &mouse_y);
+            mPosition.setX(mouse_x);
+            mPosition.setY(mouse_y);
             break;
         case eGAME_EVENT_MOUSE_RELEASE:
             if (mFruitState == eFRUIT_SELECTED)
@@ -80,6 +90,7 @@ class FruitCreator: public BaseCreator
 GameObject* FruitCreator:: create_object() const
 {
     FruitObject *new_object = new FruitObject();
+    Vector2D *position = new_object->get_position();
     return (GameObject*) new_object;
 }
 #endif /*FRUIT_H*/
