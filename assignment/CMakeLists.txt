@@ -33,7 +33,5 @@ project(fruit_picking)
 # Add SDL2 CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
 
-include_directories (${box2d_SOURCE_DIR})
-
 add_subdirectory(src)
 add_subdirectory(box2d)

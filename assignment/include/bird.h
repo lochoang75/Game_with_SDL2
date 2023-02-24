@@ -104,7 +104,6 @@ void BirdObject::update()
     mUpdateCounter++;
     if (mUpdateCounter == 7)
     {
-        mAcceleration.setX(-1);
         frame = animation->get_frame(mState, mFrameIdx);
         SDLGameObject::update();
         mUpdateCounter = 0;
@@ -122,7 +121,7 @@ void BirdObject::draw()
     }
     else
     {
-        texture->draw(mPosition.getX(), mPosition.getY(), frame->get_x(), frame->get_y(), 
+        texture->draw(x, y, frame->get_x(), frame->get_y(), 
                         frame->get_width(), frame->get_height(), p_renderer, flip);
     }
     return;

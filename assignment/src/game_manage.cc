@@ -12,11 +12,12 @@
 #include "background.h"
 #include "basket.h"
 #include "animation_manage.h"
+#include "box2d.h"
 
 Game *Game::mInstance = NULL;
 
 
-Game *Game::get_instance()
+Game *Game::Instance()
 {
     if (mInstance == NULL)
     {
@@ -25,7 +26,38 @@ Game *Game::get_instance()
     return mInstance;
 }
 
-ErrorCode_t Game::init( const char *title, int xpos, int ypos, int flags)
+Game::Game()
+{
+    mWindow = NULL;
+    mRenderer = NULL;
+    b2Vec2 gravity(0, -10);
+    mWorld = new b2World(gravity);
+}
+
+ErrorCode_t Game::init(const char *title)
+{
+    ErrorCode_t ret = sdl_component_init(title, 0, 0, SDL_INIT_EVERYTHING);
+    if (ret != kSUCCESS)
+    {
+        return ret;
+    }
+
+    physics_init();
+    creator_register();
+    return ret;
+}
+
+void Game::physics_init()
+{
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(0.0f, -10.0f);
+    mGroundBody = mWorld->CreateBody(&groundBodyDef);
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(50.0f, 10.0f);
+    mGroundBody->CreateFixture(&groundBox, 0.0f);
+}
+
+ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     mWindow = SDL_CreateWindow(title, xpos, ypos, SCREEN_WIDTH, SCREEEN_HEIGHT, flags);
@@ -49,13 +81,17 @@ ErrorCode_t Game::init( const char *title, int xpos, int ypos, int flags)
         LogError("SDL image could not initialize! SDL image error: %s\n", IMG_GetError());
     }
 
+    return kSUCCESS;
+}
+
+void Game::creator_register()
+{
     GameObjectFactory::Instance()->creator_register(eFRUIT_OBJECT, new FruitCreator());
     GameObjectFactory::Instance()->creator_register(eTREE_OBJECT, new TreeCreator());
     GameObjectFactory::Instance()->creator_register(eBACKGROUND_OBJECT, new BackgroundCreator());
     GameObjectFactory::Instance()->creator_register(eBASKET_OBJECT, new BasketCreator());
     GameObjectFactory::Instance()->creator_register(eBIRD_OBJECT, new BirdCreator());
     GameObjectFactory::Instance()->creator_register(eKID_OBJECT, new KidCreator());
-    return kSUCCESS;
 }
 
 ErrorCode_t Game::load_media()
@@ -222,27 +258,27 @@ void Game::handle_event(enum eGameEventEnum event)
 
     if (event == eGAME_EVENT_MOUSE_DONW)
     {
-        int mouse_x, mouse_y;
-        int i = 0;
-        SDL_GetMouseState(&mouse_x, &mouse_y);
-        for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
-        {
-            SDLGameObject *sdl_object = (SDLGameObject*)*object;
-            if (sdl_object->get_object_type() == eFRUIT_OBJECT)
-            {
-                Vector2D *position = sdl_object->get_position();
-                if (mouse_x >= position->getX() && mouse_x <= (position->getX() + sdl_object->get_width()))
-                {
-                    if (mouse_y >= position->getY() && mouse_y <= (position->getY() + sdl_object->get_height()))
-                    {
-                        FruitObject* fruit = (FruitObject*) *object;
-                        fruit->handle_event(event);
-                        break;
-                    }
-                }
-            }
-            i++;
-        }
+        // int mouse_x, mouse_y;
+        // int i = 0;
+        // SDL_GetMouseState(&mouse_x, &mouse_y);
+        // for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
+        // {
+        //     SDLGameObject *sdl_object = (SDLGameObject*)*object;
+        //     if (sdl_object->get_object_type() == eFRUIT_OBJECT)
+        //     {
+        //         Vector2D *position = sdl_object->get_position();
+        //         if (mouse_x >= position->getX() && mouse_x <= (position->getX() + sdl_object->get_width()))
+        //         {
+        //             if (mouse_y >= position->getY() && mouse_y <= (position->getY() + sdl_object->get_height()))
+        //             {
+        //                 FruitObject* fruit = (FruitObject*) *object;
+        //                 fruit->handle_event(event);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     i++;
+        // }
     } 
     else
     {

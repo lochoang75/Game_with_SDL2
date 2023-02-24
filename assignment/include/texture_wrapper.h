@@ -1,9 +1,9 @@
 #ifndef TEXTURE_WRAPPER_H
 #define TEXTURE_WRAPPER_H
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <stdbool.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "log_wrapper.h"
 
