@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
         Game::get_instance()->update();
         Game::get_instance()->render();
         Uint64 end = SDL_GetPerformanceCounter();
-        float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-        SDL_Delay(floor(16.666f - elapsed));
+        float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
+        LogInfo("FPS: %0.2f", 1/elapsed);
     }
 
     return 0;
