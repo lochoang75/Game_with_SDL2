@@ -30,13 +30,13 @@ Game::Game()
 {
     mWindow = NULL;
     mRenderer = NULL;
-    b2Vec2 gravity(0, -10);
+    b2Vec2 gravity(0, 10);
     mWorld = new b2World(gravity);
 }
 
 ErrorCode_t Game::init(const char *title)
 {
-    ErrorCode_t ret = sdl_component_init(title, 0, 0, SDL_INIT_EVERYTHING);
+    ErrorCode_t ret = sdl_component_init(title, 0, 0, SDL_WINDOW_SHOWN);
     if (ret != kSUCCESS)
     {
         return ret;
@@ -49,13 +49,25 @@ ErrorCode_t Game::init(const char *title)
 
 void Game::physics_init()
 {
-    b2BodyDef groundBodyDef;
-    groundBodyDef.type = b2_staticBody;
-    groundBodyDef.position.Set(10.0f, 10.0f);
-    groundBodyDef.angle = 0;
-    mGroundBody = mWorld->CreateBody(&groundBodyDef);
-    b2PolygonShape groundBox;
-    mGroundBody->CreateFixture(&groundBox, 0.0f);
+    b2BodyDef ground_body_def;
+    ground_body_def.type = b2_staticBody;
+    ground_body_def.position.Set(0.0f, 0.0f);
+    ground_body_def.angle = 0;
+    mGroundBody = mWorld->CreateBody(&ground_body_def);
+    b2EdgeShape ground_line;
+    b2Vec2 ground_start;
+    ground_start.x = 0;
+    ground_start.y = GROUND_POSITION / MET2PIX;
+
+    b2Vec2 ground_end;
+    ground_end.x = SCREEN_WIDTH / MET2PIX;
+    ground_end.y = GROUND_POSITION / MET2PIX;
+    ground_line.SetTwoSided(ground_start, ground_end);
+
+    b2FixtureDef ground_fixture_def;
+    ground_fixture_def.shape = &ground_line;
+    
+    mGroundBody->CreateFixture(&ground_fixture_def);
 }
 
 ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
@@ -139,7 +151,7 @@ ErrorCode_t Game::create_static_object()
     }
     else
     {
-        LoaderParams params = LoaderParams(0, 0, 300, 300, eTEXTURE_TREE_FORM_1);
+        LoaderParams params = LoaderParams(10, 0, 300, 300, eTEXTURE_TREE_FORM_1);
         tree_object->load(&params);
         mGameObjectVector.push_back(tree_object);
         LogDebug("Create tree success");
@@ -180,8 +192,9 @@ ErrorCode_t Game::create_dynamic_object()
             
             int new_fruit_x_pos = tree_base_position_x + x_fruit_offset;
             int new_fruit_y_pos = tree_base_position_y + y_fruit_offset;
-            LoaderParams params = LoaderParams(0, 1, 32, 32, eTEXTURE_APPLE);
+            LoaderParams params = LoaderParams(0, 0, 32, 32, eTEXTURE_APPLE);
             params.add_physical_object_type(ePHYSIC_DYNAMIC);
+            params.add_physical_density(0.75f);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
             LogDebug("Create fruit %d success", i);

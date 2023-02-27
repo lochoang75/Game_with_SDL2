@@ -8,9 +8,9 @@ LoaderParams:: LoaderParams(int x, int y, int width, int height, enum eTextureTy
     mHeight = height;
     mId = id;
     mPhysType = ePHYSIC_STATIC;
-    mFriction = 0.3f;
-    mDensity = 1.0f;
-    mRestitution = 0.5f;
+    mFriction = 0.0f;
+    mDensity = 0.0f;
+    mRestitution = 0.0f;
     mShape = ePOLYGON_SHAPE;
 }
 

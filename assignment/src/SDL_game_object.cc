@@ -11,7 +11,7 @@ void SDLGameObject:: load(const LoaderParams *pParams)
     {
         object_def.type = b2_dynamicBody;
     }
-    object_def.position.Set(pParams->get_x(), pParams->get_y());
+    object_def.position.Set((float)pParams->get_x()/MET2PIX, (float)pParams->get_y()/MET2PIX);
     mBody = world_instnace->CreateBody(&object_def);
     physic_paramter_load(pParams->get_physical_shape(), pParams->get_physical_density(),
                         pParams->get_physical_friction(), pParams->get_physical_restitution());
@@ -79,6 +79,7 @@ void SDLGameObject::get_current_position(int &pos_x, int &pos_y) const
     b2Vec2 position = mBody->GetPosition();
     pos_x = ((SCALED_WIDTH / 2.0f) + position.x) * MET2PIX - mWidth / 2;
     pos_y = ((SCALED_HEIGH / 2.0f) + position.y) * MET2PIX - mHeight / 2;
+    LogDebug("Result of object at x: %d, y: %d", pos_x, pos_y);
 }
 
 double SDLGameObject::get_angle() const
