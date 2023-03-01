@@ -82,6 +82,7 @@ class BirdObject: public SDLGameObject
         ~BirdObject(){};
         void update() override;
         void draw() override;
+        void load(const LoaderParams *pParams) override;
     private:
         enum eBirdState mState;
         const AnimationFrame *frame;
@@ -99,6 +100,13 @@ BirdObject::BirdObject(): SDLGameObject(eBIRD_OBJECT)
     frame = animation->get_frame(mState, mFrameIdx);
 }
 
+void BirdObject::load(const LoaderParams *pParams)
+{
+    SDLGameObject::load(pParams);
+    Box2DPhysicalFacade::set_gravity_scale(mBody, 0.0f);
+    Box2DPhysicalFacade::set_velocity(mBody, -1.0f, 0.0f);
+}
+
 void BirdObject::update()
 {
     mUpdateCounter++;
@@ -112,9 +120,10 @@ void BirdObject::update()
 
 void BirdObject::draw()
 {
-    double angle = SDLGameObject::get_angle();
-    int pos_x, pos_y;
-    SDLGameObject::get_current_position(pos_x, pos_y);
+    double angle = Box2DPhysicalFacade::get_angle(mBody);
+    float pos_x, pos_y;
+    Box2DPhysicalFacade::get_current_position(mBody, pos_x, pos_y);
+    Box2DPhysicalFacade::compute_pixel_postion(pos_x, pos_y, mWidth, mHeight, x, y);
     SDL_Rect src_rect;
     src_rect.x = frame->get_x();
     src_rect.y = frame->get_y();
@@ -129,7 +138,7 @@ void BirdObject::draw()
     }
     else
     {
-        texture->draw(pos_x, pos_y, &src_rect, angle, p_renderer, flip);
+        texture->draw(x, y, &src_rect, angle, p_renderer, flip);
     }
     return;
 }

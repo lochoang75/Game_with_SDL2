@@ -4,24 +4,21 @@ void SDLGameObject:: load(const LoaderParams *pParams)
 {
     mWidth = pParams->get_width();
     mHeight = pParams->get_height();
+    x = pParams->get_x();
+    y = pParams->get_y();
     id = pParams->get_type();
-    b2World *world_instnace = Game::Instance()->get_world();
-    b2BodyDef object_def;
-    if (pParams->get_physical_object_type() == ePHYSIC_DYNAMIC)
+    mBody = Box2DPhysicalFacade::create_body(pParams);
+    if (mBody != NULL)
     {
-        object_def.type = b2_dynamicBody;
     }
-    object_def.position.Set((float)pParams->get_x()/MET2PIX, (float)pParams->get_y()/MET2PIX);
-    mBody = world_instnace->CreateBody(&object_def);
-    physic_paramter_load(pParams->get_physical_shape(), pParams->get_physical_density(),
-                        pParams->get_physical_friction(), pParams->get_physical_restitution());
 }
 
 void SDLGameObject::draw()
 {
-    double angle = SDLGameObject::get_angle();
-    int pos_x, pos_y;
-    SDLGameObject::get_current_position(pos_x, pos_y);
+    double angle = Box2DPhysicalFacade::get_angle(mBody);
+    float pos_x, pos_y;
+    Box2DPhysicalFacade::get_current_position(mBody, pos_x, pos_y);
+    Box2DPhysicalFacade::compute_pixel_postion(pos_x, pos_y, mWidth, mHeight, x, y);
     SDL_Rect src_rect;
     src_rect.x = 0;
     src_rect.y = 0;
@@ -36,55 +33,21 @@ void SDLGameObject::draw()
     }
     else
     {
-        texture->draw(pos_x, pos_y, &src_rect, angle, p_renderer, flip);
+        // LogDebug("Draw object %d at x: %0.4f, y: %0.4f, w: %d, height: %d", id, pos_x, pos_y, mWidth, mHeight);
+        texture->draw(x, y, &src_rect, angle, p_renderer, flip);
     }
     return;
 }
 
 void SDLGameObject:: clean_up()
 {
-    b2World *world_instance = Game::Instance()->get_world();
-    world_instance->DestroyBody(mBody);
+    Box2DPhysicalFacade::destroy_body(mBody);
 }
 
-void SDLGameObject::physic_paramter_load(enum ePhysicalShape shape, float density, float friction, float restitution)
+void SDLGameObject:: get_position(int &x, int &y) const
 {
-    if (shape == ePOLYGON_SHAPE)
-    {
-        b2PolygonShape object_shape;
-        float w_plat = mWidth / MET2PIX;
-        float h_plat = mHeight / MET2PIX;
-        object_shape.SetAsBox((w_plat / 2.0f) - object_shape.m_radius, (h_plat / 2.0f) - object_shape.m_radius);
-        b2FixtureDef fixture;
-        fixture.shape = &object_shape;
-        fixture.density = density;
-        fixture.friction = friction;
-        fixture.restitution = restitution;
-        mBody->CreateFixture(&fixture);
-    }
-    else
-    {
-        LogError("Object has shape %d is not implment", shape);
-    }
-}
-
-void SDLGameObject::set_velocity(float x_vel, float y_vel)
-{
-    b2Vec2 vel(0.0f, 0.2f);
-    mBody->SetLinearVelocity(vel);
-}
-
-void SDLGameObject::get_current_position(int &pos_x, int &pos_y) const
-{
-    b2Vec2 position = mBody->GetPosition();
-    pos_x = ((SCALED_WIDTH / 2.0f) + position.x) * MET2PIX - mWidth / 2;
-    pos_y = ((SCALED_HEIGH / 2.0f) + position.y) * MET2PIX - mHeight / 2;
-    LogDebug("Result of object at x: %d, y: %d", pos_x, pos_y);
-}
-
-double SDLGameObject::get_angle() const
-{
-    return mBody->GetAngle() * RAD2DEG;
+    x = this->x;
+    y = this->y;
 }
 
 

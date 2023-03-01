@@ -151,6 +151,7 @@ namespace {
     inline static void setupOutputFile();
 
   private:
+    inline static void clear_warning(){return;};
 
 #if __cplusplus >= 201703L
     // C++17 code

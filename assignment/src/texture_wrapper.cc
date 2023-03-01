@@ -23,7 +23,7 @@ void GameTexture:: draw(int x, int y, int width, int height, SDL_Renderer *pRend
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    SDL_RenderCopyEx(pRenderer, mTexture, &srcRect, &destRect, 0, 0, flip);
+    SDL_RenderCopyEx(pRenderer, mTexture, &srcRect, &destRect, 0, NULL, flip);
 }
 
 void GameTexture::draw(int x, int y, SDL_Rect *src_rect, double angle, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
@@ -33,7 +33,7 @@ void GameTexture::draw(int x, int y, SDL_Rect *src_rect, double angle, SDL_Rende
     desRect.h = src_rect->h;
     desRect.x = x;
     desRect.y = y;
-    SDL_RenderCopyEx(pRenderer, mTexture, src_rect, &desRect, angle, 0, flip);
+    SDL_RenderCopyEx(pRenderer, mTexture, src_rect, &desRect, angle, NULL, flip);
 }
 
 int GameTexture:: get_width()
@@ -46,7 +46,7 @@ int GameTexture:: get_height()
     return mHeight;
 }
 
-bool GameTexture:: load_from_file(std::string path, int id, SDL_Renderer *pRenderer)
+bool GameTexture:: load_from_file(std::string path, SDL_Renderer *pRenderer)
 {
     free();
 

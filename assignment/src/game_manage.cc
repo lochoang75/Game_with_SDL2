@@ -30,8 +30,6 @@ Game::Game()
 {
     mWindow = NULL;
     mRenderer = NULL;
-    b2Vec2 gravity(0, 10);
-    mWorld = new b2World(gravity);
 }
 
 ErrorCode_t Game::init(const char *title)
@@ -47,26 +45,23 @@ ErrorCode_t Game::init(const char *title)
     return ret;
 }
 
+b2EdgeShape ground_shape;
+
 void Game::physics_init()
 {
     b2BodyDef ground_body_def;
     ground_body_def.type = b2_staticBody;
     ground_body_def.position.Set(0.0f, 0.0f);
     ground_body_def.angle = 0;
-    mGroundBody = mWorld->CreateBody(&ground_body_def);
-    b2EdgeShape ground_line;
-    b2Vec2 ground_start;
-    ground_start.x = 0;
-    ground_start.y = GROUND_POSITION / MET2PIX;
-
-    b2Vec2 ground_end;
-    ground_end.x = SCREEN_WIDTH / MET2PIX;
-    ground_end.y = GROUND_POSITION / MET2PIX;
-    ground_line.SetTwoSided(ground_start, ground_end);
-
+    mGroundBody = Box2DPhysicalFacade::create_body(&ground_body_def);
+    float x_ground = Box2DPhysicalFacade::compute_distance_to_meter(SCREEN_WIDTH);
+    float y_ground = Box2DPhysicalFacade::compute_distance_to_meter(GROUND_POSITION - 100);
+    b2Vec2 ground_start(-x_ground/2, y_ground/2);
+    b2Vec2 ground_end(x_ground/2, y_ground/2);
+    ground_shape.SetTwoSided(ground_start, ground_end);
     b2FixtureDef ground_fixture_def;
-    ground_fixture_def.shape = &ground_line;
-    
+    ground_fixture_def.shape = &ground_shape;
+    ground_fixture_def.density = 1.0f;
     mGroundBody->CreateFixture(&ground_fixture_def);
 }
 
@@ -151,7 +146,7 @@ ErrorCode_t Game::create_static_object()
     }
     else
     {
-        LoaderParams params = LoaderParams(10, 0, 300, 300, eTEXTURE_TREE_FORM_1);
+        LoaderParams params = LoaderParams(10, GROUND_POSITION - 300, 300, 300, eTEXTURE_TREE_FORM_1);
         tree_object->load(&params);
         mGameObjectVector.push_back(tree_object);
         LogDebug("Create tree success");
@@ -169,7 +164,7 @@ ErrorCode_t Game::create_dynamic_object()
     int x_fruit_offset = 0;
     int y_fruit_offset = 0;
     srand(time(NULL));
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 5; i++)
     {
         GameObject *fruit_object = GameObjectFactory::Instance()->create_object(eFRUIT_OBJECT);
         if (fruit_object == NULL)
@@ -192,9 +187,11 @@ ErrorCode_t Game::create_dynamic_object()
             
             int new_fruit_x_pos = tree_base_position_x + x_fruit_offset;
             int new_fruit_y_pos = tree_base_position_y + y_fruit_offset;
-            LoaderParams params = LoaderParams(0, 0, 32, 32, eTEXTURE_APPLE);
+            LoaderParams params = LoaderParams(new_fruit_x_pos, new_fruit_y_pos, 32, 32, eTEXTURE_APPLE);
             params.add_physical_object_type(ePHYSIC_DYNAMIC);
-            params.add_physical_density(0.75f);
+            params.add_physical_density(1.0f);
+            params.add_physical_friction(0.3f);
+            params.add_physical_restitution(0.3f);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
             LogDebug("Create fruit %d success", i);
@@ -210,27 +207,34 @@ ErrorCode_t Game::create_dynamic_object()
     // else
     // {
     //     LoaderParams params = LoaderParams(400, GROUND_POSITION - 75, 80, 75, eTEXTURE_BASKET);
+    //     params.add_physical_density(1.0f);
+    //     params.add_physical_friction(0.3f);
+    //     params.add_physical_restitution(0.3f);
     //     basket_object->load(&params);
+    //     params.add_physical_object_type(ePHYSIC_DYNAMIC);
     //     mGameObjectVector.push_back(basket_object);
     //     LogDebug("Create basket success");
     // }
 
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
-    //     if (bird_object == NULL)
-    //     {
-    //         LogError("Unable to allocate memory for bird object");
-    //     } 
-    //     else
-    //     {
-    //         LoaderParams params = LoaderParams(0, 0, 32, 32, eTEXTURE_BIRDS);
-    //         params.add_physical_object_type(ePHYSIC_DYNAMIC);
-    //         bird_object->load(&params);
-    //         mGameObjectVector.push_back(bird_object);
-    //         LogDebug("Create bird success");
-    //     }
-    // }
+    for (int i = 0; i < 3; i++)
+    {
+        GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
+        if (bird_object == NULL)
+        {
+            LogError("Unable to allocate memory for bird object");
+        } 
+        else
+        {
+            LoaderParams params = LoaderParams(800, 100, 32, 32, eTEXTURE_BIRDS);
+            params.add_physical_object_type(ePHYSIC_DYNAMIC);
+            params.add_physical_density(0.4f);
+            params.add_physical_friction(0.3f);
+            params.add_physical_restitution(0.3f);
+            bird_object->load(&params);
+            mGameObjectVector.push_back(bird_object);
+            LogDebug("Create bird success");
+        }
+    }
 
     // GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
     // if (kid_object == NULL)
@@ -260,7 +264,7 @@ ErrorCode_t Game::create_object()
 }
 
 void Game::update()
-{
+{ 
     for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
     {
         SDLGameObject *sdl_object = (SDLGameObject*)*object;
@@ -274,27 +278,28 @@ void Game::handle_event(enum eGameEventEnum event)
 
     if (event == eGAME_EVENT_MOUSE_DONW)
     {
-        // int mouse_x, mouse_y;
-        // int i = 0;
-        // SDL_GetMouseState(&mouse_x, &mouse_y);
-        // for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
-        // {
-        //     SDLGameObject *sdl_object = (SDLGameObject*)*object;
-        //     if (sdl_object->get_object_type() == eFRUIT_OBJECT)
-        //     {
-        //         Vector2D *position = sdl_object->get_position();
-        //         if (mouse_x >= position->getX() && mouse_x <= (position->getX() + sdl_object->get_width()))
-        //         {
-        //             if (mouse_y >= position->getY() && mouse_y <= (position->getY() + sdl_object->get_height()))
-        //             {
-        //                 FruitObject* fruit = (FruitObject*) *object;
-        //                 fruit->handle_event(event);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     i++;
-        // }
+        int mouse_x, mouse_y;
+        int i = 0;
+        SDL_GetMouseState(&mouse_x, &mouse_y);
+        for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
+        {
+            SDLGameObject *sdl_object = (SDLGameObject*)*object;
+            if (sdl_object->get_object_type() == eFRUIT_OBJECT)
+            {
+                int obj_x, obj_y;
+                sdl_object->get_position(obj_x, obj_y);
+                if (mouse_x >= obj_x && mouse_x <= (obj_x + sdl_object->get_width()))
+                {
+                    if (mouse_y >= obj_y && mouse_y <= (obj_y + sdl_object->get_height()))
+                    {
+                        FruitObject* fruit = (FruitObject*) *object;
+                        fruit->handle_event(event);
+                        break;
+                    }
+                }
+            }
+            i++;
+        }
     } 
     else
     {
@@ -326,17 +331,14 @@ void Game:: render()
         SDLGameObject* sdl_object = (SDLGameObject*) *object;
         sdl_object->draw();
     }
+    SDL_RenderDrawLine(mRenderer, ((SCALED_WIDTH / 2.0f) + ground_shape.m_vertex1.x) * MET2PIX, ((SCALED_HEIGHT / 2.0f) + ground_shape.m_vertex1.y) * MET2PIX, ((SCALED_WIDTH / 2.0f) + ground_shape.m_vertex2.x) * MET2PIX, ((SCALED_HEIGHT / 2.0f) + ground_shape.m_vertex2.y) * MET2PIX);
+
     SDL_RenderPresent(mRenderer);
 }
 
 SDL_Renderer* Game::get_renderer()
 {
     return mRenderer;
-}
-
-b2World* Game::get_world()
-{
-    return mWorld;
 }
 
 

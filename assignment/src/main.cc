@@ -5,10 +5,11 @@
 #include "game_manage.h"
 #include "game_enum.h"
 #include "texture_manager.h"
+#include "box2d_facade.h"
 #define MAX_FRUIT (10)
 #define NUM_TREES (3)
 
-int main(int argc, char *argv[])
+int main()
 {
     Game::Instance()->init("Fruit Picking");
     Game::Instance()->load_media();
@@ -31,12 +32,15 @@ int main(int argc, char *argv[])
             switch (e.type)
             {
                 case SDL_MOUSEMOTION:
+                case SDL_FINGERMOTION:
                     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_MOVE);
                     break;
                 case SDL_MOUSEBUTTONDOWN:
+                case SDL_FINGERDOWN:
                     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_DONW);
                     break;
                 case SDL_MOUSEBUTTONUP:
+                case SDL_FINGERUP:
                     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_RELEASE);
                     break;
             }
@@ -45,10 +49,10 @@ int main(int argc, char *argv[])
 
         Game::Instance()->update();
         Game::Instance()->render();
-        Game::Instance()->get_world()->Step(1.0f / 60.0f, 6.0f, 2.0f);
+        Box2DPhysicalFacade::get_world()->Step(1.0f / 30.0f, 6.0f, 2.0f);
         Uint64 end = SDL_GetPerformanceCounter();
         float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-        SDL_Delay(floor(16.666f - elapsed));
+        SDL_Delay(floor(32.0f - elapsed));
     }
 
     return 0;

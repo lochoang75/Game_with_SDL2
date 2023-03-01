@@ -12,7 +12,7 @@ class GameTexture
     public:
         GameTexture(): mTexture(NULL), mWidth(100), mHeight(100) {};
         ~GameTexture();
-        bool load_from_file(std:: string path, int id, SDL_Renderer *renderer);
+        bool load_from_file(std:: string path, SDL_Renderer *renderer);
         void free();
         void draw(int x, int y, int width, int height, SDL_Renderer *pRenderer, SDL_RendererFlip flip);
         void draw(int x, int y, SDL_Rect *src_rect, double angle, SDL_Renderer*, SDL_RendererFlip);

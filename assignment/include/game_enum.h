@@ -31,4 +31,16 @@ enum eGameEventEnum {
     eGAME_EVENT_MOUSE_MOVE,
 };
 
+enum eGameObjectPhysic {
+    ePHYSIC_STATIC = 0,
+    ePHYSIC_DYNAMIC
+};
+
+enum ePhysicalShape {
+    eCHAIN_SHAPE = 0,
+    eCIRCEL_SHAPE,
+    eEDGE_SHAPE,
+    ePOLYGON_SHAPE
+};
+
 #endif /* GAME_ENUM_H*/

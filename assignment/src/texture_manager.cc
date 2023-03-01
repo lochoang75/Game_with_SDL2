@@ -30,7 +30,7 @@ void TextureManager::load_texture(enum eTextureTypeList id, std::string path, SD
     }
 
     LogDebug("Load texture %s for id %d", path.c_str(), id);
-    mTextureList[id].load_from_file(path, id, pRenderer);
+    mTextureList[id].load_from_file(path, pRenderer);
 }
 
 GameTexture* TextureManager:: get_texture(enum eTextureTypeList id) const

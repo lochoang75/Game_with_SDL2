@@ -69,7 +69,7 @@ AnimationPool:: ~AnimationPool()
 
 const AnimationFrame* AnimationPool::get_frame(int enum_state, int &index) const
 {
-    if (enum_state >= mStateList.size())
+    if (enum_state >= (int)mStateList.size())
     {
         LogError("Unable to get state if index %d out of range %d", enum_state, mStateList.size());
         return NULL;

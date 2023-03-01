@@ -12,7 +12,6 @@ class Game
     public:
         static Game* Instance();
         SDL_Renderer* get_renderer();
-        b2World *get_world();
         ErrorCode_t init(const char *title);
 
         ErrorCode_t load_media();
@@ -35,7 +34,6 @@ class Game
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
         static Game *mInstance;
-        b2World *mWorld;
         b2Body *mGroundBody;
         std::vector<GameObject*> mGameObjectVector;
 };

@@ -79,9 +79,10 @@ KidObject:: KidObject(): SDLGameObject(eKID_OBJECT)
 }
 void KidObject:: draw()
 {
-    double angle = SDLGameObject::get_angle();
-    int pos_x, pos_y;
-    SDLGameObject::get_current_position(pos_x, pos_y);
+    double angle = Box2DPhysicalFacade::get_angle(mBody);
+    float pos_x, pos_y;
+    Box2DPhysicalFacade::get_current_position(mBody, pos_x, pos_y);
+    Box2DPhysicalFacade::compute_pixel_postion(pos_x, pos_y, mWidth, mHeight, x, y);
     SDL_Rect src_rect;
     src_rect.x = frame->get_x();
     src_rect.y = frame->get_y();
@@ -96,7 +97,7 @@ void KidObject:: draw()
     }
     else
     {
-        texture->draw(pos_x, pos_y, &src_rect, angle, p_renderer, flip);
+        texture->draw(x, y, &src_rect, angle, p_renderer, flip);
     }
     return;
 }

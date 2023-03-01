@@ -33,6 +33,7 @@ namespace {
 
   // Setters
   inline void Logger::setMaxLogLevel(const Logger& logger_){
+    logger_.clear_warning();
     // _currentLogLevel_ is set by the constructor,
     // so when you provide "LogDebug" as an argument the _currentLogLevel_ is automatically updated
     // Stricto sensu: the argument is just a placeholder for silently updating _currentLogLevel_
@@ -79,6 +80,7 @@ namespace {
     return _currentPrefix_;
   }
   inline std::string Logger::getPrefixString(const Logger& loggerConstructor){
+    loggerConstructor.clear_warning();
     // Calling the constructor will automatically update the fields
     return Logger::getPrefixString();
   }
@@ -187,6 +189,7 @@ namespace {
     return *this;
   }
   inline Logger &Logger::operator<<(Logger& l_){
+    l_.clear_warning();
     return *this;
   }
   inline Logger &Logger::operator()(bool condition_){
