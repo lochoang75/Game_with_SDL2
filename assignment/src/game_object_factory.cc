@@ -20,12 +20,12 @@ void GameObjectFactory:: creator_register(enum eGameObjectType type, BaseCreator
 
     if (creator_list[type] != NULL)
     {
-        LogError("You are set new creator for type %d it may cause memory leak here", type);
+        LogError("You are set new creator for type %s it may cause memory leak here", DBG_ObjectType(type));
         creator_list[type] = pCreator;
     }
     else
     {
-        LogDebug("Creator <%p> has registered to create object type %d", pCreator, type);
+        LogDebug("Creator <%p> has registered to create object %s", pCreator, DBG_ObjectType(type));
         creator_list[type] = pCreator;
     }
 }

@@ -5,35 +5,14 @@
 
 b2World *Box2DPhysicalFacade::mWorld = new b2World(b2Vec2(0.0f, 10.0f));
 
-b2Body* Box2DPhysicalFacade::create_body(const LoaderParams *pParams)
+b2Body* Box2DPhysicalFacade::create_body(b2BodyDef &body_def)
 {
-    b2BodyDef object_def;
-    if (pParams->get_physical_object_type() == ePHYSIC_DYNAMIC)
-    {
-        object_def.type = b2_dynamicBody;
-    }
-    float body_x, body_y;
-    compute_cartesian_origin(pParams->get_x(), pParams->get_y(), pParams->get_width(), 
-                                pParams->get_height(), body_x, body_y);
-    object_def.position.Set(body_x, body_y);
-    // LogDebug("Create body at position: x: %0.2f, y: %0.2f", body_x, body_y);
-    b2Body *body = mWorld->CreateBody(&object_def);
-    if (body == NULL)
-    {
-        LogError("Unable to create body for object %d", pParams->get_type());
-    } else
-    {
-        if (object_def.type == b2_dynamicBody)
-        {
-            physic_paramter_load(body, pParams);
-        }
-    }
-    return body;
+    return mWorld->CreateBody(&body_def);
 }
 
-b2Body* Box2DPhysicalFacade::create_body(b2BodyDef *body_def)
+void Box2DPhysicalFacade::create_fixture(b2Body *body, b2FixtureDef &fixture_def)
 {
-    return mWorld->CreateBody(body_def);
+    body->CreateFixture(&fixture_def);
 }
 
 void Box2DPhysicalFacade::destroy_body(b2Body *body)
@@ -44,34 +23,6 @@ void Box2DPhysicalFacade::destroy_body(b2Body *body)
 void Box2DPhysicalFacade::destroy_joint(b2Joint *joint)
 {
     mWorld->DestroyJoint(joint);
-}
-
-void Box2DPhysicalFacade:: physic_paramter_load(b2Body *body, const LoaderParams *pParams)
-{
-    ePhysicalShape shape = pParams->get_physical_shape();
-    int width = pParams->get_width();
-    int height = pParams->get_height();
-    float density = pParams->get_physical_density();
-    float friction = pParams->get_physical_friction();
-    float restitution = pParams->get_physical_restitution();
-    if (shape == ePOLYGON_SHAPE)
-    {
-        b2PolygonShape object_shape;
-        float w_plat = compute_distance_to_meter(width);
-        float h_plat = compute_distance_to_meter(height); 
-        LogDebug("Create box: w: %0.5f, h: %0.5f", w_plat /2, h_plat/2);
-        object_shape.SetAsBox(w_plat / 2.0f, h_plat / 2.0f);
-        b2FixtureDef fixture;
-        fixture.shape = &object_shape;
-        fixture.density = density;
-        fixture.friction = friction;
-        fixture.restitution = restitution; 
-        body->CreateFixture(&fixture);
-    }
-    else
-    {
-        LogError("Object has shape %d is not implment", shape);
-    }
 }
 
 void Box2DPhysicalFacade:: get_current_position(b2Body *body, float &x, float &y)

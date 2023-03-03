@@ -12,6 +12,7 @@
 #include "background.h"
 #include "basket.h"
 #include "animation_manage.h"
+#include "game_contact_listener.h"
 #include "box2d.h"
 
 Game *Game::mInstance = NULL;
@@ -42,6 +43,7 @@ ErrorCode_t Game::init(const char *title)
 
     physics_init();
     creator_register();
+    mContactListener.InitContactHandler();
     return ret;
 }
 
@@ -53,7 +55,7 @@ void Game::physics_init()
     ground_body_def.type = b2_staticBody;
     ground_body_def.position.Set(0.0f, 0.0f);
     ground_body_def.angle = 0;
-    mGroundBody = Box2DPhysicalFacade::create_body(&ground_body_def);
+    mGroundBody = Box2DPhysicalFacade::create_body(ground_body_def);
     float x_ground = Box2DPhysicalFacade::compute_distance_to_meter(SCREEN_WIDTH);
     float y_ground = Box2DPhysicalFacade::compute_distance_to_meter(GROUND_POSITION - 100);
     b2Vec2 ground_start(-x_ground/2, y_ground/2);
@@ -62,7 +64,9 @@ void Game::physics_init()
     b2FixtureDef ground_fixture_def;
     ground_fixture_def.shape = &ground_shape;
     ground_fixture_def.density = 1.0f;
-    mGroundBody->CreateFixture(&ground_fixture_def);
+    ground_fixture_def.filter.categoryBits = kGROUND;
+    Box2DPhysicalFacade::create_fixture(mGroundBody, ground_fixture_def);
+    Box2DPhysicalFacade::get_world()->SetContactListener(&mContactListener);
 }
 
 ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
@@ -122,7 +126,7 @@ ErrorCode_t Game::load_animation()
     return kSUCCESS;
 }
 
-ErrorCode_t Game::create_static_object()
+ErrorCode_t Game::_create_background_object()
 {
     GameObject *background = GameObjectFactory::Instance()->create_object(eBACKGROUND_OBJECT);
     if (background == NULL)
@@ -133,13 +137,18 @@ ErrorCode_t Game::create_static_object()
     else
     {
         LoaderParams params = LoaderParams(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, eTEXTURE_BACKGROUND);
+        params.add_physical_fixture(false);
         background->load(&params);
         mGameObjectVector.push_back(background);
         LogDebug("Create background sucess ");
     }
+    return kSUCCESS;
+}
 
-    GameObject *tree_object = GameObjectFactory::Instance()->create_object(eTREE_OBJECT);
-    if (tree_object == NULL)
+ErrorCode_t Game::_create_tree_object(GameObject *&tree)
+{
+    tree = GameObjectFactory::Instance()->create_object(eTREE_OBJECT);
+    if (tree == NULL)
     {
         LogError("Unable to allocate memory for tree object");
         return kNO_MEM;
@@ -147,22 +156,16 @@ ErrorCode_t Game::create_static_object()
     else
     {
         LoaderParams params = LoaderParams(10, GROUND_POSITION - 300, 300, 300, eTEXTURE_TREE_FORM_1);
-        tree_object->load(&params);
-        mGameObjectVector.push_back(tree_object);
+        tree->load(&params);
+        mGameObjectVector.push_back(tree);
         LogDebug("Create tree success");
     }
     return kSUCCESS;
 }
 
-ErrorCode_t Game::create_dynamic_object()
+ErrorCode_t Game::_create_fruit_object(GameObject *tree)
 {
     /*TODO: Change to load from json or st, that create map dynamic, instead of hardcode*/
-    const int x_offset = 30;
-    const int tree_base_position_x = 10 + x_offset;
-    const int y_offset = 20;
-    const int tree_base_position_y = GROUND_POSITION - 300 + y_offset;
-    int x_fruit_offset = 0;
-    int y_fruit_offset = 0;
     srand(time(NULL));
     for (int i = 0; i < 5; i++)
     {
@@ -174,29 +177,18 @@ ErrorCode_t Game::create_dynamic_object()
         }
         else
         {
-            x_fruit_offset += rand() % 32 + 32;
-            if (x_fruit_offset >= 200)
-            {
-                y_fruit_offset = y_fruit_offset + 35;
-                x_fruit_offset = 0;
-            }
-            else
-            {
-                y_fruit_offset += 10;
-            }
-            
-            int new_fruit_x_pos = tree_base_position_x + x_fruit_offset;
-            int new_fruit_y_pos = tree_base_position_y + y_fruit_offset;
-            LoaderParams params = LoaderParams(new_fruit_x_pos, new_fruit_y_pos, 32, 32, eTEXTURE_APPLE);
-            params.add_physical_object_type(ePHYSIC_DYNAMIC);
-            params.add_physical_density(1.0f);
-            params.add_physical_friction(0.3f);
-            params.add_physical_restitution(0.3f);
+            int fruit_x = 0;
+            int fruit_y = 0;
+            static_cast<TreeObject*>(tree)->get_tree_anchor_point(fruit_x, fruit_y);
+            LoaderParams params = LoaderParams(fruit_x - 10, fruit_y - 10, 32, 32, eTEXTURE_APPLE);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
+            static_cast<TreeObject*>(tree)->joint_new_object((FruitObject*) fruit_object);
             LogDebug("Create fruit %d success", i);
         }
     }
+    return kSUCCESS;
+}
 
     // GameObject *basket_object = GameObjectFactory::Instance()->create_object(eBASKET_OBJECT);
     // if (basket_object == NULL)
@@ -216,7 +208,9 @@ ErrorCode_t Game::create_dynamic_object()
     //     LogDebug("Create basket success");
     // }
 
-    for (int i = 0; i < 3; i++)
+ErrorCode_t Game::_create_bird_object()
+{
+    for (int i = 0; i < 1; i++)
     {
         GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
         if (bird_object == NULL)
@@ -226,15 +220,14 @@ ErrorCode_t Game::create_dynamic_object()
         else
         {
             LoaderParams params = LoaderParams(800, 100, 32, 32, eTEXTURE_BIRDS);
-            params.add_physical_object_type(ePHYSIC_DYNAMIC);
-            params.add_physical_density(0.4f);
-            params.add_physical_friction(0.3f);
-            params.add_physical_restitution(0.3f);
             bird_object->load(&params);
             mGameObjectVector.push_back(bird_object);
             LogDebug("Create bird success");
         }
     }
+
+    return kSUCCESS;
+}
 
     // GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
     // if (kid_object == NULL)
@@ -249,18 +242,15 @@ ErrorCode_t Game::create_dynamic_object()
     //     mGameObjectVector.push_back(kid_object);
     //     LogDebug("Create kid success");
     // }
-   
-    return kSUCCESS;
-}
 
 ErrorCode_t Game::create_object()
 {
-    ErrorCode_t error = create_static_object();
-    if (error == kSUCCESS)
-    {
-        error = create_dynamic_object();
-    }
-    return error;
+    GameObject *tree_object = NULL;
+    _create_background_object();
+    _create_tree_object(tree_object);
+    _create_fruit_object(tree_object);
+    _create_bird_object();
+    return kSUCCESS;
 }
 
 void Game::update()

@@ -4,12 +4,19 @@
 #include "game_enum.h"
 #include "SDL_game_object.h"
 #include "game_object_factory.h"
+#include "game_container_object.h"
 
-class TreeObject: public SDLGameObject
+class TreeObject: public SDLGameObject, public GameContainerObject
 {
     public:
-        TreeObject(): SDLGameObject(eTREE_OBJECT){};
+        TreeObject():SDLGameObject(eTREE_OBJECT), GameContainerObject(10){};
         ~TreeObject(){};
+        ErrorCode_t get_tree_anchor_point(int &x, int &y) const;
+    protected:
+        ErrorCode_t container_init_anchor_point() override;
+        b2Body* container_get_body() override;
+        void load(const LoaderParams *pParams) override;
+        ErrorCode_t create_object_fixture() override;
 };
 
 class TreeCreator: public BaseCreator
@@ -20,9 +27,4 @@ class TreeCreator: public BaseCreator
         GameObject* create_object() const override;
 };
 
-GameObject* TreeCreator:: create_object() const
-{
-    TreeObject *new_object = new TreeObject();
-    return (GameObject*)new_object;
-}
 #endif /* TREE_H */

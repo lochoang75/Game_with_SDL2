@@ -7,10 +7,21 @@ void SDLGameObject:: load(const LoaderParams *pParams)
     x = pParams->get_x();
     y = pParams->get_y();
     id = pParams->get_type();
-    mBody = Box2DPhysicalFacade::create_body(pParams);
-    if (mBody != NULL)
+    ErrorCode_t ret = create_object_body();
+    if (ret != kSUCCESS)
     {
+        LogError("Unable to create body for object type %s", DBG_ObjectType(mType));
     }
+
+    if (pParams->is_create_fixture())
+    {
+        ret = create_object_fixture();
+        if (ret != kSUCCESS)
+        {
+            LogError("Unable to create fixture for object type %s", DBG_ObjectType(mType));
+        }
+    }
+    LogDebug("Loaded successful");
 }
 
 void SDLGameObject::draw()
@@ -29,7 +40,7 @@ void SDLGameObject::draw()
     GameTexture *texture = TextureManager::Instance()->get_texture(id);
     if (texture == NULL)
     {
-        LogError("Error occur when get texture for id %d", id);
+        LogError("Error occur when get texture for id %s", DBG_TextureType(id));
     }
     else
     {
@@ -42,6 +53,36 @@ void SDLGameObject::draw()
 void SDLGameObject:: clean_up()
 {
     Box2DPhysicalFacade::destroy_body(mBody);
+}
+
+ErrorCode_t SDLGameObject::create_object_body()
+{
+    LogDebug("Get body definition for object %s", DBG_ObjectType(mType));
+    b2BodyDef body_def;
+    float body_x, body_y;
+    Box2DPhysicalFacade::compute_cartesian_origin(x, y, mWidth, mHeight, body_x, body_y);
+
+    body_def.type = b2_staticBody;
+    body_def.position.Set(body_x, body_y);
+    body_def.userData.pointer = reinterpret_cast<uintptr_t> (this);
+    mBody = Box2DPhysicalFacade::create_body(body_def);
+    if (mBody == NULL)
+    {
+        return kNO_MEM;
+    }
+
+    return kSUCCESS;
+}
+
+ErrorCode_t SDLGameObject::create_object_fixture()
+{
+    LogDebug("Get fixture definition for object %s", DBG_ObjectType(mType));
+    b2FixtureDef fixture_def;
+    b2PolygonShape shape;
+    fixture_def.shape = &shape;
+    fixture_def.density = 1.0;
+    Box2DPhysicalFacade::create_fixture(mBody, fixture_def);
+    return kSUCCESS;
 }
 
 void SDLGameObject:: get_position(int &x, int &y) const

@@ -9,7 +9,9 @@
 enum eBirdState {
     eBIRD_STAND = 0,
     eBIRD_TAKE_OFF,
-    eBIRD_FLYING
+    eBIRD_FLYING,
+    eBIRD_CATCH_THE_FRUIT,
+    eBIRD_ESCAPE
 };
 
 class BirdAnimationPool: public AnimationPool
@@ -83,6 +85,10 @@ class BirdObject: public SDLGameObject
         void update() override;
         void draw() override;
         void load(const LoaderParams *pParams) override;
+        void handle_event(enum eGameEventEnum event);
+        enum eBirdState get_bird_state() const {return mState;};
+        ErrorCode_t create_object_body() override;
+        ErrorCode_t create_object_fixture() override;
     private:
         enum eBirdState mState;
         const AnimationFrame *frame;
@@ -100,6 +106,40 @@ BirdObject::BirdObject(): SDLGameObject(eBIRD_OBJECT)
     frame = animation->get_frame(mState, mFrameIdx);
 }
 
+ErrorCode_t BirdObject::create_object_body()
+{
+    LogDebug("Get body definition for object %s", DBG_ObjectType(mType));
+    b2BodyDef body_def;
+    float body_x, body_y;
+    Box2DPhysicalFacade::compute_cartesian_origin(x, y, mWidth, mHeight, body_x, body_y);
+
+    body_def.type = b2_dynamicBody;
+    body_def.position.Set(body_x, body_y);
+    body_def.userData.pointer = reinterpret_cast<uintptr_t> (this);
+    mBody = Box2DPhysicalFacade::create_body(body_def);
+    if (mBody == NULL)
+    {
+        return kNO_MEM;
+    }
+    return kSUCCESS;
+}
+
+ErrorCode_t BirdObject:: create_object_fixture()
+{
+    LogDebug("Get fixture definition for object %s", DBG_ObjectType(mType));
+    b2FixtureDef fixture_def;
+    b2PolygonShape shape;
+    float w_plat = Box2DPhysicalFacade::compute_distance_to_meter(mWidth);
+    float h_plat = Box2DPhysicalFacade::compute_distance_to_meter(mHeight); 
+    shape.SetAsBox(w_plat/2, h_plat/2);
+    fixture_def.shape = &shape;
+    fixture_def.density = 1.0;
+    fixture_def.friction = 0.3;
+    fixture_def.restitution = 0.2;
+    Box2DPhysicalFacade::create_fixture(mBody, fixture_def);
+    return kSUCCESS;
+}
+
 void BirdObject::load(const LoaderParams *pParams)
 {
     SDLGameObject::load(pParams);
@@ -108,14 +148,24 @@ void BirdObject::load(const LoaderParams *pParams)
 }
 
 void BirdObject::update()
-{
-    mUpdateCounter++;
-    if (mUpdateCounter == 7)
+{   
+    switch (mState)
     {
-        frame = animation->get_frame(mState, mFrameIdx);
-        SDLGameObject::update();
-        mUpdateCounter = 0;
+        case eBIRD_STAND:
+            break;
+        case eBIRD_TAKE_OFF:
+            break;
+        case eBIRD_FLYING:
+            break;
+        case eBIRD_CATCH_THE_FRUIT:
+            break;
+        case eBIRD_ESCAPE:
+            break;
     }
+
+    frame = animation->get_frame(mState, mFrameIdx);
+    SDLGameObject::update();
+    mUpdateCounter = 0;
 }
 
 void BirdObject::draw()

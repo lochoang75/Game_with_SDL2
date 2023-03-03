@@ -4,6 +4,7 @@
     #define SCREEN_WIDTH (840)
     #define SCREEN_HEIGHT (480)
     #define GROUND_POSITION (SCREEN_HEIGHT - 100)
+    #define MAX_CONTACT_HANDLER (20)
     
 
     const int MET2PIX = (60);
@@ -19,4 +20,11 @@ typedef enum kErrorCode {
     kINVALID = -4,
     kUNKNOWN = -5
 } ErrorCode_t;
+
+enum _ObjectPhysicCategoryEnum {
+    kGROUND = 0x0001,
+    kFRUIT = 0x0002,
+    kBIRD = 0x0004,
+    kTREE = 0x0008,
+};
 #endif /* GAME CONSTANT */

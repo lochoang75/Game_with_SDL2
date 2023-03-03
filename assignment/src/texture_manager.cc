@@ -29,7 +29,7 @@ void TextureManager::load_texture(enum eTextureTypeList id, std::string path, SD
         return;
     }
 
-    LogDebug("Load texture %s for id %d", path.c_str(), id);
+    LogDebug("Load texture %s for id %s", path.c_str(), DBG_TextureType(id));
     mTextureList[id].load_from_file(path, pRenderer);
 }
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include "game_constant.h"
 #include "game_object.h"
+#include "game_contact_listener.h"
 #include "box2d.h"
 
 class Game
@@ -26,8 +27,6 @@ class Game
     private:
         Game();
         ~Game(){};
-        ErrorCode_t create_static_object();
-        ErrorCode_t create_dynamic_object();
         void creator_register();
         ErrorCode_t sdl_component_init(const char *title, int xpos, int ypos, int flags);
         void physics_init();
@@ -35,7 +34,14 @@ class Game
         SDL_Renderer *mRenderer;
         static Game *mInstance;
         b2Body *mGroundBody;
+        GameContactListener mContactListener;
         std::vector<GameObject*> mGameObjectVector;
+
+        ErrorCode_t _create_background_object();
+        ErrorCode_t _create_tree_object(GameObject *&tree);
+        ErrorCode_t _create_bird_object();
+        ErrorCode_t _create_fruit_object(GameObject *tree);
+        ErrorCode_t _create_kid_object();
 };
 
 #endif /* APPLICATION_MANAGE_H */

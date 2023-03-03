@@ -23,24 +23,11 @@ enum eGameObjectType {
     eTOTAL_OBJECT
 };
 
-
 enum eGameEventEnum {
     eGAME_EVENT_UNSET = 0,
     eGAME_EVENT_MOUSE_DONW,
     eGAME_EVENT_MOUSE_RELEASE,
     eGAME_EVENT_MOUSE_MOVE,
-};
-
-enum eGameObjectPhysic {
-    ePHYSIC_STATIC = 0,
-    ePHYSIC_DYNAMIC
-};
-
-enum ePhysicalShape {
-    eCHAIN_SHAPE = 0,
-    eCIRCEL_SHAPE,
-    eEDGE_SHAPE,
-    ePOLYGON_SHAPE
 };
 
 #endif /* GAME_ENUM_H*/

@@ -271,6 +271,78 @@ box2d_facade.cc.s:
 	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.s
 .PHONY : box2d_facade.cc.s
 
+game_contact_listener.o: game_contact_listener.cc.o
+.PHONY : game_contact_listener.o
+
+# target to build an object file
+game_contact_listener.cc.o:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.o
+.PHONY : game_contact_listener.cc.o
+
+game_contact_listener.i: game_contact_listener.cc.i
+.PHONY : game_contact_listener.i
+
+# target to preprocess a source file
+game_contact_listener.cc.i:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.i
+.PHONY : game_contact_listener.cc.i
+
+game_contact_listener.s: game_contact_listener.cc.s
+.PHONY : game_contact_listener.s
+
+# target to generate assembly for a file
+game_contact_listener.cc.s:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.s
+.PHONY : game_contact_listener.cc.s
+
+game_container_object.o: game_container_object.cc.o
+.PHONY : game_container_object.o
+
+# target to build an object file
+game_container_object.cc.o:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.o
+.PHONY : game_container_object.cc.o
+
+game_container_object.i: game_container_object.cc.i
+.PHONY : game_container_object.i
+
+# target to preprocess a source file
+game_container_object.cc.i:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.i
+.PHONY : game_container_object.cc.i
+
+game_container_object.s: game_container_object.cc.s
+.PHONY : game_container_object.s
+
+# target to generate assembly for a file
+game_container_object.cc.s:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.s
+.PHONY : game_container_object.cc.s
+
+game_debug.o: game_debug.cc.o
+.PHONY : game_debug.o
+
+# target to build an object file
+game_debug.cc.o:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.o
+.PHONY : game_debug.cc.o
+
+game_debug.i: game_debug.cc.i
+.PHONY : game_debug.i
+
+# target to preprocess a source file
+game_debug.cc.i:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.i
+.PHONY : game_debug.cc.i
+
+game_debug.s: game_debug.cc.s
+.PHONY : game_debug.s
+
+# target to generate assembly for a file
+game_debug.cc.s:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.s
+.PHONY : game_debug.cc.s
+
 game_manage.o: game_manage.cc.o
 .PHONY : game_manage.o
 
@@ -415,6 +487,30 @@ texture_wrapper.cc.s:
 	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.s
 .PHONY : texture_wrapper.cc.s
 
+tree.o: tree.cc.o
+.PHONY : tree.o
+
+# target to build an object file
+tree.cc.o:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.o
+.PHONY : tree.cc.o
+
+tree.i: tree.cc.i
+.PHONY : tree.i
+
+# target to preprocess a source file
+tree.cc.i:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.i
+.PHONY : tree.cc.i
+
+tree.s: tree.cc.s
+.PHONY : tree.s
+
+# target to generate assembly for a file
+tree.cc.s:
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.s
+.PHONY : tree.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -440,6 +536,15 @@ help:
 	@echo "... box2d_facade.o"
 	@echo "... box2d_facade.i"
 	@echo "... box2d_facade.s"
+	@echo "... game_contact_listener.o"
+	@echo "... game_contact_listener.i"
+	@echo "... game_contact_listener.s"
+	@echo "... game_container_object.o"
+	@echo "... game_container_object.i"
+	@echo "... game_container_object.s"
+	@echo "... game_debug.o"
+	@echo "... game_debug.i"
+	@echo "... game_debug.s"
 	@echo "... game_manage.o"
 	@echo "... game_manage.i"
 	@echo "... game_manage.s"
@@ -458,6 +563,9 @@ help:
 	@echo "... texture_wrapper.o"
 	@echo "... texture_wrapper.i"
 	@echo "... texture_wrapper.s"
+	@echo "... tree.o"
+	@echo "... tree.i"
+	@echo "... tree.s"
 .PHONY : help
 
 
