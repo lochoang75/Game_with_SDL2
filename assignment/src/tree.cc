@@ -39,18 +39,8 @@ ErrorCode_t TreeObject:: create_object_fixture()
         b2EdgeShape edge;
         int anchor_x = mAnchorArray[i].x;
         int anchor_y = mAnchorArray[i].y;
-        float x_pos = Box2DPhysicalFacade::compute_distance_to_meter(anchor_x);
-        float y_pos = Box2DPhysicalFacade:: compute_distance_to_meter(anchor_y);
-        if (anchor_x < (SCREEN_WIDTH/2))
-        {
-            x_pos = -x_pos;
-        }
-
-        if (anchor_y > (SCREEN_HEIGHT/2))
-        {
-            y_pos = -y_pos;
-        }
-
+        float x_pos, y_pos; 
+        Box2DPhysicalFacade::compute_cartesian_origin(x, y, kAnchorSize, kAnchorSize, x_pos, y_pos);
         b2Vec2 edge_position_start(x_pos - 0.1, y_pos);
         b2Vec2 edge_position_end(x_pos + 0.1, y_pos);
         edge.SetTwoSided(edge_position_start, edge_position_end);
@@ -83,17 +73,22 @@ ErrorCode_t TreeObject:: container_init_anchor_point()
     }
 
     int anchor_x_location = 40;
-    int anchor_y_location = 40;
+    int anchor_y_location = 10;
+    srand(time(NULL));
     for (int i = 0; i < mTotalAnchor; i++)
     {
         if (this->x + anchor_x_location >= this->x + mWidth - 40)
         {
-            anchor_x_location = 0;
-            anchor_y_location += 40;
+            anchor_x_location = 40;
+            anchor_y_location += (rand() % 20 + 20);
+        }
+        else
+        {
+            anchor_y_location += (rand() % 10 + 5);
         }
         mAnchorArray[i].Set(x + anchor_x_location, y + anchor_y_location);
         mJointArray[i] = NULL;
-        anchor_x_location += 40;
+        anchor_x_location += (rand() % 40 + 30);
     }
     return kSUCCESS;
 }

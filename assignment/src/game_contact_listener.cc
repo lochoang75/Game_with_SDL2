@@ -3,6 +3,8 @@
 
 #include "game_constant.h"
 #include "game_object.h"
+#include "bird.h"
+#include "fruit.h"
 #include "log_wrapper.h"
 
 void GameContactListener::BeginContact(b2Contact *contact)
@@ -42,6 +44,9 @@ void GameContactListener::BeginContact(b2Contact *contact)
     }
     else
     {
+        GameObject *tmp = obj_1;
+        obj_1 = obj_2;
+        obj_2 = tmp;
         key_pair = std::make_pair(object_2_type, object_1_type);
     }
     std::map<std::pair<eGameObjectType, eGameObjectType>, ContactHandler>::iterator it;
@@ -66,9 +71,15 @@ static void handle_contact_fruit_fruit(GameObject *first, GameObject *seccond)
     LogDebug("Contact handler for fruit and fruit has been called");
 }
 
-static void handle_contact_bird_fruit(GameObject *first, GameObject *seccond)
+static void handle_contact_bird_fruit(GameObject *bird, GameObject *fruit)
 {
     LogDebug("Contact handler for bird and fruit has been called");
+    eBirdState bird_state = static_cast<BirdObject*>(bird)->handle_event(eGAME_EVENT_CONTACT_TARGET);
+    if (bird_state == eBIRD_CATCH_THE_FRUIT)
+    {
+        static_cast<FruitObject*>(fruit)->handle_event(eGAME_EVENT_CONTACT_TARGET);
+        static_cast<BirdObject*>(bird)->bird_aim_this_fruit((FruitObject*)fruit);
+    }
 }
 
 void GameContactListener::InitContactHandler()

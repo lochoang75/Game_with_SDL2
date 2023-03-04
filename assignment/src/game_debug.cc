@@ -58,6 +58,8 @@ const char* DBG_EventType(enum eGameEventEnum event)
         return "MOUSE_RELEASE_EVENT";
     case eGAME_EVENT_MOUSE_MOVE:
         return "MOUSE_MOVE_EVENT";
+    case eGAME_EVENT_CONTACT_TARGET:
+        return "CONTACT_TARGET_EVENT";
     default:
         return "UNREGISTERED_MOUSE_EVENT";
     }

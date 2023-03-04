@@ -2,6 +2,8 @@
 #include "log_wrapper.h"
 #include "box2d_facade.h"
 
+const int kAnchorSize = 40;
+
 void ContainedObject:: set_container(GameContainerObject *container)
 {
     if (mContainer != NULL)
@@ -47,7 +49,7 @@ int GameContainerObject::joint_new_object(ContainedObject *target)
         if (mJointArray[i] == NULL)
         {
             b2Body *target_body = target->get_body();
-            target_body->SetAngularDamping(10.0f);
+            // target_body->SetAngularDamping(10.0f);
             b2Body *host_body = container_get_body();
             b2Vec2 host_anchor = container_get_anchor_point(i);
             b2Vec2 target_anchor = target->get_anchor_point();
@@ -82,11 +84,20 @@ void GameContainerObject::unjoint_object(int anchor_index)
 
 b2Vec2 GameContainerObject::container_get_anchor_point(int index)
 {
+    b2Body *body = container_get_body();
+    b2Vec2 anchor_point;
+    float x_pos, y_pos;
     int anchor_x = mAnchorArray[index].x;
     int anchor_y = mAnchorArray[index].y;
-    float x_pos, y_pos;
-    Box2DPhysicalFacade::compute_cartesian_origin(anchor_x, anchor_y, 40, 40, x_pos, y_pos);
-    b2Vec2 anchor_point(x_pos, y_pos);
-    LogDebug("Tree anchor point at x: %0.4f y: %0.4f", x_pos, y_pos);
+    if (body->GetType() == b2_dynamicBody)
+    {
+        anchor_point = body->GetPosition();
+    }
+    else
+    {
+        Box2DPhysicalFacade::compute_cartesian_origin(anchor_x, anchor_y, kAnchorSize, kAnchorSize, x_pos, y_pos);
+        anchor_point.Set(x_pos, y_pos);
+    }
+    LogDebug("Container anchor point at x: %0.4f y: %0.4f", anchor_point.x, anchor_point.y);
     return anchor_point;
 }

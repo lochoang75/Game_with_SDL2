@@ -5,7 +5,6 @@
     #define SCREEN_HEIGHT (480)
     #define GROUND_POSITION (SCREEN_HEIGHT - 100)
     #define MAX_CONTACT_HANDLER (20)
-    
 
     const int MET2PIX = (60);
     const int SCALED_WIDTH = (SCREEN_WIDTH/ MET2PIX);

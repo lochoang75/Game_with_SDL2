@@ -47,12 +47,14 @@ double Box2DPhysicalFacade:: get_angle(b2Body *body)
 b2Joint* Box2DPhysicalFacade:: joint_object_with_distance(b2Body *body, b2Body *target, b2Vec2 anchorA, b2Vec2 anchorB)
 {
     float hertz = 1.0f;
-    float dampingRatio = 0.7f;
+    float dampingRatio = 1.0f;
 
     b2DistanceJointDef jd;
     jd.Initialize(target, body, anchorA, anchorB);
-    jd.collideConnected = true;
-    int length = jd.length;
+    jd.collideConnected = false;
+    jd.length = 0.02f;
+    jd.maxLength = 0.02f;
+    jd.damping = 10.0f;
     b2LinearStiffness(jd.stiffness, jd.damping, hertz, dampingRatio, jd.bodyA, jd.bodyB);
     b2Joint *joint = mWorld->CreateJoint(&jd);
     return joint;

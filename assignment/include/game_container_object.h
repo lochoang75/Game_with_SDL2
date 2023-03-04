@@ -2,6 +2,7 @@
 #define GAME_CONTAINER_OBJECT_H
 #include "box2d.h"
 #include "game_constant.h"
+extern const int kAnchorSize;
 
 class GameContainerObject;
 

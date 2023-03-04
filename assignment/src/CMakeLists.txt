@@ -1,7 +1,7 @@
 # Add compiler errors/warnings flags
 set(SOURCES loader_params.cc texture_wrapper.cc game_manage.cc animation_manage.cc animation.cc
             texture_manager.cc game_object_factory.cc box2d_facade.cc SDL_game_object.cc game_debug.cc
-            game_contact_listener.cc tree.cc game_container_object.cc main.cc)        
+            game_contact_listener.cc tree.cc game_container_object.cc bird.cc fruit.cc main.cc)        
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)

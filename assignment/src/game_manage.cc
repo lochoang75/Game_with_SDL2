@@ -167,7 +167,7 @@ ErrorCode_t Game::_create_fruit_object(GameObject *tree)
 {
     /*TODO: Change to load from json or st, that create map dynamic, instead of hardcode*/
     srand(time(NULL));
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 10; i++)
     {
         GameObject *fruit_object = GameObjectFactory::Instance()->create_object(eFRUIT_OBJECT);
         if (fruit_object == NULL)
@@ -210,7 +210,7 @@ ErrorCode_t Game::_create_fruit_object(GameObject *tree)
 
 ErrorCode_t Game::_create_bird_object()
 {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 3; i++)
     {
         GameObject *bird_object = GameObjectFactory::Instance()->create_object(eBIRD_OBJECT);
         if (bird_object == NULL)
@@ -219,7 +219,7 @@ ErrorCode_t Game::_create_bird_object()
         } 
         else
         {
-            LoaderParams params = LoaderParams(800, 100, 32, 32, eTEXTURE_BIRDS);
+            LoaderParams params = LoaderParams(600 + i * 100, 150 + i * 50, 32, 32, eTEXTURE_BIRDS);
             bird_object->load(&params);
             mGameObjectVector.push_back(bird_object);
             LogDebug("Create bird success");
