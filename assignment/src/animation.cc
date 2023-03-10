@@ -1,8 +1,9 @@
 #include "animation.h"
 
-StateAnimation::StateAnimation(int total_frame)
+StateAnimation::StateAnimation(int total_frame, bool repeat)
 {
     mSize = total_frame;
+    mRepeat = repeat;
     mCurrent = 0;
     mFrameList = new AnimationFrame[total_frame];
 }
@@ -58,6 +59,27 @@ const AnimationFrame* StateAnimation::get_frame(int &index) const
     }
 }
 
+bool StateAnimation:: is_animate_completed(int &index) const
+{
+    if (index >= mCurrent)
+    {
+        LogError("Your requested index is out of range, we only have %d frame, can't supply %d", mCurrent, index);
+        return NULL;
+    }
+    else
+    {
+        if (index == (mCurrent - 1))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+}
+
 AnimationPool:: ~AnimationPool()
 {
     for (std::vector<StateAnimation*>::iterator object = mStateList.begin(); object < mStateList.end(); object ++)
@@ -79,9 +101,23 @@ const AnimationFrame* AnimationPool::get_frame(int enum_state, int &index) const
     return frame;
 }
 
-void AnimationPool:: add_animation_for_new_state(AnimationFrame *frame_array, int size)
+bool AnimationPool:: is_completed(int enum_state, int &index) const
 {
-    StateAnimation *state_animation = new StateAnimation(size);
+    if (enum_state >= (int)mStateList.size())
+    {
+        LogError("Unable to get state if index %d out of range %d", enum_state, mStateList.size());
+        return false;
+    }
+    else
+    {
+        StateAnimation* state_animation = mStateList.at(enum_state);
+        return state_animation->is_animate_completed(index);
+    }
+}
+
+void AnimationPool:: add_animation_for_new_state(AnimationFrame *frame_array, int size, bool repeat)
+{
+    StateAnimation *state_animation = new StateAnimation(size, repeat);
     if (state_animation == NULL)
     {
         LogError("Can't allocate memory for new state");

@@ -17,7 +17,8 @@ class Box2DPhysicalFacade
         static void set_gravity_scale(b2Body *body, float scale);
         static void get_current_position(b2Body *body, float &x, float &y);
         static double get_angle(b2Body *body);
-        static b2Joint *joint_object_with_distance(b2Body *body, b2Body *target, b2Vec2 body_anchor, b2Vec2 target_anchor);
+        static b2Joint *joint_object_with_distance(b2Body *body, b2Body *target, b2Vec2 body_anchor, b2Vec2 target_anchor, float distance);
+        static b2Joint *joint_object_with_distance(b2DistanceJointDef *joint_def);
 
         static void destroy_body(b2Body *body);
         static void destroy_joint(b2Joint *joint);

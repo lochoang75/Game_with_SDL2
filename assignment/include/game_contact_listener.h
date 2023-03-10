@@ -14,7 +14,7 @@ class GameContactListener: public b2ContactListener
 {
     public:
         void BeginContact(b2Contact *contact);
-        void EndContact(b2Contact *contact);
+        // void EndContact(b2Contact *contact);
         void InitContactHandler();
     private:
         void HandlerRegister(eGameObjectType firstObj, eGameObjectType seccondObj, ContactHandler handler);

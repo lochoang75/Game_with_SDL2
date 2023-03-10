@@ -12,8 +12,8 @@ class TextureManager
 {
     public:
         static TextureManager* Instance();
-        GameTexture *get_texture(enum eTextureTypeList id) const;
-        void load_texture(enum eTextureTypeList id, std::string path, SDL_Renderer *pRenderer);
+        GameTexture *get_texture(enum eTextureType id) const;
+        void load_texture(enum eTextureType id, std::string path, SDL_Renderer *pRenderer);
 
     private:
         TextureManager(); 

@@ -27,7 +27,7 @@ void TreeObject::load(const LoaderParams *pParams)
         LogError("Unable to create fixtures");
         return;
     }
-
+    
     LogDebug("Loaded sucessful");
 
 }
@@ -80,15 +80,15 @@ ErrorCode_t TreeObject:: container_init_anchor_point()
         if (this->x + anchor_x_location >= this->x + mWidth - 40)
         {
             anchor_x_location = 40;
-            anchor_y_location += (rand() % 20 + 20);
+            anchor_y_location += (rand() % 10 + 20);
         }
         else
         {
-            anchor_y_location += (rand() % 10 + 5);
+            anchor_y_location += (rand() % 5 + 5);
         }
         mAnchorArray[i].Set(x + anchor_x_location, y + anchor_y_location);
         mJointArray[i] = NULL;
-        anchor_x_location += (rand() % 40 + 30);
+        anchor_x_location += (rand() % 40 + 20);
     }
     return kSUCCESS;
 }
@@ -96,6 +96,15 @@ ErrorCode_t TreeObject:: container_init_anchor_point()
 b2Body* TreeObject::container_get_body()
 {
     return mBody;
+}
+
+b2DistanceJointDef TreeObject::container_get_joint_config(b2Body *host, b2Body *target, b2Vec2 host_anchor, b2Vec2 target_anchor) const
+{
+    b2DistanceJointDef joint_def;
+    joint_def.Initialize(host, target, host_anchor, target_anchor);
+    joint_def.collideConnected = true;
+    joint_def.maxLength = 0.0f;
+    return joint_def;
 }
 
 ErrorCode_t TreeObject:: get_tree_anchor_point(int &x, int &y) const

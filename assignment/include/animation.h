@@ -41,13 +41,15 @@ class StateAnimation
 {
     public:
         StateAnimation() = delete;
-        StateAnimation(int total_frame);
+        StateAnimation(int total_frame, bool repeat);
         ~StateAnimation();
         ErrorCode_t append_frame(AnimationFrame &frame);
         const AnimationFrame* get_frame(int &index) const;
+        bool is_animate_completed(int &index) const;
     private:
         int mSize;
         int mCurrent;
+        bool mRepeat;
         AnimationFrame *mFrameList;
 };
 
@@ -57,9 +59,10 @@ class AnimationPool
         AnimationPool(){};
         virtual ~AnimationPool();
         virtual const AnimationFrame* get_frame(int enum_state, int &index) const;
+        virtual bool is_completed(int enum_state, int &index) const;
         virtual void load_animation() = 0;
     protected:
-        void add_animation_for_new_state(AnimationFrame *frame_array, int size);
+        void add_animation_for_new_state(AnimationFrame *frame_array, int size, bool repeat);
         std::vector<StateAnimation*> mStateList;
 };
 

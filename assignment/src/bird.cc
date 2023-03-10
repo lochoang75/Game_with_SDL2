@@ -47,38 +47,41 @@ void BirdAnimationPool:: load_animation()
 void BirdAnimationPool:: load_bird_fly_animation()
 {
     AnimationFrame fly_frame[3] = {
-        {"fly_1",245,0,46,42},
-        {"fly_2",146,103,60,28},
-        {"fly_3",292,170,46,40}
+        {"fly_1", 0, 0, 46, 42},
+        {"fly_2", 0, 113, 60, 28},
+        {"fly_3", 0, 43, 46,40}
     };
-    AnimationPool::add_animation_for_new_state(fly_frame, 3);
+    AnimationPool::add_animation_for_new_state(fly_frame, 3, true);
     return;
 }
 
 void BirdAnimationPool:: load_bird_stand_animation()
 {
-    AnimationFrame stand_frame[2] = {
-        {"stand_1", 114, 22, 22, 21},
-        {"stand_1", 114, 22, 22, 21}
+    AnimationFrame stand_frame[4] = {
+        {"stand_1", 94, 0, 33, 29},
+        {"stand_2", 94, 30, 33, 29},
+        {"stand_3", 94, 60, 33, 29},
+        {"stand_4", 94, 176, 33, 29}
     };
-    AnimationPool::add_animation_for_new_state(stand_frame, 2);
+    AnimationPool::add_animation_for_new_state(stand_frame, 4, true);
 }
 
 void BirdAnimationPool:: load_bird_take_off_animation()
 {
-    AnimationFrame take_off_frame[2] = {
-        {"take_off_1", 0, 61, 23, 23},
-        {"take_off_2", 24, 61, 26, 21}
+    AnimationFrame take_off_frame[3] = {
+        {"take_off_1", 260, 252, 46, 42},
+        {"take_off_2", 47, 41, 46, 40},
+        {"take_off_3", 47, 0, 46, 40}
     };
-    AnimationPool::add_animation_for_new_state(take_off_frame, 2);
+    AnimationPool::add_animation_for_new_state(take_off_frame, 3, false);
 }
 
 void BirdAnimationPool:: load_bird_catch_the_fruit_animation()
 {
     AnimationFrame catch_the_fruit_frame[1] = {
-        {"catch_fruit_1", 207, 0, 37, 42}
+        {"catch_fruit_1", 175, 0, 37, 42}
     };
-    AnimationPool::add_animation_for_new_state(catch_the_fruit_frame, 1);
+    AnimationPool::add_animation_for_new_state(catch_the_fruit_frame, 1, false);
 }
 
 void BirdAnimationPool:: load_bird_escape_animation()
@@ -88,13 +91,13 @@ void BirdAnimationPool:: load_bird_escape_animation()
         {"escaping_2", 0, 116, 60, 28},
         {"escaping_3", 245, 129, 46, 42}
     };
-    AnimationPool::add_animation_for_new_state(escape_frame, 3);
+    AnimationPool::add_animation_for_new_state(escape_frame, 3, true);
 }
 
 
 BirdObject::BirdObject(): SDLGameObject(eBIRD_OBJECT), GameContainerObject(1)
 {
-    mBirdState = eBIRD_FLYING;
+    mBirdState = eBIRD_STAND;
     mFrameIdx = 0;
     mUpdateCounter = 0;
     mTargetFruit = NULL;
@@ -131,20 +134,21 @@ ErrorCode_t BirdObject:: create_object_fixture()
     float h_plat = Box2DPhysicalFacade::compute_distance_to_meter(mHeight); 
     shape.SetAsBox(w_plat/2, h_plat/2);
     fixture_def.shape = &shape;
-    fixture_def.density = 1.0;
+    fixture_def.density = 5.0;
     fixture_def.friction = 0.3;
     fixture_def.restitution = 0.2;
     fixture_def.filter.categoryBits = kBIRD;
-    fixture_def.filter.maskBits = kFRUIT;
     Box2DPhysicalFacade::create_fixture(mBody, fixture_def);
 
     for (int i = 0; i < mTotalAnchor; i++)
     {
+        LogDebug("Get fixture definition for object %s", DBG_ObjectType(mType));
         b2EdgeShape claws_shape;
         b2Vec2 pixel_anchor = mAnchorArray[i];
         float pos_x, pos_y;
         Box2DPhysicalFacade::compute_cartesian_origin(pixel_anchor.x, pixel_anchor.y, kAnchorSize, kAnchorSize, pos_x, pos_y);
         claws_shape.SetTwoSided(b2Vec2(pos_x, pos_y - 0.1), b2Vec2(pos_x, pos_y + 0.1));
+
         b2FixtureDef claws_def;
         claws_def.shape = &claws_shape;
         claws_def.filter.categoryBits = kBIRD;
@@ -161,8 +165,6 @@ void BirdObject::load(const LoaderParams *pParams)
 {
     container_init_anchor_point();
     SDLGameObject::load(pParams);
-    Box2DPhysicalFacade::set_gravity_scale(mBody, 0.0f);
-    Box2DPhysicalFacade::set_velocity(mBody, -1.0f, 0.0f);
 }
 
 void BirdObject:: set_bird_state(eBirdState new_state)
@@ -173,20 +175,32 @@ void BirdObject:: set_bird_state(eBirdState new_state)
 
 void BirdObject::update()
 {   
+    bool animation_change  = true;
+    uint8_t counter_limit = 10;
+    b2Vec2 object_velocity = mBody->GetLinearVelocity();
     switch (mBirdState)
     {
         case eBIRD_STAND:
+            if ((rand() % 100) > 70)
+            {
+                animation_change = false;
+            }
             break;
         case eBIRD_TAKE_OFF:
             break;
         case eBIRD_FLYING:
+            counter_limit = 3;
+            object_velocity = mBody->GetLinearVelocity();
+            if (object_velocity.y > 0)
+            {
+                mBody->ApplyForce(b2Vec2(-1.0, -(mMass * 10.0f) - 3), mBody->GetPosition(), true);
+            }
             break;
         case eBIRD_CATCH_THE_FRUIT:
             LogDebug("Bird will catch the fruit after that");
             if (fruit_catched)
             {
                 set_bird_state(eBIRD_ESCAPE);
-                Box2DPhysicalFacade::set_velocity(mBody, 1.5f, -1.0f);
             } else
             {
                 joint_new_object(mTargetFruit);
@@ -194,13 +208,21 @@ void BirdObject::update()
             }
             break;
         case eBIRD_ESCAPE:
+            if (object_velocity.y > 0)
+            {
+                mBody->ApplyForce(b2Vec2(2.0, -(mMass * 10.0f) - 20), mBody->GetPosition(), true);
+            }
             break;
         default:
             break;
     }
-    if (mUpdateCounter == 3)
+
+    if (mUpdateCounter == counter_limit)
     {
-        frame = animation->get_frame(mBirdState, mFrameIdx);
+        if (animation_change)
+        {
+            frame = animation->get_frame(mBirdState, mFrameIdx);
+        }
         mUpdateCounter = 0;
     }
     mUpdateCounter ++;
@@ -220,7 +242,7 @@ eBirdState BirdObject::handle_event(eGameEventEnum event)
         }
         else if (mBirdState == eBIRD_ESCAPE)
         {
-            Box2DPhysicalFacade::set_velocity(mBody, 1.5f, -1.0f);
+            Box2DPhysicalFacade::set_velocity(mBody, 2.0f, -1.0f);
             LogDebug("Bird will ignore that fruit");
         } 
         else
@@ -280,6 +302,30 @@ b2Body* BirdObject::container_get_body()
 void BirdObject::bird_aim_this_fruit(FruitObject *target_fruit)
 {
     mTargetFruit = target_fruit;
+}
+
+b2Vec2 BirdObject:: container_get_anchor_point(int index)
+{
+    b2Vec2 anchor_point;
+    do {
+        b2Vec2 center = mBody->GetPosition();
+        float w_plat = Box2DPhysicalFacade::compute_distance_to_meter(mWidth);
+        float h_plat = Box2DPhysicalFacade::compute_distance_to_meter(mHeight);
+        anchor_point.Set(center.x - w_plat/2, center.y - h_plat/2);
+        LogDebug("Bird anchor point at: %0.4f, %0.4f", anchor_point.x, anchor_point.y);
+        index--;
+    } while (index > 0);
+    return anchor_point;
+}
+
+b2DistanceJointDef BirdObject:: container_get_joint_config(b2Body *host, b2Body *target, b2Vec2 host_anchor, b2Vec2 target_anchor) const
+{
+    b2DistanceJointDef joint_def;
+    joint_def.Initialize(host, target, host_anchor, target_anchor);
+    joint_def.collideConnected = true;
+    joint_def.maxLength = 0.8f;
+    joint_def.damping = 100.0f;
+    return joint_def;
 }
 
 

@@ -2,7 +2,7 @@
 #include "log_wrapper.h"
 #include "box2d_facade.h"
 
-const int kAnchorSize = 40;
+const int kAnchorSize = 30;
 
 void ContainedObject:: set_container(GameContainerObject *container)
 {
@@ -49,12 +49,12 @@ int GameContainerObject::joint_new_object(ContainedObject *target)
         if (mJointArray[i] == NULL)
         {
             b2Body *target_body = target->get_body();
-            // target_body->SetAngularDamping(10.0f);
             b2Body *host_body = container_get_body();
             b2Vec2 host_anchor = container_get_anchor_point(i);
             b2Vec2 target_anchor = target->get_anchor_point();
-            LogDebug("Found anchor at %d will joint apple to this", i);
-            mJointArray[i] = Box2DPhysicalFacade::joint_object_with_distance(host_body, target_body, host_anchor, target_anchor);
+            // LogDebug("Found anchor at %d will joint apple to this", i);
+            b2DistanceJointDef joint_def = container_get_joint_config(host_body, target_body, host_anchor, target_anchor);
+            mJointArray[i] = Box2DPhysicalFacade::joint_object_with_distance(&joint_def);
             target->set_container(this);
             target->set_anchorindex(i);
             return i;
@@ -98,6 +98,6 @@ b2Vec2 GameContainerObject::container_get_anchor_point(int index)
         Box2DPhysicalFacade::compute_cartesian_origin(anchor_x, anchor_y, kAnchorSize, kAnchorSize, x_pos, y_pos);
         anchor_point.Set(x_pos, y_pos);
     }
-    LogDebug("Container anchor point at x: %0.4f y: %0.4f", anchor_point.x, anchor_point.y);
+    // LogDebug("Container anchor point at x: %0.4f y: %0.4f", anchor_point.x, anchor_point.y);
     return anchor_point;
 }

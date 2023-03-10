@@ -14,6 +14,7 @@ int main()
     Game::Instance()->init("Fruit Picking");
     Game::Instance()->load_media();
     Game::Instance()->load_animation();
+    Game::Instance()->load_font();
     Game::Instance()->create_object();
     SDL_Event e;
     bool quit = false;

@@ -1,7 +1,8 @@
 # Add compiler errors/warnings flags
 set(SOURCES loader_params.cc texture_wrapper.cc game_manage.cc animation_manage.cc animation.cc
             texture_manager.cc game_object_factory.cc box2d_facade.cc SDL_game_object.cc game_debug.cc
-            game_contact_listener.cc tree.cc game_container_object.cc bird.cc fruit.cc main.cc)        
+            game_contact_listener.cc tree.cc game_container_object.cc bird.cc fruit.cc kids.cc 
+            game_speech.cc game_font_manage.cc game_bubble.cc main.cc)        
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
@@ -20,8 +21,8 @@ find_package(SDL2_image REQUIRED)
 target_link_libraries(${PROJECT_NAME} SDL2::Image)
 
 # Add SDL2_ttf library
-#find_package(SDL2_ttf REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::TTF)
+find_package(SDL2_ttf REQUIRED)
+target_link_libraries(${PROJECT_NAME} SDL2::TTF)
 
 # Add SDL2_net library
 #find_package(SDL2_net REQUIRED)

@@ -44,19 +44,27 @@ double Box2DPhysicalFacade:: get_angle(b2Body *body)
     return body->GetAngle() * RAD2DEG;
 }
 
-b2Joint* Box2DPhysicalFacade:: joint_object_with_distance(b2Body *body, b2Body *target, b2Vec2 anchorA, b2Vec2 anchorB)
+b2Joint* Box2DPhysicalFacade:: joint_object_with_distance(b2Body *host, b2Body *target, b2Vec2 anchor_host, b2Vec2 anchor_target, float distance)
 {
     float hertz = 1.0f;
     float dampingRatio = 1.0f;
 
     b2DistanceJointDef jd;
-    jd.Initialize(target, body, anchorA, anchorB);
-    jd.collideConnected = false;
-    jd.length = 0.02f;
-    jd.maxLength = 0.02f;
-    jd.damping = 10.0f;
+    jd.Initialize(host, target, anchor_host, anchor_target);
+    jd.collideConnected = true;
+    jd.maxLength = distance;
     b2LinearStiffness(jd.stiffness, jd.damping, hertz, dampingRatio, jd.bodyA, jd.bodyB);
     b2Joint *joint = mWorld->CreateJoint(&jd);
+    return joint;
+}
+
+b2Joint* Box2DPhysicalFacade:: joint_object_with_distance(b2DistanceJointDef *joint_def)
+{
+    float hertz = 1.0f;
+    float dampingRatio = 1.0f;
+
+    b2LinearStiffness(joint_def->stiffness, joint_def->damping, hertz, dampingRatio, joint_def->bodyA, joint_def->bodyB);
+    b2Joint *joint = mWorld->CreateJoint(joint_def);
     return joint;
 }
 

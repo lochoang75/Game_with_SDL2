@@ -21,7 +21,7 @@ TextureManager* TextureManager:: Instance()
     return mInstance;
 }
 
-void TextureManager::load_texture(enum eTextureTypeList id, std::string path, SDL_Renderer *pRenderer)
+void TextureManager::load_texture(enum eTextureType id, std::string path, SDL_Renderer *pRenderer)
 {
     if (id >= eTEXTURE_TOTAL)
     {
@@ -33,7 +33,7 @@ void TextureManager::load_texture(enum eTextureTypeList id, std::string path, SD
     mTextureList[id].load_from_file(path, pRenderer);
 }
 
-GameTexture* TextureManager:: get_texture(enum eTextureTypeList id) const
+GameTexture* TextureManager:: get_texture(enum eTextureType id) const
 {
     GameTexture *game_texture = NULL;
     if (id >= eTEXTURE_TOTAL)

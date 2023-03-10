@@ -42,13 +42,15 @@ class BirdObject: public SDLGameObject, public GameContainerObject
         void load(const LoaderParams *pParams) override;
         enum eBirdState handle_event(enum eGameEventEnum event);
         enum eBirdState get_bird_state() const {return mBirdState;};
-        ErrorCode_t create_object_body() override;
-        ErrorCode_t create_object_fixture() override;
         void bird_aim_this_fruit(FruitObject *target);
 
     protected:
+        ErrorCode_t create_object_body() override;
+        ErrorCode_t create_object_fixture() override;
         ErrorCode_t container_init_anchor_point() override;
         b2Body* container_get_body() override;
+        b2Vec2 container_get_anchor_point(int index) override;
+        b2DistanceJointDef container_get_joint_config(b2Body *host, b2Body *target, b2Vec2 host_anchor, b2Vec2 target_anchor) const override;
         void set_bird_state(eBirdState new_state);
 
     private:

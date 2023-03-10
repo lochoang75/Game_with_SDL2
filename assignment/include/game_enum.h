@@ -1,7 +1,7 @@
 #ifndef GAME_ENUM_H
 #define GAME_ENUM_H
 
-enum eTextureTypeList {
+enum eTextureType {
     eTEXTURE_BACKGROUND = 0,
     eTEXTURE_TREE_FORM_1 = 1,
     eTEXTURE_TREE_FORM_2 = 2,
@@ -10,6 +10,9 @@ enum eTextureTypeList {
     eTEXTURE_BASKET = 5,
     eTEXTURE_BIRDS = 6,
     eTEXTURE_KIDS = 7,
+    eTEXTURE_BUBBLE = 8,
+    eTEXTURE_SIGN = 9,
+    eTEXTURE_WATER_BUBBLE = 10,
     eTEXTURE_TOTAL
 };
 
@@ -20,7 +23,16 @@ enum eGameObjectType {
     eBACKGROUND_OBJECT = 3,
     eBIRD_OBJECT = 4,
     eKID_OBJECT = 5,
+    eBUBBLE_OBJECT = 6,
+    eWATER_BUBBLE_OBJECT = 7,
+    eSIGN_OBJECT = 8,
     eTOTAL_OBJECT
+};
+
+enum eGameFont {
+    eDEFAULT_FONT = 0,
+    eDELUXE_FONT, 
+    eTOTAL_FONTS
 };
 
 enum eGameEventEnum {

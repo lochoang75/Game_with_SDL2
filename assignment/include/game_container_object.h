@@ -33,11 +33,11 @@ class GameContainerObject
 
     protected:
         virtual ErrorCode_t container_init_anchor_point() = 0;
+        virtual b2DistanceJointDef container_get_joint_config(b2Body *host, b2Body *target, b2Vec2 host_anchor, b2Vec2 target_anchor) const = 0;
+        virtual b2Vec2 container_get_anchor_point(int index);
         virtual b2Body *container_get_body() = 0;
         b2Vec2 *mAnchorArray;
         b2Joint **mJointArray;
         int mTotalAnchor;
-    private:
-        b2Vec2 container_get_anchor_point(int index);
 };
 #endif /*GAME_CONTAINER_OBJECT_H*/

@@ -29,13 +29,13 @@ void GameContactListener::BeginContact(b2Contact *contact)
     }
     else
     {
-        LogDebug("Contact object 2 user data is unset");
+        // LogDebug("Contact object 2 user data is unset");
         return;
     }
 
     eGameObjectType object_1_type = obj_1->get_object_type();
     eGameObjectType object_2_type = obj_2->get_object_type();
-    LogDebug("Contact between %s and %s has begin", DBG_ObjectType(object_1_type), DBG_ObjectType(object_2_type));
+    // LogDebug("Contact between %s and %s has begin", DBG_ObjectType(object_1_type), DBG_ObjectType(object_2_type));
 
     std::pair<eGameObjectType, eGameObjectType> key_pair;
     if (object_1_type > object_2_type)
@@ -62,14 +62,9 @@ void GameContactListener::BeginContact(b2Contact *contact)
     }
 }
 
-void GameContactListener::EndContact(b2Contact *contact)
-{
-}
-
-static void handle_contact_fruit_fruit(GameObject *first, GameObject *seccond)
-{
-    LogDebug("Contact handler for fruit and fruit has been called");
-}
+// void GameContactListener::EndContact(b2Contact *contact)
+// {
+// }
 
 static void handle_contact_bird_fruit(GameObject *bird, GameObject *fruit)
 {
@@ -84,7 +79,6 @@ static void handle_contact_bird_fruit(GameObject *bird, GameObject *fruit)
 
 void GameContactListener::InitContactHandler()
 {
-    HandlerRegister(eFRUIT_OBJECT, eFRUIT_OBJECT, &handle_contact_fruit_fruit);
     HandlerRegister(eBIRD_OBJECT, eFRUIT_OBJECT, &handle_contact_bird_fruit);
 }
 

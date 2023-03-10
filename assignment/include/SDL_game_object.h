@@ -22,7 +22,7 @@ class SDLGameObject: public GameObject, public GamePhysicObject
         void get_position(int &x, int &y) const;
         int get_width() const {return mWidth;};
         int get_height() const {return mHeight;};
-        enum eTextureTypeList get_id() const {return id;};
+        enum eTextureType get_id() const {return id;};
     protected:
 
         virtual ErrorCode_t create_object_body() override;
@@ -32,7 +32,7 @@ class SDLGameObject: public GameObject, public GamePhysicObject
         int y;
         int mWidth;
         int mHeight;
-        enum eTextureTypeList id;
+        enum eTextureType id;
 };
 
 #endif /* SDL_GAME_OBJECT_H*/

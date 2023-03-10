@@ -5,6 +5,7 @@
     #define SCREEN_HEIGHT (480)
     #define GROUND_POSITION (SCREEN_HEIGHT - 100)
     #define MAX_CONTACT_HANDLER (20)
+    #define MAX_ANSWER_BUBBLE (10)
 
     const int MET2PIX = (60);
     const int SCALED_WIDTH = (SCREEN_WIDTH/ MET2PIX);
@@ -21,9 +22,10 @@ typedef enum kErrorCode {
 } ErrorCode_t;
 
 enum _ObjectPhysicCategoryEnum {
-    kGROUND = 0x0001,
-    kFRUIT = 0x0002,
-    kBIRD = 0x0004,
-    kTREE = 0x0008,
+    kGROUND = 0x0001 << 0,
+    kFRUIT = 0x0001 << 1,
+    kBIRD = 0x0001 << 2,
+    kTREE = 0x0001 << 3,
+    kSIGN = 0x0001 << 4
 };
 #endif /* GAME CONSTANT */

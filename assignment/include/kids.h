@@ -5,11 +5,25 @@
 #include "game_object_factory.h"
 #include "animation.h"
 #include "animation_manage.h"
+#include "game_speech.h"
 
-enum eKidState 
+enum eKidAnimationState 
 {
     eKID_STAND = 0,
-    eKID_RUN_LEFT,
+    eKID_MOVE_RIGHT,
+    eKID_MOVE_LEFT,
+    eKID_WATER_TREE
+};
+
+enum eKidActionState
+{
+    eKID_ACTION_INTRODUCE = 0,
+    eKID_ACTION_PLAN_TREE,
+    eKID_ACTION_ASK_QUESTION_1,
+    eKID_ACTION_ASK_QUESTION_2,
+    eKID_ACTION_ASK_QUESTION_3,
+    eKID_ACTION_TRASH_TALK,
+    eKID_ACTION_TOTAL
 };
 
 class KidAnimationPool: public AnimationPool
@@ -20,40 +34,10 @@ class KidAnimationPool: public AnimationPool
         void load_animation() override;
     private:
         void load_stand_animation();
-        void load_run_animation();
+        void load_right_move_animation();
+        void load_left_move_animation();
+        void load_water_tree_animation();
 };
-
-KidAnimationPool::KidAnimationPool():AnimationPool()
-{
-    load_animation();
-}
-
-void KidAnimationPool::load_animation()
-{
-    load_stand_animation();
-    load_run_animation();
-}
-
-void KidAnimationPool::load_stand_animation()
-{
-    AnimationFrame sprite_sheet[2] = 
-    {
-        {"stand_1",0,145,40,70},
-        {"stand_2",89,145,40,68}
-    };
-    AnimationPool::add_animation_for_new_state(sprite_sheet,2);
-}
-
-void KidAnimationPool::load_run_animation()
-{
-    AnimationFrame sprite_sheet[3] = 
-    {
-        {"run_1",215,72,42,72},
-        {"run_2",354,65,46,69},
-        {"run_3",0,287,52,69}
-    };
-    AnimationPool::add_animation_for_new_state(sprite_sheet, 3);
-}
 
 class KidObject: public SDLGameObject
 {
@@ -63,55 +47,17 @@ class KidObject: public SDLGameObject
         void update() override;
         void draw() override;
         void handle_event();
+        void set_tree_position(int tree_x_position);
     private:
-        enum eKidState mState;
-        const AnimationFrame *frame;
-        const AnimationPool *animation;
+        void init_character_speech();
+        enum eKidAnimationState mAnimationState;
+        enum eKidActionState mActionState;
+        const AnimationFrame *mFrame;
+        const AnimationPool *mAnimation;
+        GameCharacterSpeechSet mSpeechSet[eKID_ACTION_TOTAL];
         int mUpdateCounter = 0;
         int mFrameIdx;
 };
-KidObject:: KidObject(): SDLGameObject(eKID_OBJECT)
-{
-    mState = eKID_STAND;
-    mFrameIdx = 0;
-    animation = AnimationManage::Instance()->get_animation(eKID_OBJECT);
-    frame = animation->get_frame(mState, mFrameIdx);
-}
-void KidObject:: draw()
-{
-    double angle = Box2DPhysicalFacade::get_angle(mBody);
-    float pos_x, pos_y;
-    Box2DPhysicalFacade::get_current_position(mBody, pos_x, pos_y);
-    Box2DPhysicalFacade::compute_pixel_postion(pos_x, pos_y, mWidth, mHeight, x, y);
-    SDL_Rect src_rect;
-    src_rect.x = frame->get_x();
-    src_rect.y = frame->get_y();
-    src_rect.w = frame->get_width();
-    src_rect.h = frame->get_height();
-    SDL_Renderer *p_renderer = Game::Instance()->get_renderer();
-    SDL_RendererFlip flip = SDL_FLIP_NONE;
-    GameTexture *texture = TextureManager::Instance()->get_texture(id);
-    if (texture == NULL)
-    {
-        LogError("Error occur when get texture for id %d", id);
-    }
-    else
-    {
-        texture->draw(x, y, &src_rect, angle, p_renderer, flip);
-    }
-    return;
-}
-
-void KidObject::update()
-{
-    mUpdateCounter++;
-    if (mUpdateCounter == 7)
-    {
-        frame = animation->get_frame(mState, mFrameIdx);
-        SDLGameObject::update();
-        mUpdateCounter = 0;
-    }
-}
 
 
 class KidCreator: public BaseCreator
@@ -120,9 +66,4 @@ class KidCreator: public BaseCreator
         GameObject* create_object() const override;
 };
 
-GameObject* KidCreator::create_object() const
-{
-    KidObject *new_object = new KidObject();
-    return (GameObject*) new_object;
-}
 #endif /*KIDS_H*/

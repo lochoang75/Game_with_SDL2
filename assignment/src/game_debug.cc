@@ -1,6 +1,6 @@
 #include "game_debug.h"
 
-const char* DBG_TextureType(enum eTextureTypeList id)
+const char* DBG_TextureType(enum eTextureType id)
 {
     switch (id)
     {
@@ -20,6 +20,13 @@ const char* DBG_TextureType(enum eTextureTypeList id)
         return "TREE_FORM_3_TEXTURE";
     case eTEXTURE_KIDS:
         return "KID_TEXTURE";
+    case eTEXTURE_BUBBLE:
+        return "BUBBLE_TEXTURE";
+    case eTEXTURE_SIGN:
+        return "SIGN_TEXTURE";
+    case eTEXTURE_WATER_BUBBLE:
+        return "WATER_BUBBLE_TEXTURE";
+
     default:
         return "UNREGISTERED_TEXTURE";
     }
@@ -41,6 +48,12 @@ const char* DBG_ObjectType(enum eGameObjectType obj_type)
         return "KID_OBJECT";
     case eTREE_OBJECT:
         return "TREE_OBJECT";
+    case eBUBBLE_OBJECT:
+        return "BUBBLE_OBJECT";
+    case eSIGN_OBJECT:
+        return "SIGN_OBJECT";
+    case eWATER_BUBBLE_OBJECT:
+        return "WATER_BUBBLE_OBJECT";
     default:
         return "UNREGISTERED OBJECT";
     }
@@ -62,5 +75,19 @@ const char* DBG_EventType(enum eGameEventEnum event)
         return "CONTACT_TARGET_EVENT";
     default:
         return "UNREGISTERED_MOUSE_EVENT";
+    }
+}
+
+const char *DBG_FontType(enum eGameFont font)
+{
+    switch (font)
+    {
+    case eDEFAULT_FONT:
+        return "DEFAULT_FONT";
+    case eDELUXE_FONT:
+        return "DELUXE_FONT";
+    default:
+        return "UNREGISTERED FONT";
+        break;
     }
 }

@@ -17,6 +17,7 @@ class Game
 
         ErrorCode_t load_media();
         ErrorCode_t load_animation();
+        ErrorCode_t load_font();
         ErrorCode_t create_object();
         void update();
         void clean_up();
@@ -39,9 +40,12 @@ class Game
 
         ErrorCode_t _create_background_object();
         ErrorCode_t _create_tree_object(GameObject *&tree);
-        ErrorCode_t _create_bird_object();
+        ErrorCode_t _create_bird_object(GameObject *roadSign);
         ErrorCode_t _create_fruit_object(GameObject *tree);
         ErrorCode_t _create_kid_object();
+        ErrorCode_t _create_road_sign(GameObject *&sign);
+        ErrorCode_t _create_chat_box(GameObject *&chatBox);
+        ErrorCode_t _create_answer_bubble(GameObject *pParent); 
 };
 
 #endif /* APPLICATION_MANAGE_H */

@@ -21,7 +21,8 @@ void SDLGameObject:: load(const LoaderParams *pParams)
             LogError("Unable to create fixture for object type %s", DBG_ObjectType(mType));
         }
     }
-    LogDebug("Loaded successful");
+    mMass = mBody->GetMass();
+    // LogDebug("Loaded successful object mass is: %0.4f", mMass);
 }
 
 void SDLGameObject::draw()

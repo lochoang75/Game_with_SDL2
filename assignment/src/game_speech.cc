@@ -1,0 +1,172 @@
+#include "game_speech.h"
+#include "texture_manager.h"
+#include "game_font_manage.h"
+#define SUPPORTED_NUMBER (11)
+
+GameAnswer:: GameAnswer(const GameAnswer &answer)
+{
+    answerText = answer.answerText;
+    answerNumber = answer.answerNumber;
+    textR = answer.textR;
+    textG = answer.textG;
+    textB = answer.textB;
+    textA = answer.textA;
+}
+
+GameAnswer::GameAnswer(const wchar_t *text, int answer_num, int R, int G, int B, int A)
+{
+    answerText = text;
+    answerNumber = answer_num;
+    textR = R;
+    textG = G;
+    textB = B;
+    textA = A;
+}
+
+const GameAnswer GameAnswer::operator=(const GameAnswer &other)
+{
+    const GameAnswer new_answer(other);
+    return new_answer;
+}
+
+GameCharacterSpeech:: GameCharacterSpeech(const wchar_t *question, int answerValue)
+{
+    mAnswerArray.push_back(answerValue);
+    isQuestion = true;
+    mSpeech = question;
+    mTextColor = { 0, 0, 0, 255};
+}
+
+GameCharacterSpeech:: GameCharacterSpeech(): mSpeech(NULL), isQuestion(false)
+{
+    mTextColor = { 0, 0, 0, 255};
+}
+
+GameCharacterSpeech::GameCharacterSpeech(const wchar_t *simpleSpeech): mSpeech(simpleSpeech), isQuestion(false)
+{
+    mTextColor = { 0, 0, 0, 255};
+}
+
+
+GameCharacterSpeech::GameCharacterSpeech(const wchar_t *otherSpeech, bool isQuestion): mSpeech(otherSpeech), isQuestion(isQuestion)
+{
+    mTextColor = { 0, 0, 0, 255};
+}
+
+
+GameCharacterSpeech:: ~GameCharacterSpeech()
+{
+    clear_all_answers();
+}
+
+void GameCharacterSpeech:: set_speech_text(const wchar_t *speech)
+{
+    mSpeech = speech;
+}
+
+ErrorCode_t GameCharacterSpeech:: append_answer(int answerValue)
+{
+    if (isQuestion)
+    {
+        mAnswerArray.push_back(answerValue);
+        return kSUCCESS;
+    }
+
+    return kFAILED;
+}
+
+static GameAnswer lanswer_array[SUPPORTED_NUMBER] = 
+{
+    {L"không", 0, 125, 125, 125, 125},
+    {L"một", 1, 125, 125, 125, 125},
+    {L"hai", 2, 125, 125, 125, 125},
+    {L"ba", 3, 125, 125, 125, 125},
+    {L"bốn", 4, 125, 125, 125, 125},
+    {L"năm", 5, 125, 125, 125, 125},
+    {L"sáu", 6, 125, 125, 125, 125},
+    {L"bảy", 7, 125, 125, 125, 125},
+    {L"tám", 8, 125, 125, 125, 125},
+    {L"chín", 9, 125, 125, 125, 125},
+    {L"mười", 10, 125, 125, 125, 125}
+};
+
+static const GameAnswer* get_answer_by_index(int id)
+{
+    if (id > SUPPORTED_NUMBER)
+    {
+        LogDebug("Number %d is not supported yet, created it", id);
+        return &lanswer_array[0];
+    }
+
+    return &lanswer_array[id];
+}
+
+int GameCharacterSpeech:: get_answer(const GameAnswer** &answerArray)
+{
+    std::vector<int>::iterator it;
+    answerArray = new const GameAnswer* [mAnswerArray.size()];
+    int i = 0;
+    for (it = mAnswerArray.begin(); it < mAnswerArray.end(); it ++)
+    {
+        answerArray[i] = get_answer_by_index((*it));
+        i++;
+    }
+
+    return i;
+}
+
+GameCharacterSpeechSet::GameCharacterSpeechSet()
+{
+    mReapeat = false;
+    mCount = 0;
+    mCurrentIdx = 0;
+}
+
+void GameCharacterSpeechSet:: append_new_speech(GameCharacterSpeech* new_speech)
+{
+    mSpeechSet.push_back(new_speech);
+    mCount++;
+}
+
+void GameCharacterSpeechSet:: append_new_speech(GameCharacterSpeech *newSpeechList, int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        append_new_speech(&newSpeechList[i]);
+    }
+}
+
+GameCharacterSpeech* GameCharacterSpeechSet::get_next_speech()
+{
+    GameCharacterSpeech *new_speech = mSpeechSet[mCurrentIdx];
+    if (mCurrentIdx == mCount - 1)
+    {
+        if (mReapeat)
+        {
+            mCurrentIdx = 0;
+        } 
+    }
+    else
+    {
+        mCurrentIdx++;
+    }
+
+    return new_speech;
+}
+
+void GameCharacterSpeechSet:: set_index(int index)
+{
+    if (index < mCount)
+    {
+        mCurrentIdx = index;
+    }
+    else
+    {
+        LogError("Indexing error, cannot set frame to invalid number");
+    }
+}
+
+void GameCharacterSpeechSet:: set_repeat(bool repeat)
+{
+    mReapeat = repeat;
+}

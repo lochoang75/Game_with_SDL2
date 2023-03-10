@@ -11,8 +11,11 @@
 #include "kids.h"
 #include "background.h"
 #include "basket.h"
+#include "game_bubble.h"
 #include "animation_manage.h"
+#include "road_sign.h"
 #include "game_contact_listener.h"
+#include "game_font_manage.h"
 #include "box2d.h"
 
 Game *Game::mInstance = NULL;
@@ -47,7 +50,6 @@ ErrorCode_t Game::init(const char *title)
     return ret;
 }
 
-b2EdgeShape ground_shape;
 
 void Game::physics_init()
 {
@@ -60,6 +62,7 @@ void Game::physics_init()
     float y_ground = Box2DPhysicalFacade::compute_distance_to_meter(GROUND_POSITION - 100);
     b2Vec2 ground_start(-x_ground/2, y_ground/2);
     b2Vec2 ground_end(x_ground/2, y_ground/2);
+    b2EdgeShape ground_shape;
     ground_shape.SetTwoSided(ground_start, ground_end);
     b2FixtureDef ground_fixture_def;
     ground_fixture_def.shape = &ground_shape;
@@ -93,6 +96,11 @@ ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int 
         LogError("SDL image could not initialize! SDL image error: %s\n", IMG_GetError());
     }
 
+    if (TTF_Init())
+    {
+        LogError("SDL image could not initialize! SDL image error: %s\n", TTF_GetError());
+    }
+
     return kSUCCESS;
 }
 
@@ -104,6 +112,8 @@ void Game::creator_register()
     GameObjectFactory::Instance()->creator_register(eBASKET_OBJECT, new BasketCreator());
     GameObjectFactory::Instance()->creator_register(eBIRD_OBJECT, new BirdCreator());
     GameObjectFactory::Instance()->creator_register(eKID_OBJECT, new KidCreator());
+    GameObjectFactory::Instance()->creator_register(eSIGN_OBJECT, new SignCreator());
+    GameObjectFactory::Instance()->creator_register(eWATER_BUBBLE_OBJECT, new GameBubbleCreator());
 }
 
 ErrorCode_t Game::load_media()
@@ -115,7 +125,10 @@ ErrorCode_t Game::load_media()
     TextureManager::Instance()->load_texture(eTEXTURE_BACKGROUND, "resources/background.png", mRenderer);
     TextureManager::Instance()->load_texture(eTEXTURE_BASKET, "resources/basket.png", mRenderer);
     TextureManager::Instance()->load_texture(eTEXTURE_BIRDS, "resources/birds.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_KIDS, "resources/kids.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_KIDS, "resources/farmers.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_BUBBLE, "resources/chat_box.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_SIGN, "resources/sign.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_WATER_BUBBLE, "resources/water_bubble.png", mRenderer);
     return kSUCCESS;
 }
 
@@ -123,6 +136,14 @@ ErrorCode_t Game::load_animation()
 {
     AnimationManage::Instance()->animation_register(eBIRD_OBJECT, new BirdAnimationPool());
     AnimationManage::Instance()->animation_register(eKID_OBJECT, new KidAnimationPool());
+    AnimationManage::Instance()->animation_register(eWATER_BUBBLE_OBJECT, new AnswerBubbleAnimationPool());
+    return kSUCCESS;
+}
+
+ErrorCode_t Game::load_font()
+{
+    GameFontManage::load_new_font(eDEFAULT_FONT, "fonts/Arial.ttf", 18);
+    GameFontManage::load_new_font(eDEFAULT_FONT, "fonts/dlxfont.ttf", 18);
     return kSUCCESS;
 }
 
@@ -155,7 +176,7 @@ ErrorCode_t Game::_create_tree_object(GameObject *&tree)
     }
     else
     {
-        LoaderParams params = LoaderParams(10, GROUND_POSITION - 300, 300, 300, eTEXTURE_TREE_FORM_1);
+        LoaderParams params = LoaderParams(20, GROUND_POSITION - 300, 300, 300, eTEXTURE_TREE_FORM_1);
         tree->load(&params);
         mGameObjectVector.push_back(tree);
         LogDebug("Create tree success");
@@ -180,7 +201,7 @@ ErrorCode_t Game::_create_fruit_object(GameObject *tree)
             int fruit_x = 0;
             int fruit_y = 0;
             static_cast<TreeObject*>(tree)->get_tree_anchor_point(fruit_x, fruit_y);
-            LoaderParams params = LoaderParams(fruit_x - 10, fruit_y - 10, 32, 32, eTEXTURE_APPLE);
+            LoaderParams params = LoaderParams(fruit_x - 10, fruit_y - 10, 25, 24, eTEXTURE_APPLE);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
             static_cast<TreeObject*>(tree)->joint_new_object((FruitObject*) fruit_object);
@@ -208,7 +229,7 @@ ErrorCode_t Game::_create_fruit_object(GameObject *tree)
     //     LogDebug("Create basket success");
     // }
 
-ErrorCode_t Game::_create_bird_object()
+ErrorCode_t Game::_create_bird_object(GameObject *roadSign)
 {
     for (int i = 0; i < 3; i++)
     {
@@ -219,7 +240,9 @@ ErrorCode_t Game::_create_bird_object()
         } 
         else
         {
-            LoaderParams params = LoaderParams(600 + i * 100, 150 + i * 50, 32, 32, eTEXTURE_BIRDS);
+            int sign_x = static_cast<RoadSign*>(roadSign)->get_x_position(); 
+            int sign_y = static_cast<RoadSign*>(roadSign)->get_y_position();
+            LoaderParams params = LoaderParams(sign_x + i * 20, sign_y, 32, 32, eTEXTURE_BIRDS);
             bird_object->load(&params);
             mGameObjectVector.push_back(bird_object);
             LogDebug("Create bird success");
@@ -229,32 +252,101 @@ ErrorCode_t Game::_create_bird_object()
     return kSUCCESS;
 }
 
-    // GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
-    // if (kid_object == NULL)
-    // {
-    //     LogError("Unable to allocate memory for kid object");
-    // } 
-    // else
-    // {
-    //     LoaderParams params = LoaderParams(0, 0, 32, 32, eTEXTURE_KIDS);
-    //     params.add_physical_object_type(ePHYSIC_DYNAMIC);
-    //     kid_object->load(&params);
-    //     mGameObjectVector.push_back(kid_object);
-    //     LogDebug("Create kid success");
-    // }
+ErrorCode_t Game::_create_kid_object()
+{
+    GameObject *kid_object = GameObjectFactory::Instance()->create_object(eKID_OBJECT);
+    if (kid_object == NULL)
+    {
+        LogError("Unable to allocate memory for kid object");
+        return kNO_MEM;
+    } 
+    else
+    {
+        LoaderParams params = LoaderParams(200, GROUND_POSITION - 80, 46, 90, eTEXTURE_KIDS);
+        kid_object->load(&params);
+        mGameObjectVector.push_back(kid_object);
+        LogDebug("Create kid success");
+    }
+    return kSUCCESS;
+}
+
+ErrorCode_t Game::_create_road_sign(GameObject *&signObject)
+{
+    signObject = GameObjectFactory::Instance()->create_object(eSIGN_OBJECT);
+    if (signObject == NULL)
+    {
+        LogError("Unable to allocate memory for sign object");
+        return kNO_MEM;
+    } 
+    else
+    {
+        LoaderParams params = LoaderParams(SCREEN_WIDTH - 77, GROUND_POSITION - 94, 77, 94, eTEXTURE_SIGN);
+        signObject->load(&params);
+        mGameObjectVector.push_back(signObject);
+        LogDebug("Create sign success");
+    }
+    return kSUCCESS;
+}
+
+ErrorCode_t Game::_create_chat_box(GameObject *&chatBox)
+{
+    chatBox = GameQuestionBubble::Instance();
+    if (chatBox == NULL)
+    {
+        LogError("Unable to allocate memory for chat box object");
+        return kNO_MEM;
+    }
+    else
+    {
+        LoaderParams params = LoaderParams(0, GROUND_POSITION, SCREEN_WIDTH, SCREEN_HEIGHT - GROUND_POSITION, eTEXTURE_BUBBLE);
+        chatBox->load(&params);
+        mGameObjectVector.push_back(chatBox);
+        LogDebug("Create chat box successful");
+    }
+    return kSUCCESS;
+}
+
+ErrorCode_t Game::_create_answer_bubble(GameObject *pParent)
+{
+    for(int i = 0; i < 10; i++)
+    {
+        GameObject *new_bubble = GameObjectFactory::Instance()->create_object(eWATER_BUBBLE_OBJECT);
+        if (new_bubble == NULL)
+        {
+            LogError("Unable to allocate memory for water bubble object");
+            return kNO_MEM;
+        } else
+        {
+            LoaderParams params = LoaderParams(0, 0, 0, 0, eTEXTURE_WATER_BUBBLE);
+            new_bubble->load(&params);
+            static_cast<GameQuestionBubble*>(pParent)->add_answer_bubble((GameAnswerBubble*)new_bubble);
+            mGameObjectVector.push_back(new_bubble);
+        }
+    }
+
+    LogDebug("Create water bubble successful");
+    return kSUCCESS;
+}
 
 ErrorCode_t Game::create_object()
 {
     GameObject *tree_object = NULL;
+    GameObject *sign_object = NULL;
+    GameObject *chat_box = NULL;
     _create_background_object();
+    _create_road_sign(sign_object);
     _create_tree_object(tree_object);
     _create_fruit_object(tree_object);
-    _create_bird_object();
+    _create_bird_object(sign_object);
+    _create_kid_object();
+    _create_chat_box(chat_box);
+    _create_answer_bubble(chat_box);
     return kSUCCESS;
 }
 
 void Game::update()
 { 
+    LogDebug("################# Updating #####################");
     for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
     {
         SDLGameObject *sdl_object = (SDLGameObject*)*object;
@@ -308,6 +400,7 @@ void Game::handle_event(enum eGameEventEnum event)
 
 void Game:: clean_up()
 {
+    LogDebug("#################### CLEAN UP ##################");
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
@@ -315,13 +408,13 @@ void Game:: clean_up()
 
 void Game:: render()
 {
+    LogDebug("################### RENDER ##################");
     SDL_RenderClear(mRenderer);
     for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
         SDLGameObject* sdl_object = (SDLGameObject*) *object;
         sdl_object->draw();
     }
-    SDL_RenderDrawLine(mRenderer, ((SCALED_WIDTH / 2.0f) + ground_shape.m_vertex1.x) * MET2PIX, ((SCALED_HEIGHT / 2.0f) + ground_shape.m_vertex1.y) * MET2PIX, ((SCALED_WIDTH / 2.0f) + ground_shape.m_vertex2.x) * MET2PIX, ((SCALED_HEIGHT / 2.0f) + ground_shape.m_vertex2.y) * MET2PIX);
 
     SDL_RenderPresent(mRenderer);
 }
