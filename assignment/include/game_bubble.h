@@ -55,11 +55,16 @@ class GameBubble: public GameObject
         virtual void set_render_text(GameCharacterSpeech *speech);
         void set_text_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
         void set_text_color(SDL_Color color);
+        void get_position(int &x, int &y) const;
+        void get_size(int &width, int &height) const;
+        virtual void handle_event(int event) = 0;
     protected:
         virtual void draw_background();
         virtual void draw_text();
-        int x;
-        int y;
+        int mBackgroundX;
+        int mBackgroundY;
+        int mTextOffsetX;
+        int mTextOffsetY;
         int mWidth;
         int mHeight;
         uint16_t *mText;
@@ -79,9 +84,9 @@ class GameAnswerBubble: public GameBubble
         void load_animation() override;
         
         /* a alittle mapping here*/
-        void handle_event(enum eGameBubbleEventEnum event);
+        void handle_event(int event) override;
     protected:
-        virtual void draw_background() override;
+        void draw_background() override;
     private:
         const AnimationFrame *mCurrentFrame;
         const AnimationPool *mAnimation;
@@ -103,7 +108,7 @@ class GameQuestionBubble: public GameBubble
         // void set_state(enum )
         void update() override;
         /*TODO: handle answer if speech is a question*/
-        void handle_event(enum eGameEventEnum event);
+        void handle_event(int event) override;
         void set_render_text(GameCharacterSpeech *speech) override;
         void add_answer_bubble(GameAnswerBubble *other_bubble);
     

@@ -42,10 +42,10 @@ void AnswerBubbleAnimationPool::load_bubble_explose_animation()
 
 GameBubble:: GameBubble(enum eGameObjectType type): GameObject(type)
 {
-    x = 0;
-    y = 0;
-    mWidth = 0;
-    mHeight = 0;
+    mBackgroundX = 0;
+    mBackgroundY = 0;
+    mTextOffsetX = 0;
+    mTextOffsetY = 0;
     mText = NULL;
     set_render_text(L" ");
     mTextColor = {0, 0, 0, 255};
@@ -69,8 +69,8 @@ void GameBubble:: draw()
 
 void GameBubble:: load(const LoaderParams *pParams)
 {
-    x = pParams->get_x();
-    y = pParams->get_y();
+    mBackgroundX = pParams->get_x();
+    mBackgroundY = pParams->get_y();
     mWidth = pParams->get_width();
     mHeight = pParams->get_height();
     id = pParams->get_type();
@@ -82,8 +82,8 @@ void GameBubble:: draw_text()
     SDL_Rect src_rect, dst_rect;
     src_rect.x = 0;
     src_rect.y = 0;
-    dst_rect.x = x + 45;
-    dst_rect.y = y + 15;
+    dst_rect.x = mBackgroundX + mTextOffsetX;
+    dst_rect.y = mBackgroundY + mTextOffsetY;
     SDL_Renderer *p_renderer = Game::Instance()->get_renderer();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     TTF_Font *rendered_font = GameFontManage::get_font(eDEFAULT_FONT);
@@ -94,17 +94,8 @@ void GameBubble:: draw_text()
     SDL_FreeSurface(text_surface);
 
     SDL_RenderCopy(p_renderer, texture, &src_rect, &dst_rect);
-    LogDebug("Draw bubble text complete %s", DBG_ObjectType(mType));
+    // LogDebug("Draw bubble text complete %s", DBG_ObjectType(mType));
 }
-
-void GameBubble:: clean_up()
-{
-    if (mText != NULL)
-    {
-        free(mText);
-    }
-}
-
 
 void GameBubble:: draw_background()
 {
@@ -123,10 +114,18 @@ void GameBubble:: draw_background()
     else
     {
         // LogDebug("Draw object %d at x: %0.4f, y: %0.4f, w: %d, height: %d", id, pos_x, pos_y, mWidth, mHeight);
-        texture->draw(x, y, &src_rect, 0, p_renderer, flip);
+        texture->draw(mBackgroundX, mBackgroundY, &src_rect, 0, p_renderer, flip);
     }
-    LogDebug("Draw background complete");
+    // LogDebug("Draw background complete");
     return;
+}
+
+void GameBubble:: clean_up()
+{
+    if (mText != NULL)
+    {
+        free(mText);
+    }
 }
 
 void GameBubble:: set_render_text( const wchar_t *text_to_show)
@@ -150,11 +149,25 @@ void GameBubble::set_render_text(GameCharacterSpeech *speech)
     set_text_color(speech->get_speech_color());
 }
 
+void GameBubble::get_position(int &x_pos, int &y_pos) const
+{
+    x_pos = mBackgroundX;
+    y_pos = mBackgroundY;
+}
+
+void GameBubble::get_size(int &width, int &height) const
+{
+    width = mWidth;
+    height = mHeight;
+}
+
 GameAnswerBubble:: GameAnswerBubble(): GameBubble(eWATER_BUBBLE_OBJECT)
 {
     mCurrentFrame = NULL;
     mFrameIdx = 0;
     mState = eWATER_BUBBLE_READY_TO_SHOW;
+    mTextOffsetX = 10;
+    mTextOffsetY = 3;
 }
 
 GameAnswerBubble::GameAnswerBubble(const GameAnswer &answer): GameBubble(eWATER_BUBBLE_OBJECT), mAnswer(answer)
@@ -171,8 +184,8 @@ void GameAnswerBubble::load_animation()
 
 void GameAnswerBubble::set_position(int x, int y)
 {
-    this->x = x;
-    this->y = y;
+    this->mBackgroundX = x;
+    this->mBackgroundY = y;
 }
 
 void GameAnswerBubble::update()
@@ -203,9 +216,10 @@ void GameAnswerBubble::update()
     }
 }
 
-void GameAnswerBubble::handle_event(enum eGameBubbleEventEnum event)
+void GameAnswerBubble::handle_event(int event)
 {
     enum eAnswerBubbleAnimationState preState = mState;
+    LogDebug("Handle event %d", event);
     switch (event)
     {
     case eBUBBLE_EVENT_CLICK_ON:
@@ -237,19 +251,19 @@ void GameAnswerBubble::handle_event(enum eGameBubbleEventEnum event)
         /* Unhandle other, just ignore*/
         break;
     }
+
+    if (preState != mState)
+    {
+        mFrameIdx = 0;
+    }
 }
 
 void GameAnswerBubble:: draw()
 {
-    LogDebug("Start drawing %s", DBG_ObjectType(mType));
     if (mCurrentFrame == NULL)
     {
-        LogDebug("Frame is null not draw %s", DBG_ObjectType(mType));
+        // LogDebug("Frame is null not draw %s", DBG_ObjectType(mType));
         return;
-    }
-    else
-    {
-        LogDebug("Will draw frame %p", mCurrentFrame);
     }
 
     draw_background();
@@ -263,6 +277,8 @@ void GameAnswerBubble::draw_background()
     src_rect.y = mCurrentFrame->get_y();
     src_rect.w = mCurrentFrame->get_width();
     src_rect.h = mCurrentFrame->get_height();
+    mWidth = mCurrentFrame->get_width();
+    mHeight = mCurrentFrame->get_height();
     SDL_Renderer *p_renderer = Game::Instance()->get_renderer();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     GameTexture *texture = TextureManager::Instance()->get_texture(id);
@@ -272,15 +288,16 @@ void GameAnswerBubble::draw_background()
     }
     else
     {
-        texture->draw(x, y, &src_rect, 0, p_renderer, flip);
+        texture->draw( mBackgroundX, mBackgroundY, &src_rect, 0, p_renderer, flip);
     }
-    LogDebug("Draw background complete for Answer bubble");
+    // LogDebug("Draw background complete for Answer bubble");
     return;
 }
 
 void GameAnswerBubble::set_answer(const GameAnswer &answer)
 {
     mAnswer = answer;
+    set_render_text(answer.answerNumText);
 }
 
 GameObject *GameBubbleCreator::create_object() const
@@ -294,6 +311,8 @@ GameQuestionBubble *GameQuestionBubble::mInstance = NULL;
 GameQuestionBubble::GameQuestionBubble(): GameBubble(eBUBBLE_OBJECT)
 {
     mState = eQUESTION_BUBBLE_SHOW_ANSWER;
+    mTextOffsetX = 45;
+    mTextOffsetY = 15;
 }
 
 void GameQuestionBubble::update()
@@ -317,8 +336,8 @@ void GameQuestionBubble::update()
 
 void GameQuestionBubble:: update_position_for_answer_bubble()
 {
-    int start_x = x + 40;
-    int start_y = y + 50;
+    int start_x = mBackgroundX + 40;
+    int start_y = mBackgroundY + 50;
     std::vector<GameAnswerBubble*>::iterator it;
     for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it ++)
     {
@@ -327,7 +346,7 @@ void GameQuestionBubble:: update_position_for_answer_bubble()
     }
 }
 
-void GameQuestionBubble::handle_event(enum eGameEventEnum event)
+void GameQuestionBubble::handle_event(int event)
 {
     switch (event)
     {

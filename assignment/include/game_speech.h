@@ -11,9 +11,10 @@ class GameAnswer
     public:
         GameAnswer(){};
         GameAnswer(const GameAnswer &asnwer);
-        GameAnswer(const wchar_t *text, int answer_num, int R, int G, int B, int A);
+        GameAnswer(const wchar_t *text, const wchar_t *numText, int answer_num, int R, int G, int B, int A);
         const GameAnswer operator=(const GameAnswer&);
         const wchar_t *answerText;
+        const wchar_t *answerNumText;
         uint8_t answerNumber;
         uint8_t textR;
         uint8_t textG;

@@ -361,26 +361,31 @@ void Game::handle_event(enum eGameEventEnum event)
     if (event == eGAME_EVENT_MOUSE_DONW)
     {
         int mouse_x, mouse_y;
-        int i = 0;
         SDL_GetMouseState(&mouse_x, &mouse_y);
         for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
         {
-            SDLGameObject *sdl_object = (SDLGameObject*)*object;
-            if (sdl_object->get_object_type() == eFRUIT_OBJECT)
+            if ((*object)->get_object_type() == eBUBBLE_OBJECT ||
+                (*object)->get_object_type() == eWATER_BUBBLE_OBJECT)
             {
-                int obj_x, obj_y;
-                sdl_object->get_position(obj_x, obj_y);
-                if (mouse_x >= obj_x && mouse_x <= (obj_x + sdl_object->get_width()))
+                int obj_x, obj_y, obj_w, obj_h;
+                GameBubble * bubble_obj = (GameBubble*)(*object);
+                bubble_obj->get_position(obj_x, obj_y);
+                bubble_obj->get_size(obj_w, obj_h);
+                static_cast<GameBubble*>(*object)->get_size(obj_w, obj_h);
+                if (mouse_x < obj_x || mouse_x > (obj_x + obj_w))
                 {
-                    if (mouse_y >= obj_y && mouse_y <= (obj_y + sdl_object->get_height()))
-                    {
-                        FruitObject* fruit = (FruitObject*) *object;
-                        fruit->handle_event(event);
-                        break;
-                    }
+                    /*horizontal postion out of object*/
+                    continue;
                 }
+
+                if (mouse_y < obj_y || mouse_y > (obj_y + obj_h))
+                {
+                    /*vertical postion out of object*/
+                    continue;
+                }
+
+                bubble_obj->handle_event(eGAME_EVENT_MOUSE_DONW);
             }
-            i++;
         }
     } 
     else

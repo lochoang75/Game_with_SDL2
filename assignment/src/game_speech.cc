@@ -6,6 +6,7 @@
 GameAnswer:: GameAnswer(const GameAnswer &answer)
 {
     answerText = answer.answerText;
+    answerNumText = answer.answerNumText;
     answerNumber = answer.answerNumber;
     textR = answer.textR;
     textG = answer.textG;
@@ -13,9 +14,10 @@ GameAnswer:: GameAnswer(const GameAnswer &answer)
     textA = answer.textA;
 }
 
-GameAnswer::GameAnswer(const wchar_t *text, int answer_num, int R, int G, int B, int A)
+GameAnswer::GameAnswer(const wchar_t *text, const wchar_t *numText, int answer_num, int R, int G, int B, int A)
 {
     answerText = text;
+    answerNumText = numText;
     answerNumber = answer_num;
     textR = R;
     textG = G;
@@ -77,17 +79,17 @@ ErrorCode_t GameCharacterSpeech:: append_answer(int answerValue)
 
 static GameAnswer lanswer_array[SUPPORTED_NUMBER] = 
 {
-    {L"không", 0, 125, 125, 125, 125},
-    {L"một", 1, 125, 125, 125, 125},
-    {L"hai", 2, 125, 125, 125, 125},
-    {L"ba", 3, 125, 125, 125, 125},
-    {L"bốn", 4, 125, 125, 125, 125},
-    {L"năm", 5, 125, 125, 125, 125},
-    {L"sáu", 6, 125, 125, 125, 125},
-    {L"bảy", 7, 125, 125, 125, 125},
-    {L"tám", 8, 125, 125, 125, 125},
-    {L"chín", 9, 125, 125, 125, 125},
-    {L"mười", 10, 125, 125, 125, 125}
+    {L"không", L"0", 0, 125, 125, 125, 125},
+    {L"một", L"1", 1, 125, 125, 125, 125},
+    {L"hai", L"2", 2, 125, 125, 125, 125},
+    {L"ba", L"3", 3, 125, 125, 125, 125},
+    {L"bốn", L"4", 4, 125, 125, 125, 125},
+    {L"năm", L"5", 5, 125, 125, 125, 125},
+    {L"sáu", L"6", 6, 125, 125, 125, 125},
+    {L"bảy", L"7", 7, 125, 125, 125, 125},
+    {L"tám", L"8", 8, 125, 125, 125, 125},
+    {L"chín", L"9", 9, 125, 125, 125, 125},
+    {L"mười", L"10", 10,  125, 125, 125, 125}
 };
 
 static const GameAnswer* get_answer_by_index(int id)
@@ -138,18 +140,20 @@ void GameCharacterSpeechSet:: append_new_speech(GameCharacterSpeech *newSpeechLi
 
 GameCharacterSpeech* GameCharacterSpeechSet::get_next_speech()
 {
-    GameCharacterSpeech *new_speech = mSpeechSet[mCurrentIdx];
-    if (mCurrentIdx == mCount - 1)
+    if (mCurrentIdx == mCount)
     {
         if (mReapeat)
         {
             mCurrentIdx = 0;
         } 
+        else
+        {
+            return NULL;
+        }
     }
-    else
-    {
-        mCurrentIdx++;
-    }
+
+    GameCharacterSpeech *new_speech = mSpeechSet[mCurrentIdx];
+    mCurrentIdx++;
 
     return new_speech;
 }

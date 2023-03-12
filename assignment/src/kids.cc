@@ -87,7 +87,7 @@ static void init_plan_tree_speech(GameCharacterSpeechSet &speech_set)
     speech_set.append_new_speech(speech_array, 3);
 }
 
-static void init_question_speech(GameCharacterSpeechSet &speech_set, enum eKidActionState question_number)
+static void init_question_speech(GameCharacterSpeechSet &speechSet, enum eKidActionState question_number)
 {
     GameCharacterSpeech *question = NULL; 
     if (question_number == eKID_ACTION_ASK_QUESTION_1)
@@ -108,7 +108,19 @@ static void init_question_speech(GameCharacterSpeechSet &speech_set, enum eKidAc
     question->append_answer(8);
     question->append_answer(9);
     question->append_answer(10);
-    speech_set.append_new_speech(question);
+    speechSet.append_new_speech(question);
+}
+
+static void init_answer_speech(GameCharacterSpeechSet &speechSet, bool isCorrent)
+{
+    GameCharacterSpeech *speech = NULL;
+    if (isCorrent == false)
+    {
+        speech = new GameCharacterSpeech(L"Bạn trả lời không đùng rồi, mình cùng thử lại nhé !", false);
+    } else {
+        speech = new GameCharacterSpeech(L"Bạn thật xuất sắc, câu trả lời chính xác", false);
+    }
+    speechSet.append_new_speech(speech);
 }
 
 static void init_trash_talk_speech(GameCharacterSpeechSet &speech_set)
@@ -137,6 +149,8 @@ void KidObject:: init_character_speech()
     init_question_speech(mSpeechSet[eKID_ACTION_ASK_QUESTION_1], eKID_ACTION_ASK_QUESTION_1);
     init_question_speech(mSpeechSet[eKID_ACTION_ASK_QUESTION_2], eKID_ACTION_ASK_QUESTION_2);
     init_question_speech(mSpeechSet[eKID_ACTION_ASK_QUESTION_3], eKID_ACTION_ASK_QUESTION_3);
+    init_answer_speech(mSpeechSet[eKID_ACTION_WRONG_ANSWER], false);
+    init_answer_speech(mSpeechSet[eKID_ACTION_CORRECT_ANSWER], true);
 }
 
 KidObject:: KidObject(): SDLGameObject(eKID_OBJECT)
@@ -183,7 +197,10 @@ void KidObject::update()
         SDLGameObject::update();
 
         GameCharacterSpeech *next_speech = mSpeechSet[eKID_ACTION_ASK_QUESTION_1].get_next_speech();
-        GameQuestionBubble::Instance()->set_render_text(next_speech);
+        if (next_speech != NULL)
+        {
+            GameQuestionBubble::Instance()->set_render_text(next_speech);
+        }
         mUpdateCounter = 0;
     }
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/loc/workspace/Game_with_SDL2/assignment/src
+# Install script for directory: /home/elliot/workspace/Game_with_SDL2/assignment/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
