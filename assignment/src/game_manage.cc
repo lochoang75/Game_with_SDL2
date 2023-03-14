@@ -20,7 +20,6 @@
 
 Game *Game::mInstance = NULL;
 
-
 Game *Game::Instance()
 {
     if (mInstance == NULL)
@@ -34,6 +33,7 @@ Game::Game()
 {
     mWindow = NULL;
     mRenderer = NULL;
+    mTimerID = 0;
 }
 
 ErrorCode_t Game::init(const char *title)
@@ -47,9 +47,9 @@ ErrorCode_t Game::init(const char *title)
     physics_init();
     creator_register();
     mContactListener.InitContactHandler();
+    timer_init();
     return ret;
 }
-
 
 void Game::physics_init()
 {
@@ -60,8 +60,8 @@ void Game::physics_init()
     mGroundBody = Box2DPhysicalFacade::create_body(ground_body_def);
     float x_ground = Box2DPhysicalFacade::compute_distance_to_meter(SCREEN_WIDTH);
     float y_ground = Box2DPhysicalFacade::compute_distance_to_meter(GROUND_POSITION - 100);
-    b2Vec2 ground_start(-x_ground/2, y_ground/2);
-    b2Vec2 ground_end(x_ground/2, y_ground/2);
+    b2Vec2 ground_start(-x_ground / 2, y_ground / 2);
+    b2Vec2 ground_end(x_ground / 2, y_ground / 2);
     b2EdgeShape ground_shape;
     ground_shape.SetTwoSided(ground_start, ground_end);
     b2FixtureDef ground_fixture_def;
@@ -70,6 +70,13 @@ void Game::physics_init()
     ground_fixture_def.filter.categoryBits = kGROUND;
     Box2DPhysicalFacade::create_fixture(mGroundBody, ground_fixture_def);
     Box2DPhysicalFacade::get_world()->SetContactListener(&mContactListener);
+}
+
+Uint32 periodict_timer_callback(Uint32 interval, void* name);
+
+void Game::timer_init()
+{
+    mTimerID = SDL_AddTimer(1500, periodict_timer_callback, (void*)Game::Instance());
 }
 
 ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
@@ -200,34 +207,16 @@ ErrorCode_t Game::_create_fruit_object(GameObject *tree)
         {
             int fruit_x = 0;
             int fruit_y = 0;
-            static_cast<TreeObject*>(tree)->get_tree_anchor_point(fruit_x, fruit_y);
+            static_cast<TreeObject *>(tree)->get_tree_anchor_point(fruit_x, fruit_y);
             LoaderParams params = LoaderParams(fruit_x - 10, fruit_y - 10, 25, 24, eTEXTURE_APPLE);
             fruit_object->load(&params);
             mGameObjectVector.push_back(fruit_object);
-            static_cast<TreeObject*>(tree)->joint_new_object((FruitObject*) fruit_object);
+            static_cast<TreeObject *>(tree)->joint_new_object((FruitObject *)fruit_object);
             LogDebug("Create fruit %d success", i);
         }
     }
     return kSUCCESS;
 }
-
-    // GameObject *basket_object = GameObjectFactory::Instance()->create_object(eBASKET_OBJECT);
-    // if (basket_object == NULL)
-    // {
-    //     LogError("Unable to allocate memory for basket object");
-    //     return kNO_MEM;
-    // }
-    // else
-    // {
-    //     LoaderParams params = LoaderParams(400, GROUND_POSITION - 75, 80, 75, eTEXTURE_BASKET);
-    //     params.add_physical_density(1.0f);
-    //     params.add_physical_friction(0.3f);
-    //     params.add_physical_restitution(0.3f);
-    //     basket_object->load(&params);
-    //     params.add_physical_object_type(ePHYSIC_DYNAMIC);
-    //     mGameObjectVector.push_back(basket_object);
-    //     LogDebug("Create basket success");
-    // }
 
 ErrorCode_t Game::_create_bird_object(GameObject *roadSign)
 {
@@ -237,11 +226,11 @@ ErrorCode_t Game::_create_bird_object(GameObject *roadSign)
         if (bird_object == NULL)
         {
             LogError("Unable to allocate memory for bird object");
-        } 
+        }
         else
         {
-            int sign_x = static_cast<RoadSign*>(roadSign)->get_x_position(); 
-            int sign_y = static_cast<RoadSign*>(roadSign)->get_y_position();
+            int sign_x = static_cast<RoadSign *>(roadSign)->get_x_position();
+            int sign_y = static_cast<RoadSign *>(roadSign)->get_y_position();
             LoaderParams params = LoaderParams(sign_x + i * 20, sign_y, 32, 32, eTEXTURE_BIRDS);
             bird_object->load(&params);
             mGameObjectVector.push_back(bird_object);
@@ -259,10 +248,10 @@ ErrorCode_t Game::_create_kid_object()
     {
         LogError("Unable to allocate memory for kid object");
         return kNO_MEM;
-    } 
+    }
     else
     {
-        LoaderParams params = LoaderParams(200, GROUND_POSITION - 80, 46, 90, eTEXTURE_KIDS);
+        LoaderParams params = LoaderParams(700, GROUND_POSITION - 80, 46, 90, eTEXTURE_KIDS);
         kid_object->load(&params);
         mGameObjectVector.push_back(kid_object);
         LogDebug("Create kid success");
@@ -277,7 +266,7 @@ ErrorCode_t Game::_create_road_sign(GameObject *&signObject)
     {
         LogError("Unable to allocate memory for sign object");
         return kNO_MEM;
-    } 
+    }
     else
     {
         LoaderParams params = LoaderParams(SCREEN_WIDTH - 77, GROUND_POSITION - 94, 77, 94, eTEXTURE_SIGN);
@@ -308,18 +297,19 @@ ErrorCode_t Game::_create_chat_box(GameObject *&chatBox)
 
 ErrorCode_t Game::_create_answer_bubble(GameObject *pParent)
 {
-    for(int i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
         GameObject *new_bubble = GameObjectFactory::Instance()->create_object(eWATER_BUBBLE_OBJECT);
         if (new_bubble == NULL)
         {
             LogError("Unable to allocate memory for water bubble object");
             return kNO_MEM;
-        } else
+        }
+        else
         {
             LoaderParams params = LoaderParams(0, 0, 0, 0, eTEXTURE_WATER_BUBBLE);
             new_bubble->load(&params);
-            static_cast<GameQuestionBubble*>(pParent)->add_answer_bubble((GameAnswerBubble*)new_bubble);
+            static_cast<GameQuestionBubble *>(pParent)->add_answer_bubble((GameAnswerBubble *)new_bubble);
             mGameObjectVector.push_back(new_bubble);
         }
     }
@@ -337,22 +327,35 @@ ErrorCode_t Game::create_object()
     _create_road_sign(sign_object);
     _create_tree_object(tree_object);
     _create_fruit_object(tree_object);
-    _create_bird_object(sign_object);
     _create_kid_object();
+    _create_bird_object(sign_object);
     _create_chat_box(chat_box);
     _create_answer_bubble(chat_box);
     return kSUCCESS;
 }
 
-void Game::update()
-{ 
-    LogDebug("################# Updating #####################");
-    for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
+int Game::get_number_fruit_on_the_tree()
+{
+    uint8_t fruit_on_the_tree = 0;
+    for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
-        SDLGameObject *sdl_object = (SDLGameObject*)*object;
-        sdl_object->update();
+        if ((*object)->get_object_type() == eFRUIT_OBJECT)
+        {
+            if (static_cast<FruitObject*>(*object)->get_state() == eFRUIT_ON_THE_TREE)
+            {
+                fruit_on_the_tree ++;
+            }
+        }
     }
+    return fruit_on_the_tree;
+}
 
+void Game::update()
+{
+    for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
+    {
+        (*object)->update();
+    }
 }
 
 void Game::handle_event(enum eGameEventEnum event)
@@ -362,72 +365,110 @@ void Game::handle_event(enum eGameEventEnum event)
     {
         int mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
-        for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
+        for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
         {
-            if ((*object)->get_object_type() == eBUBBLE_OBJECT ||
-                (*object)->get_object_type() == eWATER_BUBBLE_OBJECT)
+            int obj_x, obj_y, obj_w, obj_h;
+            (*object)->get_position(obj_x, obj_y);
+            (*object)->get_size(obj_w, obj_h);
+            if (mouse_x < obj_x || mouse_x > (obj_x + obj_w))
             {
-                int obj_x, obj_y, obj_w, obj_h;
-                GameBubble * bubble_obj = (GameBubble*)(*object);
-                bubble_obj->get_position(obj_x, obj_y);
-                bubble_obj->get_size(obj_w, obj_h);
-                static_cast<GameBubble*>(*object)->get_size(obj_w, obj_h);
-                if (mouse_x < obj_x || mouse_x > (obj_x + obj_w))
-                {
-                    /*horizontal postion out of object*/
-                    continue;
-                }
-
-                if (mouse_y < obj_y || mouse_y > (obj_y + obj_h))
-                {
-                    /*vertical postion out of object*/
-                    continue;
-                }
-
-                bubble_obj->handle_event(eGAME_EVENT_MOUSE_DONW);
+                /*horizontal postion out of object*/
+                continue;
             }
+
+            if (mouse_y < obj_y || mouse_y > (obj_y + obj_h))
+            {
+                /*vertical postion out of object*/
+                continue;
+            }
+
+            LogDebug("Mouse down event on object pos: x: %d, y: %d, w: %d, h: %d", obj_x, obj_y, obj_w, obj_h);
+            (*object)->handle_event(eGAME_EVENT_MOUSE_DONW);
         }
-    } 
+    }
     else
     {
-        for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object ++)
+        for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
         {
-            SDLGameObject *sdl_object = (SDLGameObject*)*object;
+            SDLGameObject *sdl_object = (SDLGameObject *)*object;
             if (sdl_object->get_object_type() == eFRUIT_OBJECT)
             {
-                FruitObject* fruit = (FruitObject*) sdl_object;
+                FruitObject *fruit = (FruitObject *)sdl_object;
                 fruit->handle_event(event);
             }
         }
-
     }
 }
 
-void Game:: clean_up()
+void Game::clean_up()
 {
-    LogDebug("#################### CLEAN UP ##################");
+    SDL_RemoveTimer(mTimerID);
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
 
-void Game:: render()
+void Game::render()
 {
-    LogDebug("################### RENDER ##################");
     SDL_RenderClear(mRenderer);
-    for (std::vector<GameObject*>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
+    for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
-        SDLGameObject* sdl_object = (SDLGameObject*) *object;
+        SDLGameObject *sdl_object = (SDLGameObject *)*object;
         sdl_object->draw();
     }
 
     SDL_RenderPresent(mRenderer);
 }
 
-SDL_Renderer* Game::get_renderer()
+SDL_Renderer *Game::get_renderer()
 {
     return mRenderer;
 }
 
+Uint32 periodict_timer_callback(Uint32 interval, void* name)
+{
+    bool kick_the_bird = false;
+    int bird_escape = 0;
+    int fruits_on_the_tree = 0;
+    KidObject* kid = NULL;
+    for (std::vector<GameObject *>::iterator object = static_cast<Game*>(name)->mGameObjectVector.begin(); 
+        object != static_cast<Game*>(name)->mGameObjectVector.end(); object++)
+    {
+        if ((*object)->get_object_type() == eKID_OBJECT)
+        {
+            kid = (KidObject*)(*object);
+            eKidActionState state = kid->get_state();
+            if (state == eKID_ACTION_WAIT)
+            {
+                kick_the_bird = true;
+            } else
+            {
+                (*object)->handle_event(eGAME_EVENT_MOUSE_DONW);
+            }
+        }
 
+        if ((*object)->get_object_type() == eBIRD_OBJECT)
+        {
+            eBirdState state = static_cast<BirdObject*>(*object)->get_bird_state();
+            if (state == eBIRD_STAND)
+            {
+                if (kick_the_bird)
+                {
+                    LogDebug("Bird will fly after this");
+                    static_cast<BirdObject*>(*object)->handle_event(eGAME_EVENT_BIRD_FLY);
+                    break;
+                }
+            } else if (state == eBIRD_ESCAPE)
+            {
+                bird_escape++;
+            }
+        }
+    }
 
+    if (bird_escape == 3)
+    {
+        kid->handle_event(eGAME_EVENT_ALL_BIRD_OUT);
+    }
+
+    return interval;
+}

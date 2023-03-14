@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elliot/workspace/Game_with_SDL2/assignment
+CMAKE_SOURCE_DIR = /home/loc/workspace/Game_with_SDL2/assignment
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elliot/workspace/Game_with_SDL2/assignment
+CMAKE_BINARY_DIR = /home/loc/workspace/Game_with_SDL2/assignment
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -E cmake_progress_start /home/elliot/workspace/Game_with_SDL2/assignment/CMakeFiles /home/elliot/workspace/Game_with_SDL2/assignment/src//CMakeFiles/progress.marks
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elliot/workspace/Game_with_SDL2/assignment/CMakeFiles 0
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -E cmake_progress_start /home/loc/workspace/Game_with_SDL2/assignment/CMakeFiles /home/loc/workspace/Game_with_SDL2/assignment/src//CMakeFiles/progress.marks
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/loc/workspace/Game_with_SDL2/assignment/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/fruit_picking.dir/rule:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/fruit_picking.dir/rule
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/fruit_picking.dir/rule
 .PHONY : src/CMakeFiles/fruit_picking.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ fruit_picking: src/CMakeFiles/fruit_picking.dir/rule
 
 # fast build rule for target.
 fruit_picking/fast:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/build
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/build
 .PHONY : fruit_picking/fast
 
 SDL_game_object.o: SDL_game_object.cc.o
@@ -180,7 +180,7 @@ SDL_game_object.o: SDL_game_object.cc.o
 
 # target to build an object file
 SDL_game_object.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/SDL_game_object.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/SDL_game_object.cc.o
 .PHONY : SDL_game_object.cc.o
 
 SDL_game_object.i: SDL_game_object.cc.i
@@ -188,7 +188,7 @@ SDL_game_object.i: SDL_game_object.cc.i
 
 # target to preprocess a source file
 SDL_game_object.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/SDL_game_object.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/SDL_game_object.cc.i
 .PHONY : SDL_game_object.cc.i
 
 SDL_game_object.s: SDL_game_object.cc.s
@@ -196,7 +196,7 @@ SDL_game_object.s: SDL_game_object.cc.s
 
 # target to generate assembly for a file
 SDL_game_object.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/SDL_game_object.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/SDL_game_object.cc.s
 .PHONY : SDL_game_object.cc.s
 
 animation.o: animation.cc.o
@@ -204,7 +204,7 @@ animation.o: animation.cc.o
 
 # target to build an object file
 animation.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation.cc.o
 .PHONY : animation.cc.o
 
 animation.i: animation.cc.i
@@ -212,7 +212,7 @@ animation.i: animation.cc.i
 
 # target to preprocess a source file
 animation.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation.cc.i
 .PHONY : animation.cc.i
 
 animation.s: animation.cc.s
@@ -220,7 +220,7 @@ animation.s: animation.cc.s
 
 # target to generate assembly for a file
 animation.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation.cc.s
 .PHONY : animation.cc.s
 
 animation_manage.o: animation_manage.cc.o
@@ -228,7 +228,7 @@ animation_manage.o: animation_manage.cc.o
 
 # target to build an object file
 animation_manage.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation_manage.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation_manage.cc.o
 .PHONY : animation_manage.cc.o
 
 animation_manage.i: animation_manage.cc.i
@@ -236,7 +236,7 @@ animation_manage.i: animation_manage.cc.i
 
 # target to preprocess a source file
 animation_manage.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation_manage.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation_manage.cc.i
 .PHONY : animation_manage.cc.i
 
 animation_manage.s: animation_manage.cc.s
@@ -244,7 +244,7 @@ animation_manage.s: animation_manage.cc.s
 
 # target to generate assembly for a file
 animation_manage.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation_manage.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/animation_manage.cc.s
 .PHONY : animation_manage.cc.s
 
 bird.o: bird.cc.o
@@ -252,7 +252,7 @@ bird.o: bird.cc.o
 
 # target to build an object file
 bird.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/bird.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/bird.cc.o
 .PHONY : bird.cc.o
 
 bird.i: bird.cc.i
@@ -260,7 +260,7 @@ bird.i: bird.cc.i
 
 # target to preprocess a source file
 bird.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/bird.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/bird.cc.i
 .PHONY : bird.cc.i
 
 bird.s: bird.cc.s
@@ -268,7 +268,7 @@ bird.s: bird.cc.s
 
 # target to generate assembly for a file
 bird.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/bird.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/bird.cc.s
 .PHONY : bird.cc.s
 
 box2d_facade.o: box2d_facade.cc.o
@@ -276,7 +276,7 @@ box2d_facade.o: box2d_facade.cc.o
 
 # target to build an object file
 box2d_facade.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.o
 .PHONY : box2d_facade.cc.o
 
 box2d_facade.i: box2d_facade.cc.i
@@ -284,7 +284,7 @@ box2d_facade.i: box2d_facade.cc.i
 
 # target to preprocess a source file
 box2d_facade.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.i
 .PHONY : box2d_facade.cc.i
 
 box2d_facade.s: box2d_facade.cc.s
@@ -292,7 +292,7 @@ box2d_facade.s: box2d_facade.cc.s
 
 # target to generate assembly for a file
 box2d_facade.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/box2d_facade.cc.s
 .PHONY : box2d_facade.cc.s
 
 fruit.o: fruit.cc.o
@@ -300,7 +300,7 @@ fruit.o: fruit.cc.o
 
 # target to build an object file
 fruit.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/fruit.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/fruit.cc.o
 .PHONY : fruit.cc.o
 
 fruit.i: fruit.cc.i
@@ -308,7 +308,7 @@ fruit.i: fruit.cc.i
 
 # target to preprocess a source file
 fruit.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/fruit.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/fruit.cc.i
 .PHONY : fruit.cc.i
 
 fruit.s: fruit.cc.s
@@ -316,7 +316,7 @@ fruit.s: fruit.cc.s
 
 # target to generate assembly for a file
 fruit.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/fruit.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/fruit.cc.s
 .PHONY : fruit.cc.s
 
 game_bubble.o: game_bubble.cc.o
@@ -324,7 +324,7 @@ game_bubble.o: game_bubble.cc.o
 
 # target to build an object file
 game_bubble.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_bubble.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_bubble.cc.o
 .PHONY : game_bubble.cc.o
 
 game_bubble.i: game_bubble.cc.i
@@ -332,7 +332,7 @@ game_bubble.i: game_bubble.cc.i
 
 # target to preprocess a source file
 game_bubble.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_bubble.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_bubble.cc.i
 .PHONY : game_bubble.cc.i
 
 game_bubble.s: game_bubble.cc.s
@@ -340,7 +340,7 @@ game_bubble.s: game_bubble.cc.s
 
 # target to generate assembly for a file
 game_bubble.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_bubble.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_bubble.cc.s
 .PHONY : game_bubble.cc.s
 
 game_contact_listener.o: game_contact_listener.cc.o
@@ -348,7 +348,7 @@ game_contact_listener.o: game_contact_listener.cc.o
 
 # target to build an object file
 game_contact_listener.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.o
 .PHONY : game_contact_listener.cc.o
 
 game_contact_listener.i: game_contact_listener.cc.i
@@ -356,7 +356,7 @@ game_contact_listener.i: game_contact_listener.cc.i
 
 # target to preprocess a source file
 game_contact_listener.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.i
 .PHONY : game_contact_listener.cc.i
 
 game_contact_listener.s: game_contact_listener.cc.s
@@ -364,7 +364,7 @@ game_contact_listener.s: game_contact_listener.cc.s
 
 # target to generate assembly for a file
 game_contact_listener.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_contact_listener.cc.s
 .PHONY : game_contact_listener.cc.s
 
 game_container_object.o: game_container_object.cc.o
@@ -372,7 +372,7 @@ game_container_object.o: game_container_object.cc.o
 
 # target to build an object file
 game_container_object.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.o
 .PHONY : game_container_object.cc.o
 
 game_container_object.i: game_container_object.cc.i
@@ -380,7 +380,7 @@ game_container_object.i: game_container_object.cc.i
 
 # target to preprocess a source file
 game_container_object.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.i
 .PHONY : game_container_object.cc.i
 
 game_container_object.s: game_container_object.cc.s
@@ -388,7 +388,7 @@ game_container_object.s: game_container_object.cc.s
 
 # target to generate assembly for a file
 game_container_object.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_container_object.cc.s
 .PHONY : game_container_object.cc.s
 
 game_debug.o: game_debug.cc.o
@@ -396,7 +396,7 @@ game_debug.o: game_debug.cc.o
 
 # target to build an object file
 game_debug.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.o
 .PHONY : game_debug.cc.o
 
 game_debug.i: game_debug.cc.i
@@ -404,7 +404,7 @@ game_debug.i: game_debug.cc.i
 
 # target to preprocess a source file
 game_debug.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.i
 .PHONY : game_debug.cc.i
 
 game_debug.s: game_debug.cc.s
@@ -412,7 +412,7 @@ game_debug.s: game_debug.cc.s
 
 # target to generate assembly for a file
 game_debug.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_debug.cc.s
 .PHONY : game_debug.cc.s
 
 game_font_manage.o: game_font_manage.cc.o
@@ -420,7 +420,7 @@ game_font_manage.o: game_font_manage.cc.o
 
 # target to build an object file
 game_font_manage.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_font_manage.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_font_manage.cc.o
 .PHONY : game_font_manage.cc.o
 
 game_font_manage.i: game_font_manage.cc.i
@@ -428,7 +428,7 @@ game_font_manage.i: game_font_manage.cc.i
 
 # target to preprocess a source file
 game_font_manage.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_font_manage.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_font_manage.cc.i
 .PHONY : game_font_manage.cc.i
 
 game_font_manage.s: game_font_manage.cc.s
@@ -436,7 +436,7 @@ game_font_manage.s: game_font_manage.cc.s
 
 # target to generate assembly for a file
 game_font_manage.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_font_manage.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_font_manage.cc.s
 .PHONY : game_font_manage.cc.s
 
 game_manage.o: game_manage.cc.o
@@ -444,7 +444,7 @@ game_manage.o: game_manage.cc.o
 
 # target to build an object file
 game_manage.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_manage.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_manage.cc.o
 .PHONY : game_manage.cc.o
 
 game_manage.i: game_manage.cc.i
@@ -452,7 +452,7 @@ game_manage.i: game_manage.cc.i
 
 # target to preprocess a source file
 game_manage.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_manage.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_manage.cc.i
 .PHONY : game_manage.cc.i
 
 game_manage.s: game_manage.cc.s
@@ -460,7 +460,7 @@ game_manage.s: game_manage.cc.s
 
 # target to generate assembly for a file
 game_manage.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_manage.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_manage.cc.s
 .PHONY : game_manage.cc.s
 
 game_object_factory.o: game_object_factory.cc.o
@@ -468,7 +468,7 @@ game_object_factory.o: game_object_factory.cc.o
 
 # target to build an object file
 game_object_factory.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.o
 .PHONY : game_object_factory.cc.o
 
 game_object_factory.i: game_object_factory.cc.i
@@ -476,7 +476,7 @@ game_object_factory.i: game_object_factory.cc.i
 
 # target to preprocess a source file
 game_object_factory.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.i
 .PHONY : game_object_factory.cc.i
 
 game_object_factory.s: game_object_factory.cc.s
@@ -484,7 +484,7 @@ game_object_factory.s: game_object_factory.cc.s
 
 # target to generate assembly for a file
 game_object_factory.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_object_factory.cc.s
 .PHONY : game_object_factory.cc.s
 
 game_speech.o: game_speech.cc.o
@@ -492,7 +492,7 @@ game_speech.o: game_speech.cc.o
 
 # target to build an object file
 game_speech.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_speech.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_speech.cc.o
 .PHONY : game_speech.cc.o
 
 game_speech.i: game_speech.cc.i
@@ -500,7 +500,7 @@ game_speech.i: game_speech.cc.i
 
 # target to preprocess a source file
 game_speech.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_speech.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_speech.cc.i
 .PHONY : game_speech.cc.i
 
 game_speech.s: game_speech.cc.s
@@ -508,7 +508,7 @@ game_speech.s: game_speech.cc.s
 
 # target to generate assembly for a file
 game_speech.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_speech.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/game_speech.cc.s
 .PHONY : game_speech.cc.s
 
 kids.o: kids.cc.o
@@ -516,7 +516,7 @@ kids.o: kids.cc.o
 
 # target to build an object file
 kids.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/kids.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/kids.cc.o
 .PHONY : kids.cc.o
 
 kids.i: kids.cc.i
@@ -524,7 +524,7 @@ kids.i: kids.cc.i
 
 # target to preprocess a source file
 kids.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/kids.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/kids.cc.i
 .PHONY : kids.cc.i
 
 kids.s: kids.cc.s
@@ -532,7 +532,7 @@ kids.s: kids.cc.s
 
 # target to generate assembly for a file
 kids.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/kids.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/kids.cc.s
 .PHONY : kids.cc.s
 
 loader_params.o: loader_params.cc.o
@@ -540,7 +540,7 @@ loader_params.o: loader_params.cc.o
 
 # target to build an object file
 loader_params.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.o
 .PHONY : loader_params.cc.o
 
 loader_params.i: loader_params.cc.i
@@ -548,7 +548,7 @@ loader_params.i: loader_params.cc.i
 
 # target to preprocess a source file
 loader_params.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.i
 .PHONY : loader_params.cc.i
 
 loader_params.s: loader_params.cc.s
@@ -556,7 +556,7 @@ loader_params.s: loader_params.cc.s
 
 # target to generate assembly for a file
 loader_params.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/loader_params.cc.s
 .PHONY : loader_params.cc.s
 
 main.o: main.cc.o
@@ -564,7 +564,7 @@ main.o: main.cc.o
 
 # target to build an object file
 main.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/main.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/main.cc.o
 .PHONY : main.cc.o
 
 main.i: main.cc.i
@@ -572,7 +572,7 @@ main.i: main.cc.i
 
 # target to preprocess a source file
 main.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/main.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/main.cc.i
 .PHONY : main.cc.i
 
 main.s: main.cc.s
@@ -580,7 +580,7 @@ main.s: main.cc.s
 
 # target to generate assembly for a file
 main.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/main.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/main.cc.s
 .PHONY : main.cc.s
 
 texture_manager.o: texture_manager.cc.o
@@ -588,7 +588,7 @@ texture_manager.o: texture_manager.cc.o
 
 # target to build an object file
 texture_manager.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_manager.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_manager.cc.o
 .PHONY : texture_manager.cc.o
 
 texture_manager.i: texture_manager.cc.i
@@ -596,7 +596,7 @@ texture_manager.i: texture_manager.cc.i
 
 # target to preprocess a source file
 texture_manager.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_manager.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_manager.cc.i
 .PHONY : texture_manager.cc.i
 
 texture_manager.s: texture_manager.cc.s
@@ -604,7 +604,7 @@ texture_manager.s: texture_manager.cc.s
 
 # target to generate assembly for a file
 texture_manager.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_manager.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_manager.cc.s
 .PHONY : texture_manager.cc.s
 
 texture_wrapper.o: texture_wrapper.cc.o
@@ -612,7 +612,7 @@ texture_wrapper.o: texture_wrapper.cc.o
 
 # target to build an object file
 texture_wrapper.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.o
 .PHONY : texture_wrapper.cc.o
 
 texture_wrapper.i: texture_wrapper.cc.i
@@ -620,7 +620,7 @@ texture_wrapper.i: texture_wrapper.cc.i
 
 # target to preprocess a source file
 texture_wrapper.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.i
 .PHONY : texture_wrapper.cc.i
 
 texture_wrapper.s: texture_wrapper.cc.s
@@ -628,7 +628,7 @@ texture_wrapper.s: texture_wrapper.cc.s
 
 # target to generate assembly for a file
 texture_wrapper.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/texture_wrapper.cc.s
 .PHONY : texture_wrapper.cc.s
 
 tree.o: tree.cc.o
@@ -636,7 +636,7 @@ tree.o: tree.cc.o
 
 # target to build an object file
 tree.cc.o:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.o
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.o
 .PHONY : tree.cc.o
 
 tree.i: tree.cc.i
@@ -644,7 +644,7 @@ tree.i: tree.cc.i
 
 # target to preprocess a source file
 tree.cc.i:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.i
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.i
 .PHONY : tree.cc.i
 
 tree.s: tree.cc.s
@@ -652,7 +652,7 @@ tree.s: tree.cc.s
 
 # target to generate assembly for a file
 tree.cc.s:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.s
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/tree.cc.s
 .PHONY : tree.cc.s
 
 # Help Target
@@ -739,6 +739,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/elliot/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

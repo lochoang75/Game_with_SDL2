@@ -26,6 +26,7 @@ enum _ObjectPhysicCategoryEnum {
     kFRUIT = 0x0001 << 1,
     kBIRD = 0x0001 << 2,
     kTREE = 0x0001 << 3,
-    kSIGN = 0x0001 << 4
+    kSIGN = 0x0001 << 4,
+    kKID = 0x0001 << 5
 };
 #endif /* GAME CONSTANT */

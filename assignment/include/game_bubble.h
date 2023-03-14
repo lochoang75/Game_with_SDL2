@@ -55,8 +55,8 @@ class GameBubble: public GameObject
         virtual void set_render_text(GameCharacterSpeech *speech);
         void set_text_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
         void set_text_color(SDL_Color color);
-        void get_position(int &x, int &y) const;
-        void get_size(int &width, int &height) const;
+        virtual void get_position(int &x, int &y) const override;
+        virtual void get_size(int &width, int &height) const override;
         virtual void handle_event(int event) = 0;
     protected:
         virtual void draw_background();
@@ -85,14 +85,19 @@ class GameAnswerBubble: public GameBubble
         
         /* a alittle mapping here*/
         void handle_event(int event) override;
+        bool is_user_answer(GameAnswer &answer) const;
+        void clear_answer_flag() {mAnswerFlag = false;};
     protected:
         void draw_background() override;
     private:
+        void animation_variable_reset();
         const AnimationFrame *mCurrentFrame;
         const AnimationPool *mAnimation;
         enum eAnswerBubbleAnimationState mState;
         int mFrameIdx;
+        uint8_t mFrameCounter;
         GameAnswer mAnswer;
+        bool mAnswerFlag;
 };
 
 class GameBubbleCreator: public BaseCreator
@@ -110,12 +115,18 @@ class GameQuestionBubble: public GameBubble
         /*TODO: handle answer if speech is a question*/
         void handle_event(int event) override;
         void set_render_text(GameCharacterSpeech *speech) override;
+        void set_show_flag(bool flag) {mIsShow = flag;};
         void add_answer_bubble(GameAnswerBubble *other_bubble);
+        bool get_user_answer(GameAnswer &answer) const;
+        void clear_user_answer();
     
     private:
         void update_position_for_answer_bubble();
+        void hide_all_answer_bubble();
         GameQuestionBubble();
         static GameQuestionBubble *mInstance;
         enum eQuestionBubbleAnimationState mState;
         std::vector<GameAnswerBubble*> mAnsBubbleList;
+        bool mIsShow;
+        bool isQuestion;
 };

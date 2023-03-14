@@ -58,7 +58,7 @@ void SDLGameObject:: clean_up()
 
 ErrorCode_t SDLGameObject::create_object_body()
 {
-    LogDebug("Get body definition for object %s", DBG_ObjectType(mType));
+    LogDebug("Create body for object %s", DBG_ObjectType(mType));
     b2BodyDef body_def;
     float body_x, body_y;
     Box2DPhysicalFacade::compute_cartesian_origin(x, y, mWidth, mHeight, body_x, body_y);
@@ -90,6 +90,12 @@ void SDLGameObject:: get_position(int &x, int &y) const
 {
     x = this->x;
     y = this->y;
+}
+
+void SDLGameObject:: get_size(int &width, int &height) const
+{
+    width = mWidth;
+    height = mHeight;
 }
 
 

@@ -18,8 +18,10 @@ class SDLGameObject: public GameObject, public GamePhysicObject
         virtual void update() override;
         virtual void clean_up() override;
         virtual void load(const LoaderParams *pParams) override;
+        virtual void handle_event(int event) override {(void)event;};
 
-        void get_position(int &x, int &y) const;
+        virtual void get_position(int &x, int &y) const override;
+        virtual void get_size(int &width, int &height) const override;
         int get_width() const {return mWidth;};
         int get_height() const {return mHeight;};
         enum eTextureType get_id() const {return id;};

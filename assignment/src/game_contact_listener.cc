@@ -5,6 +5,7 @@
 #include "game_object.h"
 #include "bird.h"
 #include "fruit.h"
+#include "kids.h"
 #include "log_wrapper.h"
 
 void GameContactListener::BeginContact(b2Contact *contact)
@@ -77,9 +78,17 @@ static void handle_contact_bird_fruit(GameObject *bird, GameObject *fruit)
     }
 }
 
+static void handle_contact_kid_tree(GameObject *kid, GameObject *tree)
+{
+    LogDebug("Contact handler for kid and tree has been called");
+    static_cast<KidObject*>(kid)->handle_event(eGAME_EVENT_CONTACT_TARGET);
+    (void)tree;
+}
+
 void GameContactListener::InitContactHandler()
 {
     HandlerRegister(eBIRD_OBJECT, eFRUIT_OBJECT, &handle_contact_bird_fruit);
+    HandlerRegister(eKID_OBJECT, eTREE_OBJECT, &handle_contact_kid_tree);
 }
 
 void GameContactListener::HandlerRegister(eGameObjectType firstObj, eGameObjectType seccondObj, ContactHandler handler)

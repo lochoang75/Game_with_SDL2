@@ -40,7 +40,7 @@ class BirdObject: public SDLGameObject, public GameContainerObject
         void update() override;
         void draw() override;
         void load(const LoaderParams *pParams) override;
-        enum eBirdState handle_event(enum eGameEventEnum event);
+        eBirdState handle_event(eGameEventEnum event);
         enum eBirdState get_bird_state() const {return mBirdState;};
         void bird_aim_this_fruit(FruitObject *target);
 

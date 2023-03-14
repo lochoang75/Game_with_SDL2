@@ -14,7 +14,7 @@ GameAnswer:: GameAnswer(const GameAnswer &answer)
     textA = answer.textA;
 }
 
-GameAnswer::GameAnswer(const wchar_t *text, const wchar_t *numText, int answer_num, int R, int G, int B, int A)
+GameAnswer::GameAnswer(const wchar_t *text, const wchar_t *numText, uint8_t answer_num, uint8_t R, uint8_t G, uint8_t B, uint8_t A)
 {
     answerText = text;
     answerNumText = numText;
@@ -25,10 +25,15 @@ GameAnswer::GameAnswer(const wchar_t *text, const wchar_t *numText, int answer_n
     textA = A;
 }
 
-const GameAnswer GameAnswer::operator=(const GameAnswer &other)
+void GameAnswer::operator=(const GameAnswer &other)
 {
-    const GameAnswer new_answer(other);
-    return new_answer;
+    answerText = other.answerText;
+    answerNumText = other.answerNumText;
+    answerNumber = other.answerNumber;
+    textR = other.textR;
+    textG = other.textG;
+    textB = other.textB;
+    textA = other.textA;
 }
 
 GameCharacterSpeech:: GameCharacterSpeech(const wchar_t *question, int answerValue)
@@ -64,6 +69,11 @@ GameCharacterSpeech:: ~GameCharacterSpeech()
 void GameCharacterSpeech:: set_speech_text(const wchar_t *speech)
 {
     mSpeech = speech;
+}
+
+void GameCharacterSpeech::set_rendered_flag(bool flag)
+{
+    isRendered = flag;
 }
 
 ErrorCode_t GameCharacterSpeech:: append_answer(int answerValue)
@@ -108,7 +118,7 @@ int GameCharacterSpeech:: get_answer(const GameAnswer** &answerArray)
     std::vector<int>::iterator it;
     answerArray = new const GameAnswer* [mAnswerArray.size()];
     int i = 0;
-    for (it = mAnswerArray.begin(); it < mAnswerArray.end(); it ++)
+    for (it = mAnswerArray.begin(); it != mAnswerArray.end(); it ++)
     {
         answerArray[i] = get_answer_by_index((*it));
         i++;
@@ -122,6 +132,7 @@ GameCharacterSpeechSet::GameCharacterSpeechSet()
     mReapeat = false;
     mCount = 0;
     mCurrentIdx = 0;
+    mCompleted = false;
 }
 
 void GameCharacterSpeechSet:: append_new_speech(GameCharacterSpeech* new_speech)
@@ -138,6 +149,18 @@ void GameCharacterSpeechSet:: append_new_speech(GameCharacterSpeech *newSpeechLi
     }
 }
 
+bool GameCharacterSpeechSet::is_completed()
+{
+    // if (mCurrentIdx == mCount)
+    // {
+    //     if(mSpeechSet[mCurrentIdx - 1]->is_rendered())
+    //     {
+    //         mCompleted = true;
+    //     }
+    // }
+    return mCompleted;
+}
+
 GameCharacterSpeech* GameCharacterSpeechSet::get_next_speech()
 {
     if (mCurrentIdx == mCount)
@@ -148,12 +171,17 @@ GameCharacterSpeech* GameCharacterSpeechSet::get_next_speech()
         } 
         else
         {
+            mCompleted = true;
             return NULL;
         }
     }
-
     GameCharacterSpeech *new_speech = mSpeechSet[mCurrentIdx];
     mCurrentIdx++;
+    // if (new_speech->is_question())
+    // {
+    //     LogDebug("Get question speech");
+    //     mCompleted = true;
+    // }
 
     return new_speech;
 }
@@ -162,7 +190,9 @@ void GameCharacterSpeechSet:: set_index(int index)
 {
     if (index < mCount)
     {
+        LogError("Index reseting to %d", index);
         mCurrentIdx = index;
+        mCompleted = false;
     }
     else
     {

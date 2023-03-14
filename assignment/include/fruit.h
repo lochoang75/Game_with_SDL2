@@ -25,6 +25,7 @@ class FruitObject: public SDLGameObject, public ContainedObject
         void handle_event(enum eGameEventEnum);
         b2Body *get_body() override {return mBody;};
         b2Vec2 get_anchor_point() const override;
+        eFruitState get_state() const {return mFruitState;};
 
     protected:
         ErrorCode_t create_object_body() override;

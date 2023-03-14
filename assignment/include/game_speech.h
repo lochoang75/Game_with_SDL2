@@ -11,8 +11,8 @@ class GameAnswer
     public:
         GameAnswer(){};
         GameAnswer(const GameAnswer &asnwer);
-        GameAnswer(const wchar_t *text, const wchar_t *numText, int answer_num, int R, int G, int B, int A);
-        const GameAnswer operator=(const GameAnswer&);
+        GameAnswer(const wchar_t *text, const wchar_t *numText, uint8_t answer_num, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
+        void operator=(const GameAnswer&);
         const wchar_t *answerText;
         const wchar_t *answerNumText;
         uint8_t answerNumber;
@@ -36,13 +36,16 @@ class GameCharacterSpeech
         void clear_all_answers() {mAnswerArray.clear();}
         void set_speech_color(SDL_Color &color) {mTextColor = color;};
         void set_speech_text(const wchar_t *speech);
+        void set_rendered_flag(bool flag);
         SDL_Color get_speech_color() const {return mTextColor;};
         const wchar_t* get_speech() const {return mSpeech;};
         bool is_question() const {return isQuestion;};
+        bool is_rendered() const {return isRendered;};
     private:
         std::vector<int> mAnswerArray;
         const wchar_t *mSpeech;
         bool isQuestion;
+        bool isRendered;
         SDL_Color mTextColor;
 };
 
@@ -55,6 +58,7 @@ class GameCharacterSpeechSet
         void append_new_speech(GameCharacterSpeech *speechList, int len);
         void set_index(int index);
         void set_repeat(bool repeat);
+        bool is_completed();
         GameCharacterSpeech *get_next_speech();
 
     private:
@@ -62,6 +66,7 @@ class GameCharacterSpeechSet
         bool mReapeat;
         uint8_t mCount;
         uint8_t mCurrentIdx;
+        bool mCompleted;
 };
 
 #endif /*GAME_SPEECH_BUBBLE_H*/

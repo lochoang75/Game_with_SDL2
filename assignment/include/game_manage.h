@@ -19,6 +19,7 @@ class Game
         ErrorCode_t load_animation();
         ErrorCode_t load_font();
         ErrorCode_t create_object();
+        int get_number_fruit_on_the_tree();
         void update();
         void clean_up();
         void render();
@@ -26,10 +27,12 @@ class Game
         void close();
     
     private:
+        friend Uint32 periodict_timer_callback(Uint32 interval, void* name);
         Game();
         ~Game(){};
         void creator_register();
         ErrorCode_t sdl_component_init(const char *title, int xpos, int ypos, int flags);
+        void timer_init();
         void physics_init();
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
@@ -37,6 +40,7 @@ class Game
         b2Body *mGroundBody;
         GameContactListener mContactListener;
         std::vector<GameObject*> mGameObjectVector;
+        SDL_TimerID mTimerID;
 
         ErrorCode_t _create_background_object();
         ErrorCode_t _create_tree_object(GameObject *&tree);

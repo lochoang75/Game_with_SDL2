@@ -48,7 +48,7 @@ class StateAnimation
         bool is_animate_completed(int &index) const;
     private:
         int mSize;
-        int mCurrent;
+        int mCurrentTotal;
         bool mRepeat;
         AnimationFrame *mFrameList;
 };

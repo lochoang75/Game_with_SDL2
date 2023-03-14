@@ -5,7 +5,6 @@
 #include "animation.h"
 #include "animation_manage.h"
 
-
 void AnswerBubbleAnimationPool::load_animation()
 {
     load_bubble_normal_animation();
@@ -14,33 +13,32 @@ void AnswerBubbleAnimationPool::load_animation()
 
 void AnswerBubbleAnimationPool::load_bubble_normal_animation()
 {
-    AnimationFrame sprite_sheet[4] = 
-    {
-        {"normal_1", 34, 27, 31, 30},
-        {"normal_2", 122, 25, 31, 33},
-        {"normal_3", 209, 25, 33, 33},
-        {"normal_4", 296, 24, 35, 34}
-    };
+    AnimationFrame sprite_sheet[1] =
+        {
+            {"normal_1", 34, 27, 31, 30},
+            // {"normal_2", 122, 25, 31, 33},
+            // {"normal_3", 209, 25, 33, 33},
+            // {"normal_4", 296, 24, 35, 34}
+        };
 
-    AnimationPool::add_animation_for_new_state(sprite_sheet, 4, true);
+    AnimationPool::add_animation_for_new_state(sprite_sheet, 1, true);
 }
 
 void AnswerBubbleAnimationPool::load_bubble_explose_animation()
 {
-    AnimationFrame sprite_sheet[6] = 
-    {
-        {"explose_1", 378, 22, 45, 39},
-        {"explose_2", 25, 95, 45, 41},
-        {"explose_3", 133, 94, 48, 43},
-        {"explose_4", 199, 93, 50, 45},
-        {"explose_5", 287, 93, 50, 44},
-        {"explose_6", 378, 93, 47, 40}
-    };
+    AnimationFrame sprite_sheet[6] =
+        {
+            {"explose_1", 378, 22, 45, 39},
+            {"explose_2", 25, 95, 45, 41},
+            {"explose_3", 133, 94, 48, 43},
+            {"explose_4", 199, 93, 50, 45},
+            {"explose_5", 287, 93, 50, 44},
+            {"explose_6", 378, 93, 47, 40}};
 
     AnimationPool::add_animation_for_new_state(sprite_sheet, 6, false);
 }
 
-GameBubble:: GameBubble(enum eGameObjectType type): GameObject(type)
+GameBubble::GameBubble(enum eGameObjectType type) : GameObject(type)
 {
     mBackgroundX = 0;
     mBackgroundY = 0;
@@ -51,23 +49,23 @@ GameBubble:: GameBubble(enum eGameObjectType type): GameObject(type)
     mTextColor = {0, 0, 0, 255};
 }
 
-void GameBubble:: set_text_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+void GameBubble::set_text_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
     mTextColor = {red, green, blue, alpha};
 }
 
-void GameBubble:: set_text_color(SDL_Color color)
+void GameBubble::set_text_color(SDL_Color color)
 {
     mTextColor = color;
 }
 
-void GameBubble:: draw() 
+void GameBubble::draw()
 {
     draw_background();
     draw_text();
 }
 
-void GameBubble:: load(const LoaderParams *pParams)
+void GameBubble::load(const LoaderParams *pParams)
 {
     mBackgroundX = pParams->get_x();
     mBackgroundY = pParams->get_y();
@@ -77,7 +75,7 @@ void GameBubble:: load(const LoaderParams *pParams)
     load_animation();
 }
 
-void GameBubble:: draw_text()
+void GameBubble::draw_text()
 {
     SDL_Rect src_rect, dst_rect;
     src_rect.x = 0;
@@ -88,7 +86,7 @@ void GameBubble:: draw_text()
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     TTF_Font *rendered_font = GameFontManage::get_font(eDEFAULT_FONT);
     SDL_Surface *text_surface = TTF_RenderUNICODE_Solid(rendered_font, mText, mTextColor);
-    src_rect.w = dst_rect.w = text_surface->w; 
+    src_rect.w = dst_rect.w = text_surface->w;
     src_rect.h = dst_rect.h = text_surface->h;
     SDL_Texture *texture = SDL_CreateTextureFromSurface(p_renderer, text_surface);
     SDL_FreeSurface(text_surface);
@@ -97,7 +95,7 @@ void GameBubble:: draw_text()
     // LogDebug("Draw bubble text complete %s", DBG_ObjectType(mType));
 }
 
-void GameBubble:: draw_background()
+void GameBubble::draw_background()
 {
     SDL_Rect src_rect;
     src_rect.x = 0;
@@ -120,7 +118,7 @@ void GameBubble:: draw_background()
     return;
 }
 
-void GameBubble:: clean_up()
+void GameBubble::clean_up()
 {
     if (mText != NULL)
     {
@@ -128,10 +126,10 @@ void GameBubble:: clean_up()
     }
 }
 
-void GameBubble:: set_render_text( const wchar_t *text_to_show)
+void GameBubble::set_render_text(const wchar_t *text_to_show)
 {
     free(mText);
-    mText = (uint16_t*)calloc(wcslen(text_to_show), sizeof(wchar_t));
+    mText = (uint16_t *)calloc(wcslen(text_to_show), sizeof(wchar_t));
     if (mText == NULL)
     {
         LogError("Can't allocate memory for text");
@@ -160,21 +158,26 @@ void GameBubble::get_size(int &width, int &height) const
     width = mWidth;
     height = mHeight;
 }
-
-GameAnswerBubble:: GameAnswerBubble(): GameBubble(eWATER_BUBBLE_OBJECT)
+GameAnswerBubble::GameAnswerBubble() : GameBubble(eWATER_BUBBLE_OBJECT)
 {
     mCurrentFrame = NULL;
     mFrameIdx = 0;
-    mState = eWATER_BUBBLE_READY_TO_SHOW;
-    mTextOffsetX = 10;
-    mTextOffsetY = 3;
+    mState = eWATER_BUBBLE_HIDE;
+    mTextOffsetX = 8;
+    mTextOffsetY = 2;
+    mFrameCounter = 0;
+    mAnswerFlag = false;
 }
 
-GameAnswerBubble::GameAnswerBubble(const GameAnswer &answer): GameBubble(eWATER_BUBBLE_OBJECT), mAnswer(answer)
+GameAnswerBubble::GameAnswerBubble(const GameAnswer &answer) : GameBubble(eWATER_BUBBLE_OBJECT), mAnswer(answer)
 {
+    mTextOffsetX = 8;
+    mTextOffsetY = 2;
     mCurrentFrame = NULL;
     mFrameIdx = 0;
-    mState = eWATER_BUBBLE_READY_TO_SHOW;
+    mFrameCounter = 0;
+    mAnswerFlag = false;
+    mState = eWATER_BUBBLE_HIDE;
 }
 
 void GameAnswerBubble::load_animation()
@@ -188,6 +191,12 @@ void GameAnswerBubble::set_position(int x, int y)
     this->mBackgroundY = y;
 }
 
+void GameAnswerBubble:: animation_variable_reset()
+{
+    mFrameCounter = 0;
+    mFrameIdx = 0;
+}
+
 void GameAnswerBubble::update()
 {
     switch (mState)
@@ -195,31 +204,37 @@ void GameAnswerBubble::update()
     case eWATER_BUBBLE_HIDE:
     case eWATER_BUBBLE_READY_TO_SHOW:
         mCurrentFrame = NULL;
-        mFrameIdx = 0;
+        animation_variable_reset();
         break;
-    
+
     case eWATER_BUBBLE_SHOW_NORMAL:
         mCurrentFrame = mAnimation->get_frame(mState, mFrameIdx);
         break;
-    
+
     case eWATER_BUBBLE_SHOW_EXPLOSE:
-        mCurrentFrame = mAnimation->get_frame(mState, mFrameIdx);
-        if (mAnimation->is_completed(mState, mFrameIdx))
+        if (mFrameCounter == 2)
         {
-            mState = eWATER_BUBBLE_HIDE;
+            mCurrentFrame = mAnimation->get_frame(mState, mFrameIdx);
+            if (mAnimation->is_completed(mState, mFrameIdx))
+            {
+                LogDebug("User is answer value: %u", mAnswer.answerNumber);
+                mAnswerFlag = true;
+                mState = eWATER_BUBBLE_HIDE;
+            }
+            mFrameCounter = 0;
         }
         break;
-    
+
     default:
         /*ignore handle other state*/
         break;
     }
+    mFrameCounter++;
 }
 
 void GameAnswerBubble::handle_event(int event)
 {
     enum eAnswerBubbleAnimationState preState = mState;
-    LogDebug("Handle event %d", event);
     switch (event)
     {
     case eBUBBLE_EVENT_CLICK_ON:
@@ -235,18 +250,17 @@ void GameAnswerBubble::handle_event(int event)
             mState = eWATER_BUBBLE_SHOW_NORMAL;
         }
         break;
-    
+
     case eBUBBLE_EVENT_HIDE:
         if (mState == eWATER_BUBBLE_SHOW_NORMAL)
         {
             mState = eWATER_BUBBLE_READY_TO_SHOW;
         }
         break;
-    
+
     case eBUBBLE_EVENT_ENABLE:
         mState = eWATER_BUBBLE_READY_TO_SHOW;
 
-    
     default:
         /* Unhandle other, just ignore*/
         break;
@@ -254,11 +268,11 @@ void GameAnswerBubble::handle_event(int event)
 
     if (preState != mState)
     {
-        mFrameIdx = 0;
+        animation_variable_reset();
     }
 }
 
-void GameAnswerBubble:: draw()
+void GameAnswerBubble::draw()
 {
     if (mCurrentFrame == NULL)
     {
@@ -288,7 +302,7 @@ void GameAnswerBubble::draw_background()
     }
     else
     {
-        texture->draw( mBackgroundX, mBackgroundY, &src_rect, 0, p_renderer, flip);
+        texture->draw(mBackgroundX, mBackgroundY, &src_rect, 0, p_renderer, flip);
     }
     // LogDebug("Draw background complete for Answer bubble");
     return;
@@ -297,22 +311,35 @@ void GameAnswerBubble::draw_background()
 void GameAnswerBubble::set_answer(const GameAnswer &answer)
 {
     mAnswer = answer;
-    set_render_text(answer.answerNumText);
+    set_render_text(mAnswer.answerNumText);
+    mAnswerFlag = false;
 }
+
+bool GameAnswerBubble::is_user_answer(GameAnswer &answer) const
+{
+    if (mAnswerFlag)
+    {
+        answer = mAnswer;
+    }
+    return mAnswerFlag;
+}
+
 
 GameObject *GameBubbleCreator::create_object() const
 {
     GameAnswerBubble *new_object = new GameAnswerBubble();
-    return (GameObject*) new_object;
+    return (GameObject *)new_object;
 }
 
 GameQuestionBubble *GameQuestionBubble::mInstance = NULL;
 
-GameQuestionBubble::GameQuestionBubble(): GameBubble(eBUBBLE_OBJECT)
+GameQuestionBubble::GameQuestionBubble() : GameBubble(eBUBBLE_OBJECT)
 {
     mState = eQUESTION_BUBBLE_SHOW_ANSWER;
     mTextOffsetX = 45;
     mTextOffsetY = 15;
+    isQuestion = false;
+    mIsShow = false;
 }
 
 void GameQuestionBubble::update()
@@ -320,13 +347,19 @@ void GameQuestionBubble::update()
     switch (mState)
     {
     case eQUESTION_BUBBLE_HIDE:
+        set_show_flag(false);
+        hide_all_answer_bubble();
         break;
-    
+
     case eQUESTION_BUBBLE_SHOW:
+        hide_all_answer_bubble();
         break;
-    
+
     case eQUESTION_BUBBLE_SHOW_ANSWER:
-        update_position_for_answer_bubble();
+        if (isQuestion)
+        {
+            update_position_for_answer_bubble();
+        }
         break;
 
     default:
@@ -334,15 +367,25 @@ void GameQuestionBubble::update()
     }
 }
 
-void GameQuestionBubble:: update_position_for_answer_bubble()
+void GameQuestionBubble::update_position_for_answer_bubble()
 {
     int start_x = mBackgroundX + 40;
     int start_y = mBackgroundY + 50;
-    std::vector<GameAnswerBubble*>::iterator it;
-    for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it ++)
+    std::vector<GameAnswerBubble *>::iterator it;
+    for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it++)
     {
         (*it)->set_position(start_x, start_y);
+        (*it)->handle_event(eBUBBLE_EVENT_SHOW);
         start_x += 50;
+    }
+}
+
+void GameQuestionBubble::hide_all_answer_bubble()
+{
+    std::vector<GameAnswerBubble *>::iterator it;
+    for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it++)
+    {
+        (*it)->handle_event(eBUBBLE_EVENT_HIDE);
     }
 }
 
@@ -360,7 +403,7 @@ void GameQuestionBubble::handle_event(int event)
             mState = eQUESTION_BUBBLE_SHOW;
         }
         break;
-    
+
     default:
         /*ignore other event*/
         break;
@@ -372,9 +415,33 @@ void GameQuestionBubble::add_answer_bubble(GameAnswerBubble *answerBubble)
     mAnsBubbleList.push_back(answerBubble);
 }
 
+bool GameQuestionBubble::get_user_answer(GameAnswer &answer) const
+{
+    std::vector<GameAnswerBubble *>::const_iterator it;
+    for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it ++)
+    {
+        if ((*it)->is_user_answer(answer))
+        {
+            LogDebug("User is answered");
+            return true;
+        }
+    }
+    return false;
+}
+
+void GameQuestionBubble::clear_user_answer()
+{
+    std::vector<GameAnswerBubble *>::iterator it;
+    for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it ++)
+    {
+        (*it)->clear_answer_flag();
+    }
+    return;
+}
+
+
 void GameQuestionBubble::set_render_text(GameCharacterSpeech *speech)
 {
-    LogDebug("Set text to chat bubble");
     GameBubble::set_render_text(speech);
 
     if (speech->is_question())
@@ -388,16 +455,22 @@ void GameQuestionBubble::set_render_text(GameCharacterSpeech *speech)
             delete answer_array;
             return;
         }
-
+        mState = eQUESTION_BUBBLE_SHOW_ANSWER;
+        isQuestion = true;
         for (int i = 0; i < size; i++)
         {
             mAnsBubbleList[i]->set_answer(*answer_array[i]);
-            mAnsBubbleList[i]->handle_event(eBUBBLE_EVENT_SHOW);
+            mAnsBubbleList[i]->handle_event(eBUBBLE_EVENT_ENABLE);
         }
+    }
+    else
+    {
+        isQuestion = false;
+        mState = eQUESTION_BUBBLE_SHOW;
     }
 }
 
-GameQuestionBubble* GameQuestionBubble::Instance()
+GameQuestionBubble *GameQuestionBubble::Instance()
 {
     if (mInstance == NULL)
     {

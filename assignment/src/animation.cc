@@ -4,7 +4,7 @@ StateAnimation::StateAnimation(int total_frame, bool repeat)
 {
     mSize = total_frame;
     mRepeat = repeat;
-    mCurrent = 0;
+    mCurrentTotal = 0;
     mFrameList = new AnimationFrame[total_frame];
 }
 
@@ -20,40 +20,46 @@ StateAnimation::~StateAnimation()
 
 ErrorCode_t StateAnimation::append_frame(AnimationFrame &frame)
 {
-    if (mCurrent >= mSize)
+    if (mCurrentTotal >= mSize)
     {
-        LogError("New frame is out of range: %d out of %d", mCurrent + 1, mSize);
+        LogError("New frame is out of range: %d out of %d", mCurrentTotal + 1, mSize);
         return kINVALID;
     }
     else
     {
-        mFrameList[mCurrent] = frame;
+        mFrameList[mCurrentTotal] = frame;
         LogDebug("Load frame name %s, x: %d, y: %d, w: %d, h: %d", 
-                        mFrameList[mCurrent].get_frame_name().c_str(),
-                        mFrameList[mCurrent].get_x(),
-                        mFrameList[mCurrent].get_y(),
-                        mFrameList[mCurrent].get_y(),
-                        mFrameList[mCurrent].get_width(),
-                        mFrameList[mCurrent].get_height());
-        mCurrent ++;
+                        mFrameList[mCurrentTotal].get_frame_name().c_str(),
+                        mFrameList[mCurrentTotal].get_x(),
+                        mFrameList[mCurrentTotal].get_y(),
+                        mFrameList[mCurrentTotal].get_y(),
+                        mFrameList[mCurrentTotal].get_width(),
+                        mFrameList[mCurrentTotal].get_height());
+        mCurrentTotal ++;
     }
     return kSUCCESS;
 }
 
 const AnimationFrame* StateAnimation::get_frame(int &index) const
 {
-    if (index >= mCurrent)
+    if (index >= mCurrentTotal)
     {
-        LogError("Your requested index is out of range, we only have %d frame, can't supply %d", mCurrent, index);
+        LogError("Your requested index is out of range, we only have %d frame, can't supply %d", mCurrentTotal, index);
         return NULL;
     }
     else
     {
         const AnimationFrame* selected_frame = &mFrameList[index];
-        index++;
-        if (index == mCurrent)
+        if (index == mCurrentTotal - 1)
         {
-            index = 0;
+            if (mRepeat)
+            {
+                index = 0;
+            }
+        } 
+        else 
+        {
+            index++;
         }
         return selected_frame;
     }
@@ -61,14 +67,14 @@ const AnimationFrame* StateAnimation::get_frame(int &index) const
 
 bool StateAnimation:: is_animate_completed(int &index) const
 {
-    if (index >= mCurrent)
+    if (index >= mCurrentTotal)
     {
-        LogError("Your requested index is out of range, we only have %d frame, can't supply %d", mCurrent, index);
+        LogError("Your requested index is out of range, we only have %d frame, can't supply %d", mCurrentTotal, index);
         return NULL;
     }
     else
     {
-        if (index == (mCurrent - 1))
+        if (index == (mCurrentTotal - 1))
         {
             return true;
         }

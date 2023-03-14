@@ -86,12 +86,11 @@ void BirdAnimationPool:: load_bird_catch_the_fruit_animation()
 
 void BirdAnimationPool:: load_bird_escape_animation()
 {
-    AnimationFrame escape_frame[3] = {
-        {"escaping_1", 155, 227, 46, 40},
-        {"escaping_2", 0, 116, 60, 28},
-        {"escaping_3", 245, 129, 46, 42}
+    AnimationFrame escape_frame[2] = {
+        {"escaping_1", 128, 43, 46, 42},
+        {"escaping_2", 128, 86, 46, 40},
     };
-    AnimationPool::add_animation_for_new_state(escape_frame, 3, true);
+    AnimationPool::add_animation_for_new_state(escape_frame, 2, true);
 }
 
 
@@ -175,25 +174,24 @@ void BirdObject:: set_bird_state(eBirdState new_state)
 
 void BirdObject::update()
 {   
-    bool animation_change  = true;
     uint8_t counter_limit = 10;
     b2Vec2 object_velocity = mBody->GetLinearVelocity();
     switch (mBirdState)
     {
         case eBIRD_STAND:
-            if ((rand() % 100) > 70)
-            {
-                animation_change = false;
-            }
             break;
         case eBIRD_TAKE_OFF:
+            if (object_velocity.y >= 0)
+            {
+                mBody->ApplyForce(b2Vec2(-3.0, -60), mBody->GetPosition(), true);
+            }
+            set_bird_state(eBIRD_FLYING);
             break;
         case eBIRD_FLYING:
             counter_limit = 3;
-            object_velocity = mBody->GetLinearVelocity();
-            if (object_velocity.y > 0)
+            if (object_velocity.y >= 0)
             {
-                mBody->ApplyForce(b2Vec2(-1.0, -(mMass * 10.0f) - 3), mBody->GetPosition(), true);
+                mBody->ApplyForce(b2Vec2(-3.0, -60), mBody->GetPosition(), true);
             }
             break;
         case eBIRD_CATCH_THE_FRUIT:
@@ -208,21 +206,18 @@ void BirdObject::update()
             }
             break;
         case eBIRD_ESCAPE:
-            if (object_velocity.y > 0)
+            if (object_velocity.y >= 0)
             {
-                mBody->ApplyForce(b2Vec2(2.0, -(mMass * 10.0f) - 20), mBody->GetPosition(), true);
+                mBody->ApplyForce(b2Vec2(3.0, -80), mBody->GetPosition(), true);
             }
             break;
         default:
             break;
     }
 
-    if (mUpdateCounter == counter_limit)
+    if (mUpdateCounter >= counter_limit)
     {
-        if (animation_change)
-        {
-            frame = animation->get_frame(mBirdState, mFrameIdx);
-        }
+        frame = animation->get_frame(mBirdState, mFrameIdx);
         mUpdateCounter = 0;
     }
     mUpdateCounter ++;
@@ -234,6 +229,13 @@ eBirdState BirdObject::handle_event(eGameEventEnum event)
     LogDebug("Bird handle event %s", DBG_EventType(event));
     switch (event)
     {
+    case eGAME_EVENT_BIRD_FLY:
+        if (mBirdState == eBIRD_STAND)
+        {
+            LogDebug("Bird is set to take off");
+            mBirdState = eBIRD_TAKE_OFF;
+        }
+        break;
     case eGAME_EVENT_CONTACT_TARGET:
         if (mBirdState == eBIRD_FLYING)
         {

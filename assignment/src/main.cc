@@ -32,10 +32,10 @@ int main()
 
             switch (e.type)
             {
-                case SDL_MOUSEMOTION:
-                case SDL_FINGERMOTION:
-                    Game::Instance()->handle_event(eGAME_EVENT_MOUSE_MOVE);
-                    break;
+                // case SDL_MOUSEMOTION:
+                // case SDL_FINGERMOTION:
+                //     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_MOVE);
+                //     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_FINGERDOWN:
                     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_DONW);
@@ -51,10 +51,12 @@ int main()
         Game::Instance()->update();
         Game::Instance()->render();
         Box2DPhysicalFacade::get_world()->Step(1.0f / 30.0f, 6.0f, 2.0f);
-        // Uint64 end = SDL_GetPerformanceCounter();
-        // float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-        // SDL_Delay(floor(32.0f - elapsed));
+        Uint64 end = SDL_GetPerformanceCounter();
+        float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+        SDL_Delay(floor(32.0f - elapsed));
     }
+
+    Game::Instance()->clean_up();
 
     return 0;
 }

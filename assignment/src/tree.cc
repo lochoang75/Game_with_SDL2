@@ -40,7 +40,7 @@ ErrorCode_t TreeObject:: create_object_fixture()
         int anchor_x = mAnchorArray[i].x;
         int anchor_y = mAnchorArray[i].y;
         float x_pos, y_pos; 
-        Box2DPhysicalFacade::compute_cartesian_origin(x, y, kAnchorSize, kAnchorSize, x_pos, y_pos);
+        Box2DPhysicalFacade::compute_cartesian_origin(anchor_x, anchor_y, kAnchorSize, kAnchorSize, x_pos, y_pos);
         b2Vec2 edge_position_start(x_pos - 0.1, y_pos);
         b2Vec2 edge_position_end(x_pos + 0.1, y_pos);
         edge.SetTwoSided(edge_position_start, edge_position_end);
@@ -50,6 +50,16 @@ ErrorCode_t TreeObject:: create_object_fixture()
         fixture_def.filter.maskBits = kFRUIT;
         Box2DPhysicalFacade::create_fixture(mBody, fixture_def);
     }
+
+    b2PolygonShape shape;
+    float w_plat = Box2DPhysicalFacade::compute_distance_to_meter(mWidth - 200);
+    float h_plat = Box2DPhysicalFacade::compute_distance_to_meter(mHeight); 
+    shape.SetAsBox(w_plat/2, h_plat/2);
+    b2FixtureDef fixture_def;
+    fixture_def.shape = &shape;
+    fixture_def.filter.categoryBits = kTREE;
+    fixture_def.filter.maskBits = kKID;
+    Box2DPhysicalFacade::create_fixture(mBody, fixture_def);
 
     return kSUCCESS;
 }

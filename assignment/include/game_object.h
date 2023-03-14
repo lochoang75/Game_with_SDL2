@@ -13,6 +13,9 @@ class GameObject
         virtual void update() = 0;
         virtual void clean_up() = 0;
         virtual void load(const LoaderParams* params) = 0;
+        virtual void handle_event(int event) = 0;
+        virtual void get_position(int &x, int &y) const = 0;
+        virtual void get_size(int &width, int &height) const = 0;
         enum eGameObjectType get_object_type() {return mType;};
     protected:
         enum eGameObjectType mType;
