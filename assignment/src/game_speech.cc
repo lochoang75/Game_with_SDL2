@@ -42,22 +42,26 @@ GameCharacterSpeech:: GameCharacterSpeech(const wchar_t *question, int answerVal
     isQuestion = true;
     mSpeech = question;
     mTextColor = { 0, 0, 0, 255};
+    isRendered = false;
 }
 
 GameCharacterSpeech:: GameCharacterSpeech(): mSpeech(NULL), isQuestion(false)
 {
     mTextColor = { 0, 0, 0, 255};
+    isRendered = false;
 }
 
 GameCharacterSpeech::GameCharacterSpeech(const wchar_t *simpleSpeech): mSpeech(simpleSpeech), isQuestion(false)
 {
     mTextColor = { 0, 0, 0, 255};
+    isRendered = false;
 }
 
 
 GameCharacterSpeech::GameCharacterSpeech(const wchar_t *otherSpeech, bool isQuestion): mSpeech(otherSpeech), isQuestion(isQuestion)
 {
     mTextColor = { 0, 0, 0, 255};
+    isRendered = false;
 }
 
 
@@ -177,11 +181,6 @@ GameCharacterSpeech* GameCharacterSpeechSet::get_next_speech()
     }
     GameCharacterSpeech *new_speech = mSpeechSet[mCurrentIdx];
     mCurrentIdx++;
-    // if (new_speech->is_question())
-    // {
-    //     LogDebug("Get question speech");
-    //     mCompleted = true;
-    // }
 
     return new_speech;
 }

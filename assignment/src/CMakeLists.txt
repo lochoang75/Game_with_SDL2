@@ -14,15 +14,15 @@ target_include_directories(${PROJECT_NAME} PRIVATE ../box2d/include/box2d)
 
 # Add SDL2 library
 find_package(SDL2 REQUIRED)
-target_link_libraries(${PROJECT_NAME} SDL2::Main)
+target_link_libraries(${PROJECT_NAME} -lSDL2)
 
 # Add SDL2_image library
 find_package(SDL2_image REQUIRED)
-target_link_libraries(${PROJECT_NAME} SDL2::Image)
+target_link_libraries(${PROJECT_NAME} -lSDL2_image)
 
 # Add SDL2_ttf library
 find_package(SDL2_ttf REQUIRED)
-target_link_libraries(${PROJECT_NAME} SDL2::TTF)
+target_link_libraries(${PROJECT_NAME} -lSDL2_ttf)
 
 # Add SDL2_net library
 #find_package(SDL2_net REQUIRED)

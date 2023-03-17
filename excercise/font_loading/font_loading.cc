@@ -168,7 +168,7 @@ bool RotationFlipping::load_media()
         mFontTexture.set_renderer(mRenderer);
     }
 
-    mLoadedFont = TTF_OpenFont("resources/lazy.ttf", 28);
+    mLoadedFont = TTF_OpenFont("fonts/Arial.ttf", 28);
     if (mLoadedFont == NULL)
     {
         printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());

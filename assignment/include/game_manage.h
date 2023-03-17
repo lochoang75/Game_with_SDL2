@@ -19,6 +19,7 @@ class Game
         ErrorCode_t load_animation();
         ErrorCode_t load_font();
         ErrorCode_t create_object();
+        void set_touch_position(int &x, int &y);
         int get_number_fruit_on_the_tree();
         void update();
         void clean_up();
@@ -37,6 +38,8 @@ class Game
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
         static Game *mInstance;
+        int touch_x;
+        int touch_y;
         b2Body *mGroundBody;
         GameContactListener mContactListener;
         std::vector<GameObject*> mGameObjectVector;

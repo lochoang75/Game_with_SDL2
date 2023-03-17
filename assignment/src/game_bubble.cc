@@ -4,6 +4,7 @@
 #include "game_font_manage.h"
 #include "animation.h"
 #include "animation_manage.h"
+#include "vec2.h"
 
 void AnswerBubbleAnimationPool::load_animation()
 {
@@ -85,13 +86,18 @@ void GameBubble::draw_text()
     SDL_Renderer *p_renderer = Game::Instance()->get_renderer();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     TTF_Font *rendered_font = GameFontManage::get_font(eDEFAULT_FONT);
-    SDL_Surface *text_surface = TTF_RenderUNICODE_Solid(rendered_font, mText, mTextColor);
+    SDL_Surface *text_surface = TTF_RenderUNICODE_Blended(rendered_font, mText, mTextColor);
     src_rect.w = dst_rect.w = text_surface->w;
     src_rect.h = dst_rect.h = text_surface->h;
+    SDL_Point center = {SCREEN_WIDTH/2,SCREEN_HEIGHT/2};
+    vec2d position(dst_rect.x, dst_rect.y);
+    position.rotate(90);
+    dst_rect.x = position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/30; 
+    dst_rect.y = position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8;
     SDL_Texture *texture = SDL_CreateTextureFromSurface(p_renderer, text_surface);
     SDL_FreeSurface(text_surface);
 
-    SDL_RenderCopy(p_renderer, texture, &src_rect, &dst_rect);
+    SDL_RenderCopyEx(p_renderer, texture, &src_rect, &dst_rect, 90, &center, flip);
     // LogDebug("Draw bubble text complete %s", DBG_ObjectType(mType));
 }
 
@@ -394,14 +400,14 @@ void GameQuestionBubble::handle_event(int event)
     switch (event)
     {
     case eGAME_EVENT_MOUSE_DONW:
-        if (mState == eQUESTION_BUBBLE_SHOW)
-        {
-            mState = eQUESTION_BUBBLE_SHOW_ANSWER;
-        }
-        else if (mState == eQUESTION_BUBBLE_SHOW_ANSWER)
-        {
-            mState = eQUESTION_BUBBLE_SHOW;
-        }
+        // if (mState == eQUESTION_BUBBLE_SHOW)
+        // {
+        //     mState = eQUESTION_BUBBLE_SHOW_ANSWER;
+        // }
+        // else if (mState == eQUESTION_BUBBLE_SHOW_ANSWER)
+        // {
+        //     mState = eQUESTION_BUBBLE_SHOW;
+        // }
         break;
 
     default:

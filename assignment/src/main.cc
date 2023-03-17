@@ -9,6 +9,19 @@
 #define MAX_FRUIT (10)
 #define NUM_TREES (3)
 
+static void print_app_version()
+{
+    SDL_version compiled;
+    SDL_version linked;
+
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
+    SDL_Log("We compiled against SDL version %u.%u.%u ...\n",
+            compiled.major, compiled.minor, compiled.patch);
+    SDL_Log("But we are linking against SDL version %u.%u.%u.\n",
+            linked.major, linked.minor, linked.patch);
+}
+
 int main()
 {
     Game::Instance()->init("Fruit Picking");
@@ -18,6 +31,7 @@ int main()
     Game::Instance()->create_object();
     SDL_Event e;
     bool quit = false;
+    int x_pos, y_pos;
 
     while (!quit)
     {
@@ -36,13 +50,19 @@ int main()
                 // case SDL_FINGERMOTION:
                 //     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_MOVE);
                 //     break;
-                case SDL_MOUSEBUTTONDOWN:
                 case SDL_FINGERDOWN:
+                case SDL_MOUSEBUTTONDOWN:
+                    LogDebug("Position x: %d, y: %d", e.button.x, e.button.y);
                     Game::Instance()->handle_event(eGAME_EVENT_MOUSE_DONW);
                     break;
+                    // LogDebug("Position x: %d, y: %d", e.tfinger.x, e.tfinger.y);
+                    // x_pos = e.tfinger.x;
+                    // y_pos = e.tfinger.y;
+                    // Game::Instance()->set_touch_position(x_pos, y_pos);
+                    // Game::Instance()->handle_event(eGAME_EVENT_TOUCH_DOWN);
+                    // break;
                 case SDL_MOUSEBUTTONUP:
-                case SDL_FINGERUP:
-                    Game::Instance()->handle_event(eGAME_EVENT_MOUSE_RELEASE);
+                    // Game::Instance()->handle_event(eGAME_EVENT_MOUSE_RELEASE);
                     break;
             }
 

@@ -32,6 +32,8 @@ class SDLGameObject: public GameObject, public GamePhysicObject
 
         int x;
         int y;
+        int mDrawX;
+        int mDrawY;
         int mWidth;
         int mHeight;
         enum eTextureType id;

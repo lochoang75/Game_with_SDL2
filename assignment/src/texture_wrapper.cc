@@ -1,9 +1,6 @@
 #include "texture_wrapper.h"
-
-GameTexture::~GameTexture()
-{
-    free();
-}
+#include "game_constant.h"
+#include "vec2.h"
 
 void GameTexture::free()
 {
@@ -15,15 +12,24 @@ void GameTexture::free()
     }
 }
 
+GameTexture::~GameTexture()
+{
+    free();
+}
+
 void GameTexture:: draw(int x, int y, int width, int height, SDL_Renderer *pRenderer, SDL_RendererFlip flip)
 {
     SDL_Rect srcRect, destRect;
-    srcRect.x = srcRect.y = 0;
+    srcRect.x = 0;
+    srcRect.y = 0;
     srcRect.w = destRect.w = width;
     srcRect.h = destRect.h = height;
-    destRect.x = x;
-    destRect.y = y;
-    SDL_RenderCopyEx(pRenderer, mTexture, &srcRect, &destRect, 0, NULL, flip);
+    SDL_Point center = {SCREEN_WIDTH/2,SCREEN_HEIGHT/2};
+    vec2f position(x, y);
+    position.rotate(90);
+    destRect.x = position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/30; 
+    destRect.y = position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8 ;
+    SDL_RenderCopyEx(pRenderer, mTexture, &srcRect, &destRect, 90, &center, flip);
 }
 
 void GameTexture::draw(int x, int y, SDL_Rect *src_rect, double angle, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
@@ -31,9 +37,13 @@ void GameTexture::draw(int x, int y, SDL_Rect *src_rect, double angle, SDL_Rende
     SDL_Rect desRect;
     desRect.w = src_rect->w;
     desRect.h = src_rect->h;
-    desRect.x = x;
-    desRect.y = y;
-    SDL_RenderCopyEx(pRenderer, mTexture, src_rect, &desRect, angle, NULL, flip);
+    SDL_Point center = {SCREEN_WIDTH/2,SCREEN_HEIGHT/2};
+    vec2f position(x, y);
+    position.rotate(90);
+    desRect.x = position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/30; 
+    desRect.y = position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8 ;
+    // LogDebug("After rotation x: %d, y: %d", desRect.x, desRect.y);
+    SDL_RenderCopyEx(pRenderer, mTexture, src_rect, &desRect, 90 + angle, &center, flip);
 }
 
 int GameTexture:: get_width()

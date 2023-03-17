@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "game_constant.h"
+#include "game_macros.h"
 #include "game_enum.h"
 #include "game_object_factory.h"
 #include "fruit.h"
@@ -17,6 +18,7 @@
 #include "game_contact_listener.h"
 #include "game_font_manage.h"
 #include "box2d.h"
+#include "vec2.h"
 
 Game *Game::mInstance = NULL;
 
@@ -82,7 +84,7 @@ void Game::timer_init()
 ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
-    mWindow = SDL_CreateWindow(title, xpos, ypos, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
+    mWindow = SDL_CreateWindow(title, xpos, ypos, SCREEN_HEIGHT, SCREEN_WIDTH, flags);
     if (mWindow == NULL)
     {
         LogError("Unable to create windows, SDL Error: %s", SDL_GetError());
@@ -125,17 +127,17 @@ void Game::creator_register()
 
 ErrorCode_t Game::load_media()
 {
-    TextureManager::Instance()->load_texture(eTEXTURE_APPLE, "resources/apple.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_1, "resources/tree_1.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_2, "resources/tree_2.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_3, "resources/tree_3.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_BACKGROUND, "resources/background.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_BASKET, "resources/basket.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_BIRDS, "resources/birds.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_KIDS, "resources/farmers.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_BUBBLE, "resources/chat_box.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_SIGN, "resources/sign.png", mRenderer);
-    TextureManager::Instance()->load_texture(eTEXTURE_WATER_BUBBLE, "resources/water_bubble.png", mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_APPLE, IMG_RESOURCES_PATH("apple.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_1, IMG_RESOURCES_PATH("tree_1.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_2, IMG_RESOURCES_PATH("tree_2.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_TREE_FORM_3, IMG_RESOURCES_PATH("tree_3.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_BACKGROUND, IMG_RESOURCES_PATH("background.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_BASKET, IMG_RESOURCES_PATH("basket.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_BIRDS, IMG_RESOURCES_PATH("birds.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_KIDS, IMG_RESOURCES_PATH("farmers.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_BUBBLE, IMG_RESOURCES_PATH("chat_box.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_SIGN, IMG_RESOURCES_PATH("sign.png"), mRenderer);
+    TextureManager::Instance()->load_texture(eTEXTURE_WATER_BUBBLE, IMG_RESOURCES_PATH("water_bubble.png"), mRenderer);
     return kSUCCESS;
 }
 
@@ -149,8 +151,8 @@ ErrorCode_t Game::load_animation()
 
 ErrorCode_t Game::load_font()
 {
-    GameFontManage::load_new_font(eDEFAULT_FONT, "fonts/Arial.ttf", 18);
-    GameFontManage::load_new_font(eDEFAULT_FONT, "fonts/dlxfont.ttf", 18);
+    // GameFontManage::load_new_font(eDEFAULT_FONT, "fonts/Arial.ttf", 18);
+    GameFontManage::load_new_font(eDEFAULT_FONT, FONT_RESOURCES_PATH("dlxfont.ttf"), 18);
     return kSUCCESS;
 }
 
@@ -358,46 +360,79 @@ void Game::update()
     }
 }
 
+void Game::set_touch_position(int &x, int &y)
+{
+    touch_x = x;
+    touch_y = y;
+}
+
+double degreesToRadians(double degrees)
+{
+    return degrees * M_PI / 180;
+}
+
 void Game::handle_event(enum eGameEventEnum event)
 {
 
     if (event == eGAME_EVENT_MOUSE_DONW)
     {
-        int mouse_x, mouse_y;
-        SDL_GetMouseState(&mouse_x, &mouse_y);
-        for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
-        {
-            int obj_x, obj_y, obj_w, obj_h;
-            (*object)->get_position(obj_x, obj_y);
-            (*object)->get_size(obj_w, obj_h);
-            if (mouse_x < obj_x || mouse_x > (obj_x + obj_w))
-            {
-                /*horizontal postion out of object*/
-                continue;
-            }
-
-            if (mouse_y < obj_y || mouse_y > (obj_y + obj_h))
-            {
-                /*vertical postion out of object*/
-                continue;
-            }
-
-            LogDebug("Mouse down event on object pos: x: %d, y: %d, w: %d, h: %d", obj_x, obj_y, obj_w, obj_h);
-            (*object)->handle_event(eGAME_EVENT_MOUSE_DONW);
-        }
+        SDL_GetMouseState(&touch_x, &touch_y);
+        LogDebug("Mouse position at %d, %d", touch_x, touch_y);
     }
-    else
+    else if (event == eGAME_EVENT_TOUCH_DOWN)
     {
-        for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
-        {
-            SDLGameObject *sdl_object = (SDLGameObject *)*object;
-            if (sdl_object->get_object_type() == eFRUIT_OBJECT)
-            {
-                FruitObject *fruit = (FruitObject *)sdl_object;
-                fruit->handle_event(event);
-            }
-        }
+        LogDebug("Touch position at %d, %d", touch_x, touch_y);
     }
+
+    vec2d mouse_position = {touch_x - (SCREEN_WIDTH/2), touch_y + (SCREEN_HEIGHT/2)};
+    mouse_position.rotate(-90);
+    vec2d offset = {-SCREEN_WIDTH/2, -SCREEN_HEIGHT/4};
+    // offset.rotate(-90);
+    // mouse_position += offset;
+    // touch_x = mouse_position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/10; 
+    // touch_y = mouse_position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8 ;
+    // double rad = degreesToRadians(-90);
+    // double d_sin = sin(rad);
+    // double d_cos = cos(rad);
+    // double x0 = (SCREEN_WIDTH-1)/2 - d_cos*(SCREEN_WIDTH-1)/2 + d_sin*(SCREEN_HEIGHT-1)/2 ;
+    // double y0 = (SCREEN_HEIGHT-1)/2 - d_cos*(SCREEN_HEIGHT-1)/2 - d_sin*(SCREEN_WIDTH-1)/2 ; 
+    // vec2d offset = {x0, y0};
+    mouse_position += offset;
+    touch_x = mouse_position.x;
+    touch_y = mouse_position.y;
+    LogDebug("Mouse position after rotate x: %d, y: %d", touch_x, touch_y);
+    for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
+    {
+        int obj_x, obj_y, obj_w, obj_h;
+        (*object)->get_position(obj_x, obj_y);
+        (*object)->get_size(obj_w, obj_h);
+        if (touch_x < obj_x || touch_x > (obj_x + obj_w))
+        {
+            /*horizontal postion out of object*/
+            continue;
+        }
+
+        if (touch_y < obj_y || touch_y > (obj_y + obj_h))
+        {
+            /*vertical postion out of object*/
+            continue;
+        }
+
+        LogDebug("Mouse down event on object %s pos: x: %d, y: %d, w: %d, h: %d", DBG_ObjectType((*object)->get_object_type()), obj_x, obj_y, obj_w, obj_h);
+        (*object)->handle_event(eGAME_EVENT_MOUSE_DONW);
+    }
+    // else
+    // {
+    //     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
+    //     {
+    //         SDLGameObject *sdl_object = (SDLGameObject *)*object;
+    //         if (sdl_object->get_object_type() == eFRUIT_OBJECT)
+    //         {
+    //             FruitObject *fruit = (FruitObject *)sdl_object;
+    //             fruit->handle_event(event);
+    //         }
+    //     }
+    // }
 }
 
 void Game::clean_up()
@@ -413,8 +448,7 @@ void Game::render()
     SDL_RenderClear(mRenderer);
     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
-        SDLGameObject *sdl_object = (SDLGameObject *)*object;
-        sdl_object->draw();
+        (*object)->draw();
     }
 
     SDL_RenderPresent(mRenderer);

@@ -42,7 +42,8 @@ enum eGameEventEnum {
     eGAME_EVENT_MOUSE_MOVE = 0x0001 << 3,
     eGAME_EVENT_CONTACT_TARGET = 0x0001 << 4,
     eGAME_EVENT_BIRD_FLY = 0x0001 << 5,
-    eGAME_EVENT_ALL_BIRD_OUT = 0x0001 << 6
+    eGAME_EVENT_ALL_BIRD_OUT = 0x0001 << 6,
+    eGAME_EVENT_TOUCH_DOWN = 0x0001 << 7
 };
 
 #endif /* GAME_ENUM_H*/

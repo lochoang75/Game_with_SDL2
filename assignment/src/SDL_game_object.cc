@@ -1,4 +1,5 @@
 #include "SDL_game_object.h"
+#include "vec2.h"
 
 void SDLGameObject:: load(const LoaderParams *pParams)
 {

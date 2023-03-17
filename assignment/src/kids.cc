@@ -297,6 +297,7 @@ void KidObject:: draw()
 
     if (mSpeech != NULL && !mSpeech->is_rendered())
     {
+        LogDebug("set question at address %p", mSpeech);
         GameQuestionBubble::Instance()->set_render_text(mSpeech);
         mSpeech->set_rendered_flag(true);
     }
@@ -361,6 +362,10 @@ void KidObject::update()
         if (mPreState == eKID_ACTION_WRONG_ANSWER && mSpeech != NULL)
         {
             mSpeech->set_rendered_flag(false);
+        }
+        if (mSpeech != NULL)
+        {
+            LogDebug("get question at address %p", mSpeech);
         }
 
         if (GameQuestionBubble::Instance()->get_user_answer(user_answer))
