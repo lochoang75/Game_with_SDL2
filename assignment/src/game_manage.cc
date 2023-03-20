@@ -354,6 +354,7 @@ int Game::get_number_fruit_on_the_tree()
 
 void Game::update()
 {
+    // LogDebug("###### Updating #######");
     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
         (*object)->update();
@@ -384,22 +385,10 @@ void Game::handle_event(enum eGameEventEnum event)
         LogDebug("Touch position at %d, %d", touch_x, touch_y);
     }
 
-    vec2d mouse_position = {touch_x - (SCREEN_WIDTH/2), touch_y + (SCREEN_HEIGHT/2)};
-    mouse_position.rotate(-90);
-    vec2d offset = {-SCREEN_WIDTH/2, -SCREEN_HEIGHT/4};
-    // offset.rotate(-90);
-    // mouse_position += offset;
-    // touch_x = mouse_position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/10; 
-    // touch_y = mouse_position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8 ;
-    // double rad = degreesToRadians(-90);
-    // double d_sin = sin(rad);
-    // double d_cos = cos(rad);
-    // double x0 = (SCREEN_WIDTH-1)/2 - d_cos*(SCREEN_WIDTH-1)/2 + d_sin*(SCREEN_HEIGHT-1)/2 ;
-    // double y0 = (SCREEN_HEIGHT-1)/2 - d_cos*(SCREEN_HEIGHT-1)/2 - d_sin*(SCREEN_WIDTH-1)/2 ; 
-    // vec2d offset = {x0, y0};
-    mouse_position += offset;
-    touch_x = mouse_position.x;
-    touch_y = mouse_position.y;
+    vec2d position = {touch_x, touch_y - SCREEN_HEIGHT};
+    position.rotate(-90);
+    touch_x = position.x + SCREEN_HEIGHT;
+    touch_y = position.y + SCREEN_HEIGHT;
     LogDebug("Mouse position after rotate x: %d, y: %d", touch_x, touch_y);
     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
@@ -429,7 +418,7 @@ void Game::handle_event(enum eGameEventEnum event)
     //         if (sdl_object->get_object_type() == eFRUIT_OBJECT)
     //         {
     //             FruitObject *fruit = (FruitObject *)sdl_object;
-    //             fruit->handle_event(event);
+    //             fruit->handle_event(event)e
     //         }
     //     }
     // }
@@ -445,13 +434,16 @@ void Game::clean_up()
 
 void Game::render()
 {
+    // LogDebug("###### Rendering #######");
     SDL_RenderClear(mRenderer);
     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
+        // LogDebug("Render of object %s", DBG_ObjectType((*object)->get_object_type()));
         (*object)->draw();
     }
 
     SDL_RenderPresent(mRenderer);
+    // LogDebug("###### Render Completed #######");
 }
 
 SDL_Renderer *Game::get_renderer()

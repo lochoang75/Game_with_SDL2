@@ -19,29 +19,30 @@ GameTexture::~GameTexture()
 
 void GameTexture:: draw(int x, int y, int width, int height, SDL_Renderer *pRenderer, SDL_RendererFlip flip)
 {
-    SDL_Rect srcRect, destRect;
+    SDL_Rect srcRect, desRect;
     srcRect.x = 0;
     srcRect.y = 0;
-    srcRect.w = destRect.w = width;
-    srcRect.h = destRect.h = height;
-    SDL_Point center = {SCREEN_WIDTH/2,SCREEN_HEIGHT/2};
-    vec2f position(x, y);
+    srcRect.w = desRect.w = width;
+    srcRect.h = desRect.h = height;
+    SDL_Point center = {0 ,SCREEN_HEIGHT};
+    vec2f position(x , y - SCREEN_HEIGHT);
     position.rotate(90);
-    destRect.x = position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/30; 
-    destRect.y = position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8 ;
-    SDL_RenderCopyEx(pRenderer, mTexture, &srcRect, &destRect, 90, &center, flip);
+    desRect.x = position.x - SCREEN_HEIGHT;  
+    desRect.y = -position.y - SCREEN_HEIGHT + x;
+    SDL_RenderCopyEx(pRenderer, mTexture, &srcRect, &desRect, 90, &center, flip);
 }
 
 void GameTexture::draw(int x, int y, SDL_Rect *src_rect, double angle, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
 {
+    float scale = SCREEN_WIDTH/SCREEN_HEIGHT;
     SDL_Rect desRect;
     desRect.w = src_rect->w;
     desRect.h = src_rect->h;
-    SDL_Point center = {SCREEN_WIDTH/2,SCREEN_HEIGHT/2};
-    vec2f position(x, y);
+    SDL_Point center = {0 ,SCREEN_HEIGHT};
+    vec2f position(x, y - SCREEN_HEIGHT);
     position.rotate(90);
-    desRect.x = position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/30; 
-    desRect.y = position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8 ;
+    desRect.x = position.x - SCREEN_HEIGHT;  
+    desRect.y = -position.y - SCREEN_HEIGHT + 2*x;
     // LogDebug("After rotation x: %d, y: %d", desRect.x, desRect.y);
     SDL_RenderCopyEx(pRenderer, mTexture, src_rect, &desRect, 90 + angle, &center, flip);
 }

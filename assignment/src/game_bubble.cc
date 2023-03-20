@@ -45,6 +45,7 @@ GameBubble::GameBubble(enum eGameObjectType type) : GameObject(type)
     mBackgroundY = 0;
     mTextOffsetX = 0;
     mTextOffsetY = 0;
+    mTextTexture = NULL;
     mText = NULL;
     set_render_text(L" ");
     mTextColor = {0, 0, 0, 255};
@@ -81,23 +82,31 @@ void GameBubble::draw_text()
     SDL_Rect src_rect, dst_rect;
     src_rect.x = 0;
     src_rect.y = 0;
-    dst_rect.x = mBackgroundX + mTextOffsetX;
-    dst_rect.y = mBackgroundY + mTextOffsetY;
+    int x = mBackgroundX + mTextOffsetX;
+    int y = mBackgroundY + mTextOffsetY;
     SDL_Renderer *p_renderer = Game::Instance()->get_renderer();
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     TTF_Font *rendered_font = GameFontManage::get_font(eDEFAULT_FONT);
     SDL_Surface *text_surface = TTF_RenderUNICODE_Blended(rendered_font, mText, mTextColor);
-    src_rect.w = dst_rect.w = text_surface->w;
-    src_rect.h = dst_rect.h = text_surface->h;
-    SDL_Point center = {SCREEN_WIDTH/2,SCREEN_HEIGHT/2};
-    vec2d position(dst_rect.x, dst_rect.y);
+    src_rect.w = text_surface->w;
+    src_rect.h = text_surface->h;
+    SDL_Point center = {0 ,SCREEN_HEIGHT};
+    vec2f position = {x, y - SCREEN_HEIGHT};
     position.rotate(90);
-    dst_rect.x = position.x - SCREEN_WIDTH/4 + SCREEN_WIDTH/30; 
-    dst_rect.y = position.y + SCREEN_HEIGHT/4 + SCREEN_HEIGHT /8;
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(p_renderer, text_surface);
+    y = -position.y - SCREEN_HEIGHT + 2 * x;
+    x = position.x - SCREEN_HEIGHT;  
+    dst_rect.x = x;
+    dst_rect.y = y;
+    dst_rect.w = text_surface->w;
+    dst_rect.h = text_surface->h; 
+    if (mTextTexture != NULL)
+    {
+        SDL_DestroyTexture(mTextTexture);
+    }
+    mTextTexture = SDL_CreateTextureFromSurface(p_renderer, text_surface);
     SDL_FreeSurface(text_surface);
 
-    SDL_RenderCopyEx(p_renderer, texture, &src_rect, &dst_rect, 90, &center, flip);
+    SDL_RenderCopyEx(p_renderer, mTextTexture, &src_rect, &dst_rect, 90, &center, flip);
     // LogDebug("Draw bubble text complete %s", DBG_ObjectType(mType));
 }
 
@@ -167,12 +176,14 @@ void GameBubble::get_size(int &width, int &height) const
 GameAnswerBubble::GameAnswerBubble() : GameBubble(eWATER_BUBBLE_OBJECT)
 {
     mCurrentFrame = NULL;
+    mAnimation = NULL;
     mFrameIdx = 0;
     mState = eWATER_BUBBLE_HIDE;
     mTextOffsetX = 8;
     mTextOffsetY = 2;
     mFrameCounter = 0;
     mAnswerFlag = false;
+    mAnswer = GameAnswer();
 }
 
 GameAnswerBubble::GameAnswerBubble(const GameAnswer &answer) : GameBubble(eWATER_BUBBLE_OBJECT), mAnswer(answer)
@@ -285,6 +296,7 @@ void GameAnswerBubble::draw()
         // LogDebug("Frame is null not draw %s", DBG_ObjectType(mType));
         return;
     }
+    // LogDebug("Frame will be drawing at %p",mCurrentFrame);
 
     draw_background();
     draw_text();
@@ -471,6 +483,7 @@ void GameQuestionBubble::set_render_text(GameCharacterSpeech *speech)
     }
     else
     {
+        LogDebug("Add text for normal chat");
         isQuestion = false;
         mState = eQUESTION_BUBBLE_SHOW;
     }

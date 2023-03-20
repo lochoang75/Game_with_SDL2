@@ -297,7 +297,7 @@ void KidObject:: draw()
 
     if (mSpeech != NULL && !mSpeech->is_rendered())
     {
-        LogDebug("set question at address %p", mSpeech);
+        LogDebug("set new speech at address %p", mSpeech);
         GameQuestionBubble::Instance()->set_render_text(mSpeech);
         mSpeech->set_rendered_flag(true);
     }

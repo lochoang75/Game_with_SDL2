@@ -71,9 +71,9 @@ int main()
         Game::Instance()->update();
         Game::Instance()->render();
         Box2DPhysicalFacade::get_world()->Step(1.0f / 30.0f, 6.0f, 2.0f);
-        Uint64 end = SDL_GetPerformanceCounter();
-        float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-        SDL_Delay(floor(32.0f - elapsed));
+        // Uint64 end = SDL_GetPerformanceCounter();
+        // float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+        // SDL_Delay(floor(32.0f - elapsed));
     }
 
     Game::Instance()->clean_up();

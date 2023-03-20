@@ -70,6 +70,7 @@ class GameBubble: public GameObject
         uint16_t *mText;
         SDL_Color mTextColor;
         eTextureType id;
+        SDL_Texture *mTextTexture;
 };
 
 class GameAnswerBubble: public GameBubble 
