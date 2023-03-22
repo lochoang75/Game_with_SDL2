@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "log_wrapper.h"
-#include "game_enum.h"
 #include "game_object.h"
 
 class BaseCreator

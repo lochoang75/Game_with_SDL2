@@ -4,7 +4,6 @@
 
 #include "game_constant.h"
 #include "game_macros.h"
-#include "game_enum.h"
 #include "game_object_factory.h"
 #include "fruit.h"
 #include "tree.h"
@@ -17,6 +16,10 @@
 #include "road_sign.h"
 #include "game_contact_listener.h"
 #include "game_font_manage.h"
+#include "game_event.h"
+#include "game_touch_event_data.h"
+#include "game_touch_event_impl.h"
+
 #include "box2d.h"
 #include "vec2.h"
 
@@ -48,6 +51,7 @@ ErrorCode_t Game::init(const char *title)
 
     physics_init();
     creator_register();
+    event_init();
     mContactListener.InitContactHandler();
     timer_init();
     return ret;
@@ -74,11 +78,25 @@ void Game::physics_init()
     Box2DPhysicalFacade::get_world()->SetContactListener(&mContactListener);
 }
 
+void Game::event_init()
+{
+    GameEventInput *touch_event = new GameTouchEventInput();
+    if (touch_event == NULL)
+    {
+        LogError("Unable to allocate memory for touch_event");
+        return;
+    }
+
+    touch_event->input_init();
+    touch_event->event_register();
+    touch_event->start_event_poll();
+}
+
 Uint32 periodict_timer_callback(Uint32 interval, void* name);
 
 void Game::timer_init()
 {
-    mTimerID = SDL_AddTimer(1500, periodict_timer_callback, (void*)Game::Instance());
+    mTimerID = SDL_AddTimer(2000, periodict_timer_callback, (void*)Game::Instance());
 }
 
 ErrorCode_t Game::sdl_component_init(const char *title, int xpos, int ypos, int flags)
@@ -197,7 +215,7 @@ ErrorCode_t Game::_create_fruit_object(GameObject *tree)
 {
     /*TODO: Change to load from json or st, that create map dynamic, instead of hardcode*/
     srand(time(NULL));
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 5; i++)
     {
         GameObject *fruit_object = GameObjectFactory::Instance()->create_object(eFRUIT_OBJECT);
         if (fruit_object == NULL)
@@ -299,7 +317,7 @@ ErrorCode_t Game::_create_chat_box(GameObject *&chatBox)
 
 ErrorCode_t Game::_create_answer_bubble(GameObject *pParent)
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 5; i++)
     {
         GameObject *new_bubble = GameObjectFactory::Instance()->create_object(eWATER_BUBBLE_OBJECT);
         if (new_bubble == NULL)
@@ -374,17 +392,7 @@ double degreesToRadians(double degrees)
 
 void Game::handle_event(enum eGameEventEnum event)
 {
-
-    if (event == eGAME_EVENT_MOUSE_DONW)
-    {
-        SDL_GetMouseState(&touch_x, &touch_y);
-        LogDebug("Mouse position at %d, %d", touch_x, touch_y);
-    }
-    else if (event == eGAME_EVENT_TOUCH_DOWN)
-    {
-        LogDebug("Touch position at %d, %d", touch_x, touch_y);
-    }
-
+    LogDebug("Mouse position befoer rotate x: %d, y: %d", touch_x, touch_y);
     vec2d position = {touch_x, touch_y - SCREEN_HEIGHT};
     position.rotate(-90);
     touch_x = position.x + SCREEN_HEIGHT;
@@ -395,13 +403,13 @@ void Game::handle_event(enum eGameEventEnum event)
         int obj_x, obj_y, obj_w, obj_h;
         (*object)->get_position(obj_x, obj_y);
         (*object)->get_size(obj_w, obj_h);
-        if (touch_x < obj_x || touch_x > (obj_x + obj_w))
+        if (touch_x < (obj_x - 10) || touch_x > (obj_x + obj_w + 10))
         {
             /*horizontal postion out of object*/
             continue;
         }
 
-        if (touch_y < obj_y || touch_y > (obj_y + obj_h))
+        if (touch_y < (obj_y - 10) || touch_y > (obj_y + obj_h + 10))
         {
             /*vertical postion out of object*/
             continue;
@@ -435,6 +443,7 @@ void Game::clean_up()
 void Game::render()
 {
     // LogDebug("###### Rendering #######");
+    SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(mRenderer);
     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
     {
@@ -457,6 +466,7 @@ Uint32 periodict_timer_callback(Uint32 interval, void* name)
     int bird_escape = 0;
     int fruits_on_the_tree = 0;
     KidObject* kid = NULL;
+    eBirdState preState = eBIRD_ESCAPE;
     for (std::vector<GameObject *>::iterator object = static_cast<Game*>(name)->mGameObjectVector.begin(); 
         object != static_cast<Game*>(name)->mGameObjectVector.end(); object++)
     {
@@ -478,6 +488,10 @@ Uint32 periodict_timer_callback(Uint32 interval, void* name)
             eBirdState state = static_cast<BirdObject*>(*object)->get_bird_state();
             if (state == eBIRD_STAND)
             {
+                if (preState != eBIRD_ESCAPE)
+                {
+                    break;
+                }
                 if (kick_the_bird)
                 {
                     LogDebug("Bird will fly after this");
@@ -487,6 +501,9 @@ Uint32 periodict_timer_callback(Uint32 interval, void* name)
             } else if (state == eBIRD_ESCAPE)
             {
                 bird_escape++;
+            } else
+            {
+                preState = state;
             }
         }
     }

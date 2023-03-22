@@ -133,7 +133,7 @@ ErrorCode_t BirdObject:: create_object_fixture()
     float h_plat = Box2DPhysicalFacade::compute_distance_to_meter(mHeight); 
     shape.SetAsBox(w_plat/2, h_plat/2);
     fixture_def.shape = &shape;
-    fixture_def.density = 5.0;
+    fixture_def.density = 1.0;
     fixture_def.friction = 0.3;
     fixture_def.restitution = 0.2;
     fixture_def.filter.categoryBits = kBIRD;
@@ -176,6 +176,17 @@ void BirdObject::update()
 {   
     uint8_t counter_limit = 10;
     b2Vec2 object_velocity = mBody->GetLinearVelocity();
+    if (x < 0 || x > SCREEN_WIDTH)
+    {
+        set_bird_state(eBIRD_ESCAPE);
+    }
+
+    if (y < 0 || y > SCREEN_HEIGHT)
+    {
+        set_bird_state(eBIRD_ESCAPE);
+    }
+
+
     switch (mBirdState)
     {
         case eBIRD_STAND:
@@ -183,7 +194,7 @@ void BirdObject::update()
         case eBIRD_TAKE_OFF:
             if (object_velocity.y >= 0)
             {
-                mBody->ApplyForce(b2Vec2(-3.0, -60), mBody->GetPosition(), true);
+                mBody->ApplyForce(b2Vec2(-2.0f, -7.0f), mBody->GetPosition(), true);
             }
             set_bird_state(eBIRD_FLYING);
             break;
@@ -191,14 +202,17 @@ void BirdObject::update()
             counter_limit = 3;
             if (object_velocity.y >= 0)
             {
-                mBody->ApplyForce(b2Vec2(-3.0, -60), mBody->GetPosition(), true);
+                mBody->ApplyForce(b2Vec2(-2.0f, -10.0f), mBody->GetPosition(), true);
             }
+
             break;
         case eBIRD_CATCH_THE_FRUIT:
             LogDebug("Bird will catch the fruit after that");
             if (fruit_catched)
             {
                 set_bird_state(eBIRD_ESCAPE);
+                mBody->SetLinearVelocity(b2Vec2(1.5f, -1.0f));
+                mBody->SetType(b2_kinematicBody);
             } else
             {
                 joint_new_object(mTargetFruit);
@@ -206,21 +220,17 @@ void BirdObject::update()
             }
             break;
         case eBIRD_ESCAPE:
-            if (object_velocity.y >= 0)
-            {
-                mBody->ApplyForce(b2Vec2(3.0, -80), mBody->GetPosition(), true);
-            }
             break;
         default:
             break;
     }
-
     if (mUpdateCounter >= counter_limit)
     {
         frame = animation->get_frame(mBirdState, mFrameIdx);
         mUpdateCounter = 0;
     }
     mUpdateCounter ++;
+
     SDLGameObject::update();
 }
 
@@ -244,7 +254,7 @@ eBirdState BirdObject::handle_event(eGameEventEnum event)
         }
         else if (mBirdState == eBIRD_ESCAPE)
         {
-            Box2DPhysicalFacade::set_velocity(mBody, 2.0f, -1.0f);
+            Box2DPhysicalFacade::set_velocity(mBody, 1.0f, -15.0f);
             LogDebug("Bird will ignore that fruit");
         } 
         else

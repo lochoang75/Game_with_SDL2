@@ -16,7 +16,7 @@ void AnswerBubbleAnimationPool::load_bubble_normal_animation()
 {
     AnimationFrame sprite_sheet[1] =
         {
-            {"normal_1", 34, 27, 31, 30},
+            {"normal_1", 53, 40, 50, 49},
             // {"normal_2", 122, 25, 31, 33},
             // {"normal_3", 209, 25, 33, 33},
             // {"normal_4", 296, 24, 35, 34}
@@ -29,12 +29,13 @@ void AnswerBubbleAnimationPool::load_bubble_explose_animation()
 {
     AnimationFrame sprite_sheet[6] =
         {
-            {"explose_1", 378, 22, 45, 39},
-            {"explose_2", 25, 95, 45, 41},
-            {"explose_3", 133, 94, 48, 43},
-            {"explose_4", 199, 93, 50, 45},
-            {"explose_5", 287, 93, 50, 44},
-            {"explose_6", 378, 93, 47, 40}};
+            {"explose_1", 588, 34, 72, 61},
+            {"explose_2", 38, 147, 71, 65},
+            {"explose_3", 175, 145, 77, 70},
+            {"explose_4", 310, 145, 79, 70},
+            {"explose_5", 447, 144, 79, 70},
+            {"explose_6", 589, 144, 73, 65}
+        };
 
     AnimationPool::add_animation_for_new_state(sprite_sheet, 6, false);
 }
@@ -91,7 +92,7 @@ void GameBubble::draw_text()
     src_rect.w = text_surface->w;
     src_rect.h = text_surface->h;
     SDL_Point center = {0 ,SCREEN_HEIGHT};
-    vec2f position = {x, y - SCREEN_HEIGHT};
+    vec2d position = {x, y - SCREEN_HEIGHT};
     position.rotate(90);
     y = -position.y - SCREEN_HEIGHT + 2 * x;
     x = position.x - SCREEN_HEIGHT;  
@@ -179,8 +180,8 @@ GameAnswerBubble::GameAnswerBubble() : GameBubble(eWATER_BUBBLE_OBJECT)
     mAnimation = NULL;
     mFrameIdx = 0;
     mState = eWATER_BUBBLE_HIDE;
-    mTextOffsetX = 8;
-    mTextOffsetY = 2;
+    mTextOffsetX = 20;
+    mTextOffsetY = 10;
     mFrameCounter = 0;
     mAnswerFlag = false;
     mAnswer = GameAnswer();
@@ -206,6 +207,7 @@ void GameAnswerBubble::set_position(int x, int y)
 {
     this->mBackgroundX = x;
     this->mBackgroundY = y;
+    LogDebug("Answer x at: %d, y at: %d", x, y);
 }
 
 void GameAnswerBubble:: animation_variable_reset()
@@ -229,16 +231,12 @@ void GameAnswerBubble::update()
         break;
 
     case eWATER_BUBBLE_SHOW_EXPLOSE:
-        if (mFrameCounter == 2)
+        mCurrentFrame = mAnimation->get_frame(mState, mFrameIdx);
+        if (mAnimation->is_completed(mState, mFrameIdx))
         {
-            mCurrentFrame = mAnimation->get_frame(mState, mFrameIdx);
-            if (mAnimation->is_completed(mState, mFrameIdx))
-            {
-                LogDebug("User is answer value: %u", mAnswer.answerNumber);
-                mAnswerFlag = true;
-                mState = eWATER_BUBBLE_HIDE;
-            }
-            mFrameCounter = 0;
+            LogDebug("User is answer value: %u", mAnswer.answerNumber);
+            mAnswerFlag = true;
+            mState = eWATER_BUBBLE_HIDE;
         }
         break;
 
@@ -246,7 +244,6 @@ void GameAnswerBubble::update()
         /*ignore handle other state*/
         break;
     }
-    mFrameCounter++;
 }
 
 void GameAnswerBubble::handle_event(int event)
@@ -388,13 +385,13 @@ void GameQuestionBubble::update()
 void GameQuestionBubble::update_position_for_answer_bubble()
 {
     int start_x = mBackgroundX + 40;
-    int start_y = mBackgroundY + 50;
+    int start_y = mBackgroundY + 40;
     std::vector<GameAnswerBubble *>::iterator it;
     for (it = mAnsBubbleList.begin(); it != mAnsBubbleList.end(); it++)
     {
         (*it)->set_position(start_x, start_y);
         (*it)->handle_event(eBUBBLE_EVENT_SHOW);
-        start_x += 50;
+        start_x += 80;
     }
 }
 

@@ -1,7 +1,6 @@
 #ifndef KIDS_H
 #define KIDS_H
 #include "SDL_game_object.h"
-#include "game_enum.h"
 #include "game_object_factory.h"
 #include "animation.h"
 #include "animation_manage.h"

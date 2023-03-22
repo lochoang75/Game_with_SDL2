@@ -1,7 +1,13 @@
 #ifndef GAME_FONT_MANAGE_H
 #define GAME_FONT_MANAGE_H
 #include <SDL2/SDL_ttf.h>
-#include "game_enum.h"
+
+enum eGameFont
+{
+    eDEFAULT_FONT = 0,
+    eDELUXE_FONT,
+    eTOTAL_FONTS
+};
 
 class GameFontManage
 {

@@ -1,6 +1,5 @@
 #ifndef BIRD_H
 #define BIRD_H
-#include "game_enum.h"
 #include "SDL_game_object.h"
 #include "game_object_factory.h"
 #include "animation_manage.h"

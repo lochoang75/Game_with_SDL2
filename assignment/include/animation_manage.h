@@ -2,8 +2,8 @@
 #define ANIMATION_MANAGE_H
 #include "animation.h"
 #include "game_constant.h"
-#include "game_enum.h"
 #include "log_wrapper.h"
+#include "game_object.h"
 
 class AnimationManage 
 {

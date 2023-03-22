@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "game_object.h"
+#include "game_event.h"
 #include "game_object_factory.h"
 #include "game_speech.h"
 #include "animation.h"

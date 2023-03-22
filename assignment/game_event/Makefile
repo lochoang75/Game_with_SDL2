@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/loc/workspace/Game_with_SDL2/assignment/CMakeFiles /home/loc/workspace/Game_with_SDL2/assignment//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -E cmake_progress_start /home/loc/workspace/Game_with_SDL2/assignment/CMakeFiles /home/loc/workspace/Game_with_SDL2/assignment/game_event//CMakeFiles/progress.marks
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 game_event/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/loc/workspace/Game_with_SDL2/assignment/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 game_event/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,122 +148,18 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 game_event/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 game_event/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named box2d
-
-# Build rule for target.
-box2d: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 box2d
-.PHONY : box2d
-
-# fast build rule for target.
-box2d/fast:
-	$(MAKE) $(MAKESILENT) -f box2d/src/CMakeFiles/box2d.dir/build.make box2d/src/CMakeFiles/box2d.dir/build
-.PHONY : box2d/fast
-
-#=============================================================================
-# Target rules for targets named glad
-
-# Build rule for target.
-glad: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 glad
-.PHONY : glad
-
-# fast build rule for target.
-glad/fast:
-	$(MAKE) $(MAKESILENT) -f box2d/extern/glad/CMakeFiles/glad.dir/build.make box2d/extern/glad/CMakeFiles/glad.dir/build
-.PHONY : glad/fast
-
-#=============================================================================
-# Target rules for targets named glfw
-
-# Build rule for target.
-glfw: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 glfw
-.PHONY : glfw
-
-# fast build rule for target.
-glfw/fast:
-	$(MAKE) $(MAKESILENT) -f box2d/extern/glfw/CMakeFiles/glfw.dir/build.make box2d/extern/glfw/CMakeFiles/glfw.dir/build
-.PHONY : glfw/fast
-
-#=============================================================================
-# Target rules for targets named imgui
-
-# Build rule for target.
-imgui: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 imgui
-.PHONY : imgui
-
-# fast build rule for target.
-imgui/fast:
-	$(MAKE) $(MAKESILENT) -f box2d/extern/imgui/CMakeFiles/imgui.dir/build.make box2d/extern/imgui/CMakeFiles/imgui.dir/build
-.PHONY : imgui/fast
-
-#=============================================================================
-# Target rules for targets named sajson
-
-# Build rule for target.
-sajson: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sajson
-.PHONY : sajson
-
-# fast build rule for target.
-sajson/fast:
-	$(MAKE) $(MAKESILENT) -f box2d/extern/sajson/CMakeFiles/sajson.dir/build.make box2d/extern/sajson/CMakeFiles/sajson.dir/build
-.PHONY : sajson/fast
-
-#=============================================================================
-# Target rules for targets named testbed
-
-# Build rule for target.
-testbed: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 testbed
-.PHONY : testbed
-
-# fast build rule for target.
-testbed/fast:
-	$(MAKE) $(MAKESILENT) -f box2d/testbed/CMakeFiles/testbed.dir/build.make box2d/testbed/CMakeFiles/testbed.dir/build
-.PHONY : testbed/fast
-
-#=============================================================================
-# Target rules for targets named eventLib
-
-# Build rule for target.
-eventLib: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 eventLib
-.PHONY : eventLib
-
-# fast build rule for target.
-eventLib/fast:
-	$(MAKE) $(MAKESILENT) -f game_event/src/CMakeFiles/eventLib.dir/build.make game_event/src/CMakeFiles/eventLib.dir/build
-.PHONY : eventLib/fast
-
-#=============================================================================
-# Target rules for targets named fruit_picking
-
-# Build rule for target.
-fruit_picking: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fruit_picking
-.PHONY : fruit_picking
-
-# fast build rule for target.
-fruit_picking/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/fruit_picking.dir/build.make src/CMakeFiles/fruit_picking.dir/build
-.PHONY : fruit_picking/fast
 
 # Help Target
 help:
@@ -277,14 +173,6 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... box2d"
-	@echo "... eventLib"
-	@echo "... fruit_picking"
-	@echo "... glad"
-	@echo "... glfw"
-	@echo "... imgui"
-	@echo "... sajson"
-	@echo "... testbed"
 .PHONY : help
 
 
@@ -296,6 +184,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/loc/workspace/Game_with_SDL2/assignment && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,7 +1,20 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 #include "loader_params.h"
-#include "game_enum.h"
+
+enum eGameObjectType
+{
+    eFRUIT_OBJECT = 0,
+    eTREE_OBJECT = 1,
+    eBASKET_OBJECT = 2,
+    eBACKGROUND_OBJECT = 3,
+    eBIRD_OBJECT = 4,
+    eKID_OBJECT = 5,
+    eBUBBLE_OBJECT = 6,
+    eWATER_BUBBLE_OBJECT = 7,
+    eSIGN_OBJECT = 8,
+    eTOTAL_OBJECT
+};
 
 class GameObject
 {

@@ -6,6 +6,7 @@
 #include "game_object.h"
 #include "game_constant.h"
 #include "log_wrapper.h"
+#include "game_event.h"
 
 typedef void (*ContactHandler)(GameObject *, GameObject*);
 

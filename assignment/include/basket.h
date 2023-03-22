@@ -1,6 +1,5 @@
 #ifndef BASKET_H
 #define BASKET_H
-#include "game_enum.h"
 #include "SDL_game_object.h"
 #include "game_object_factory.h"
 

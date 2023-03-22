@@ -11,6 +11,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC LOGGER_PREFIX_LEVEL=3)
 # Add all headers files under the include directory
 target_include_directories(${PROJECT_NAME} PRIVATE ../include)
 target_include_directories(${PROJECT_NAME} PRIVATE ../box2d/include/box2d)
+target_include_directories(${PROJECT_NAME} PRIVATE ../game_event/include)
 
 # Add SDL2 library
 find_package(SDL2 REQUIRED)
@@ -23,6 +24,8 @@ target_link_libraries(${PROJECT_NAME} -lSDL2_image)
 # Add SDL2_ttf library
 find_package(SDL2_ttf REQUIRED)
 target_link_libraries(${PROJECT_NAME} -lSDL2_ttf)
+
+target_link_libraries(${PROJECT_NAME} eventLib)
 
 # Add SDL2_net library
 #find_package(SDL2_net REQUIRED)

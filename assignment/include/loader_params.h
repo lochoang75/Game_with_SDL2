@@ -1,6 +1,6 @@
 #ifndef LOADER_PARAMS_H
 #define LOADER_PARAMS_H
-#include "game_enum.h"
+#include "texture_manager.h"
 
 class LoaderParams
 {

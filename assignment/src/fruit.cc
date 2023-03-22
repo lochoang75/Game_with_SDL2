@@ -16,7 +16,7 @@ ErrorCode_t FruitObject:: create_object_body()
     float body_x, body_y;
     Box2DPhysicalFacade::compute_cartesian_origin(x, y, mWidth, mHeight, body_x, body_y);
 
-    body_def.type = b2_dynamicBody;
+    body_def.type = b2_kinematicBody;
     body_def.position.Set(body_x, body_y);
     body_def.linearDamping = 2.0f;
     body_def.userData.pointer = reinterpret_cast<uintptr_t> (this);
@@ -36,7 +36,7 @@ ErrorCode_t FruitObject:: create_object_fixture()
     float h_plat = Box2DPhysicalFacade::compute_distance_to_meter(mHeight); 
     shape.SetAsBox(w_plat/2, h_plat/2);
     fixture_def.shape = &shape;
-    fixture_def.density = 0.5f;
+    fixture_def.density = 1.0f;
     fixture_def.friction = 0.3f;
     fixture_def.restitution = 0.3f;
     fixture_def.filter.categoryBits = kFRUIT;
@@ -62,7 +62,7 @@ void FruitObject:: update()
             LogDebug("Fruit has been catched");
             unjoint_from_current_container();
             // Box2DPhysicalFacade::set_gravity_scale(mBody, 1f);
-            // Box2DPhysicalFacade::set_velocity(mBody, 1.5f, -1.0f);
+            Box2DPhysicalFacade::set_velocity(mBody, 1.5f, -1.0f);
             mFruitState = eFRUIT_WITH_BIRD;
             break;
         case eFRUIT_RELEASED:
@@ -72,6 +72,7 @@ void FruitObject:: update()
             // Box2DPhysicalFacade::set_gravity_scale(mBody, 1.0f);
             /*Through*/
         case eFRUIT_FALLING:
+            // LogDebug("Fruit will falled");
             /* TODO need to know if object is in the ground*/
             break;
         case eFRUIT_WITH_BIRD:
@@ -84,13 +85,14 @@ void FruitObject:: update()
     }
 }
 
-void FruitObject::handle_event(enum eGameEventEnum event)
+void FruitObject::handle_event(int event)
 {
     int mouse_x, mouse_y;
     switch(event)
     {
         case eGAME_EVENT_MOUSE_DONW:
-            mFruitState = eFRUIT_SELECTED;
+        case eGAME_EVENT_TOUCH_DOWN:
+            // mFruitState = eFRUIT_RELEASED;
             break;
         case eGAME_EVENT_MOUSE_MOVE:
             if (mFruitState != eFRUIT_SELECTED)

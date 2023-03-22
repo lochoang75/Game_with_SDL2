@@ -1,8 +1,12 @@
 #include "game_debug.h"
+#include "game_object.h"
+#include "texture_manager.h"
+#include "game_event.h"
+#include "game_font_manage.h"
 
-const char* DBG_TextureType(enum eTextureType id)
+const char* DBG_TextureType(int id)
 {
-    switch (id)
+    switch ((eTextureType)id)
     {
     case eTEXTURE_BACKGROUND:
         return "BACKGROUND_TEXTURE";
@@ -32,9 +36,9 @@ const char* DBG_TextureType(enum eTextureType id)
     }
 }
 
-const char* DBG_ObjectType(enum eGameObjectType obj_type)
+const char* DBG_ObjectType(int obj_type)
 {
-    switch (obj_type)
+    switch ((eGameObjectType) obj_type)
     {
     case eBACKGROUND_OBJECT:
         return "BACKGROUND_OBJECT";
@@ -59,9 +63,9 @@ const char* DBG_ObjectType(enum eGameObjectType obj_type)
     }
 }
 
-const char* DBG_EventType(enum eGameEventEnum event)
+const char* DBG_EventType(int event)
 {
-    switch (event)
+    switch ((eGameEventEnum) event)
     {
     case eGAME_EVENT_UNSET:
         return "UNSET_EVENT";
@@ -82,9 +86,9 @@ const char* DBG_EventType(enum eGameEventEnum event)
     }
 }
 
-const char *DBG_FontType(enum eGameFont font)
+const char *DBG_FontType(int font)
 {
-    switch (font)
+    switch ((eGameFont) font)
     {
     case eDEFAULT_FONT:
         return "DEFAULT_FONT";

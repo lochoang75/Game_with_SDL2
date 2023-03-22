@@ -189,7 +189,7 @@ void GameCharacterSpeechSet:: set_index(int index)
 {
     if (index < mCount)
     {
-        LogError("Index reseting to %d", index);
+        LogDebug("Index reseting to %d", index);
         mCurrentIdx = index;
         mCompleted = false;
     }

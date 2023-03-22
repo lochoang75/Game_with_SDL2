@@ -1,6 +1,5 @@
 #ifndef FRUIT_H
 #define FRUIT_H
-#include "game_enum.h"
 #include "SDL_game_object.h"
 #include "game_object_factory.h"
 #include "game_container_object.h"
@@ -22,7 +21,7 @@ class FruitObject: public SDLGameObject, public ContainedObject
         FruitObject(): SDLGameObject(eFRUIT_OBJECT), ContainedObject(), mFruitState(eFRUIT_ON_THE_TREE){};
         ~FruitObject(){};
         void update() override;
-        void handle_event(enum eGameEventEnum);
+        void handle_event(int event) override;
         b2Body *get_body() override {return mBody;};
         b2Vec2 get_anchor_point() const override;
         eFruitState get_state() const {return mFruitState;};

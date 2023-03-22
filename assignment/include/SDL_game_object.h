@@ -2,7 +2,6 @@
 #define SDL_GAME_OBJECT_H
 #include <SDL2/SDL.h>
 #include "game_object.h"
-#include "game_enum.h"
 #include "texture_manager.h"
 #include "game_manage.h"
 #include "box2d_facade.h"

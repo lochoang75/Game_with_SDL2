@@ -6,6 +6,7 @@
     #define GROUND_POSITION (SCREEN_HEIGHT - 100)
     #define MAX_CONTACT_HANDLER (20)
     #define MAX_ANSWER_BUBBLE (10)
+    #define EVENT_IDLE_MS   (100)
 
     const int MET2PIX = (60);
     const int SCALED_WIDTH = (SCREEN_WIDTH/ MET2PIX);
@@ -18,7 +19,8 @@ typedef enum kErrorCode {
     kTRY_AGAIN = -2,
     kNO_MEM = -3,
     kINVALID = -4,
-    kUNKNOWN = -5
+    kUNKNOWN = -5,
+    kDUPLICATED = -6
 } ErrorCode_t;
 
 enum _ObjectPhysicCategoryEnum {

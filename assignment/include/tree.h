@@ -1,7 +1,6 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include "game_enum.h"
 #include "SDL_game_object.h"
 #include "game_object_factory.h"
 #include "game_container_object.h"

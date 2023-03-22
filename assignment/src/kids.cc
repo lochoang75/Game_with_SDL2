@@ -51,13 +51,15 @@ void KidAnimationPool::load_left_move_animation()
 
 void KidAnimationPool::load_water_tree_animation()
 {
-    AnimationFrame sprite_sheet[2] =
+    AnimationFrame sprite_sheet[4] =
     {
         {"water_1", 217, 0, 78, 94},
-        {"water_2", 296, 174, 41, 85},
+        {"water_3", 217, 0, 78, 94},
+        {"water_3", 217, 0, 78, 94},
+        {"water_4", 296, 174, 41, 85},
     };
 
-    AnimationPool::add_animation_for_new_state(sprite_sheet, 2, false);
+    AnimationPool::add_animation_for_new_state(sprite_sheet, 4, false);
 }
 
 void KidAnimationPool::load_left_turn_animation()
@@ -139,13 +141,11 @@ static void init_question_speech(GameCharacterSpeechSet &speechSet, enum eKidAct
         return;
     }
 
+    question->append_answer(1);
+    question->append_answer(2);
     question->append_answer(3);
+    question->append_answer(4);
     question->append_answer(5);
-    question->append_answer(6);
-    question->append_answer(7);
-    question->append_answer(8);
-    question->append_answer(9);
-    question->append_answer(10);
     speechSet.append_new_speech(question);
 }
 
@@ -307,12 +307,7 @@ void KidObject:: draw()
 void KidObject::update()
 {
     // LogDebug("Frame get update for state %d frame id %d", mAnimationState, mFrameIdx);
-    if (mUpdateCounter >= 3)
-    {
-        mFrame = mAnimation->get_frame(mAnimationState, mFrameIdx);
-        mUpdateCounter = 0;
-    }
-    mUpdateCounter++;
+    mFrame = mAnimation->get_frame(mAnimationState, mFrameIdx);
 
     GameAnswer user_answer;
     switch (mActionState)
@@ -337,7 +332,7 @@ void KidObject::update()
             set_new_state(eKID_ACTION_PLANT_TREE);
         } else
         {
-            Box2DPhysicalFacade::set_velocity(mBody, -1.0f, 0.0f);
+            Box2DPhysicalFacade::set_velocity(mBody, -2.0f, 0.0f);
         }
         break;
 
@@ -371,7 +366,7 @@ void KidObject::update()
         if (GameQuestionBubble::Instance()->get_user_answer(user_answer))
         {
             LogDebug("User answer is %d", user_answer.answerNumber);
-            if (user_answer.answerNumber == 10)
+            if (user_answer.answerNumber == 5)
             {
                 set_new_state(eKID_ACTION_CORRECT_ANSWER);
             } else

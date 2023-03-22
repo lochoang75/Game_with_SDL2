@@ -94,11 +94,11 @@ ErrorCode_t TreeObject:: container_init_anchor_point()
         }
         else
         {
-            anchor_y_location += (rand() % 5 + 5);
+            anchor_y_location += (rand() % 5 + 20);
         }
         mAnchorArray[i].Set(x + anchor_x_location, y + anchor_y_location);
         mJointArray[i] = NULL;
-        anchor_x_location += (rand() % 40 + 20);
+        anchor_x_location += (rand() % 40 + 30);
     }
     return kSUCCESS;
 }

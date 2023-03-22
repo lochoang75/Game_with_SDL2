@@ -35,6 +35,7 @@ class Game
         ErrorCode_t sdl_component_init(const char *title, int xpos, int ypos, int flags);
         void timer_init();
         void physics_init();
+        void event_init();
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
         static Game *mInstance;
