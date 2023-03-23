@@ -92,7 +92,7 @@ void GameBubble::draw_text()
     src_rect.w = text_surface->w;
     src_rect.h = text_surface->h;
     SDL_Point center = {0 ,SCREEN_HEIGHT};
-    vec2d position = {x, y - SCREEN_HEIGHT};
+    vec2d position = {(double)x, (double)y - SCREEN_HEIGHT};
     position.rotate(90);
     y = -position.y - SCREEN_HEIGHT + 2 * x;
     x = position.x - SCREEN_HEIGHT;  

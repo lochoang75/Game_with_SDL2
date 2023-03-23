@@ -14,6 +14,7 @@ class GameFontManage
     public:
         static void load_new_font(enum eGameFont font_enum, const char* font_path, int font_size);
         static TTF_Font* get_font(enum eGameFont font_enum);
+        static void clean_up();
 
     private:
         GameFontManage(){};

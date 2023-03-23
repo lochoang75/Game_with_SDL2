@@ -54,7 +54,7 @@ void SDLGameObject::draw()
 
 void SDLGameObject:: clean_up()
 {
-    Box2DPhysicalFacade::destroy_body(mBody);
+    physics_clean_up();
 }
 
 ErrorCode_t SDLGameObject::create_object_body()

@@ -20,7 +20,7 @@ class BirdAnimationPool: public AnimationPool
 {
     public:
         BirdAnimationPool();
-        ~BirdAnimationPool();
+        ~BirdAnimationPool(){};
         void load_animation() override;
     private:
         void load_bird_stand_animation();
@@ -35,7 +35,7 @@ class BirdObject: public SDLGameObject, public GameContainerObject
 {
     public:
         BirdObject();
-        ~BirdObject(){};
+        ~BirdObject();
         void update() override;
         void draw() override;
         void load(const LoaderParams *pParams) override;

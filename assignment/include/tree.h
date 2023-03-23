@@ -9,7 +9,7 @@ class TreeObject: public SDLGameObject, public GameContainerObject
 {
     public:
         TreeObject():SDLGameObject(eTREE_OBJECT), GameContainerObject(10){};
-        ~TreeObject(){};
+        ~TreeObject();
         ErrorCode_t get_tree_anchor_point(int &x, int &y) const;
     protected:
         ErrorCode_t container_init_anchor_point() override;

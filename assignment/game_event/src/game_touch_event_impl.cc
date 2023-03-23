@@ -33,6 +33,19 @@ ErrorCode_t GameTouchEventInput::input_init()
     return kSUCCESS;
 }
 
+void GameTouchEventInput:: input_deinit()
+{
+    if (mEventFd != -1)
+    {
+        close(mEventFd);
+        mEventFd = -1;
+    }
+
+    mIsPolling = false;
+    mIsAllocated = false;
+    mPollingThread.join();
+}
+
 ErrorCode_t GameTouchEventInput::event_register()
 {
     mEventType = SDL_RegisterEvents(1);
@@ -133,8 +146,7 @@ void GameTouchEventInput::_start_event_poll(Uint32 eventType)
         // TODO: poll for event
         if (!mIsPolling)
         {
-            usleep(EVENT_IDLE_MS * 1000);
-            continue;
+            break;
         }
 
         int ret = read(mEventFd, &in, sizeof(struct input_event));

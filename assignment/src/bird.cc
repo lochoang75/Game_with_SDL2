@@ -7,16 +7,6 @@ BirdAnimationPool::BirdAnimationPool():AnimationPool()
     load_animation();
 }
 
-BirdAnimationPool::~BirdAnimationPool()
-{
-    for (std::vector<StateAnimation*>::iterator object = mStateList.begin(); object != mStateList.end(); object++)
-    {
-        delete (*object);
-    }
-
-    mStateList.clear();
-}
-
 void BirdAnimationPool:: load_animation()
 {
     for (uint8_t i = eBIRD_STAND; i < eBIRD_LAST_STATE; i++)
@@ -103,6 +93,10 @@ BirdObject::BirdObject(): SDLGameObject(eBIRD_OBJECT), GameContainerObject(1)
     fruit_catched = false;
     animation = AnimationManage::Instance()->get_animation(eBIRD_OBJECT);
     frame = animation->get_frame(mBirdState, mFrameIdx);
+}
+
+BirdObject::~BirdObject()
+{
 }
 
 ErrorCode_t BirdObject::create_object_body()

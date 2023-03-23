@@ -6,6 +6,7 @@
 #include "game_constant.h"
 #include "game_object.h"
 #include "game_contact_listener.h"
+#include "game_event.h"
 #include "box2d.h"
 
 class Game
@@ -36,6 +37,7 @@ class Game
         void timer_init();
         void physics_init();
         void event_init();
+        void signal_handler_init();
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
         static Game *mInstance;
@@ -44,6 +46,7 @@ class Game
         b2Body *mGroundBody;
         GameContactListener mContactListener;
         std::vector<GameObject*> mGameObjectVector;
+        GameEventInput *mTouchInput;
         SDL_TimerID mTimerID;
 
         ErrorCode_t _create_background_object();

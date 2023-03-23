@@ -33,6 +33,14 @@ void TextureManager::load_texture(enum eTextureType id, std::string path, SDL_Re
     mTextureList[id].load_from_file(path, pRenderer);
 }
 
+void TextureManager::clean_up()
+{
+    for (int i = 0; i < eTEXTURE_TOTAL; i++)
+    {
+        mTextureList[i].free();
+    }
+}
+
 GameTexture* TextureManager:: get_texture(enum eTextureType id) const
 {
     GameTexture *game_texture = NULL;

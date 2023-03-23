@@ -235,6 +235,10 @@ KidObject:: KidObject(): SDLGameObject(eKID_OBJECT)
     mPendingEvent = 0;
 }
 
+KidObject::~KidObject()
+{
+}
+
 ErrorCode_t KidObject:: create_object_body()
 {
     LogDebug("Get body definition for object %s", DBG_ObjectType(mType));

@@ -41,3 +41,16 @@ TTF_Font* GameFontManage:: get_font(enum eGameFont font_enum)
 
     return mFontList[font_enum];
 }
+
+void GameFontManage::clean_up()
+{
+    for (int i = 0; i < eTOTAL_FONTS; i++)
+    {
+        if (mFontList[i] != NULL)
+        {
+            TTF_CloseFont(mFontList[i]);
+            mFontList[i] = NULL;
+        }
+    }
+    TTF_Quit();
+}

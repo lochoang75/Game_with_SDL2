@@ -50,7 +50,7 @@ class KidObject: public SDLGameObject
 {
     public:
         KidObject();
-        ~KidObject(){};
+        ~KidObject();
         void update() override;
         void draw() override;
 

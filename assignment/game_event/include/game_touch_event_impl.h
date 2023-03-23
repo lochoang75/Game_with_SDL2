@@ -14,6 +14,7 @@ class GameTouchEventInput: public GameEventInput
         GameTouchEventInput(): GameEventInput(), mEventType(eGAME_EVENT_UNSET), mEventFd(-1){};
         ~GameTouchEventInput();
         ErrorCode_t input_init() override;
+        void input_deinit() override;
         ErrorCode_t event_register() override;
         ErrorCode_t start_event_poll() override;
         void stop_event_poll() override;

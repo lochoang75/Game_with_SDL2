@@ -22,6 +22,7 @@ class GameEventInput
         GameEventInput(): mIsPolling(false), mIsAllocated(false){};
         virtual ~GameEventInput(){};
         virtual ErrorCode_t input_init() = 0;
+        virtual void input_deinit() = 0;
         virtual ErrorCode_t event_register() = 0;
         virtual ErrorCode_t start_event_poll() = 0;
         virtual void stop_event_poll() = 0;

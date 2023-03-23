@@ -53,11 +53,12 @@ class GameCharacterSpeechSet
 {
     public:
         GameCharacterSpeechSet();
-        ~GameCharacterSpeechSet(){};
+        ~GameCharacterSpeechSet();
         void append_new_speech(GameCharacterSpeech *singleSpeech);
         void append_new_speech(GameCharacterSpeech *speechList, int len);
         void set_index(int index);
         void set_repeat(bool repeat);
+        void clean_up();
         bool is_completed();
         GameCharacterSpeech *get_next_speech();
 

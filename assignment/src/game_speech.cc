@@ -131,6 +131,16 @@ int GameCharacterSpeech:: get_answer(const GameAnswer** &answerArray)
     return i;
 }
 
+GameCharacterSpeechSet::~GameCharacterSpeechSet()
+{
+    clean_up();
+}
+
+void GameCharacterSpeechSet::clean_up()
+{
+    mSpeechSet.clear();
+}
+
 GameCharacterSpeechSet::GameCharacterSpeechSet()
 {
     mReapeat = false;

@@ -11,9 +11,10 @@ class AnimationManage
         static AnimationManage* Instance();
         ErrorCode_t animation_register(eGameObjectType object_type, AnimationPool *pool);
         const AnimationPool* get_animation(eGameObjectType object_type);
+        void clean_up();
 
     private:
-        AnimationManage(){};
+        AnimationManage();
         ~AnimationManage(){};
         AnimationPool *mAnimationList[eTOTAL_OBJECT];
         static AnimationManage* mInstance;

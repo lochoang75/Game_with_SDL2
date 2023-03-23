@@ -10,10 +10,7 @@ StateAnimation::StateAnimation(int total_frame, bool repeat)
 
 StateAnimation::~StateAnimation()
 {
-    for (int i = 0; i < mSize; i++)
-    {
-        delete mFrameList;
-    }
+    delete mFrameList;
     mFrameList = NULL;
 }
 
@@ -88,10 +85,6 @@ bool StateAnimation:: is_animate_completed(int &index) const
 
 AnimationPool:: ~AnimationPool()
 {
-    for (std::vector<StateAnimation*>::iterator object = mStateList.begin(); object < mStateList.end(); object ++)
-    {
-        (*object)->~StateAnimation();
-    }
     mStateList.clear();
 }
 

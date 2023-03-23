@@ -1,5 +1,9 @@
 #include "tree.h"
 
+TreeObject::~TreeObject()
+{
+}
+
 void TreeObject::load(const LoaderParams *pParams)
 {
     mWidth = pParams->get_width();

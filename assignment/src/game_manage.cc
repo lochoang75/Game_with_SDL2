@@ -1,6 +1,7 @@
 #include "game_manage.h"
 
 #include <SDL2/SDL.h>
+#include <csignal>
 
 #include "game_constant.h"
 #include "game_macros.h"
@@ -39,6 +40,7 @@ Game::Game()
     mWindow = NULL;
     mRenderer = NULL;
     mTimerID = 0;
+    mTouchInput = NULL;
 }
 
 ErrorCode_t Game::init(const char *title)
@@ -80,16 +82,16 @@ void Game::physics_init()
 
 void Game::event_init()
 {
-    GameEventInput *touch_event = new GameTouchEventInput();
-    if (touch_event == NULL)
+    mTouchInput = new GameTouchEventInput();
+    if (mTouchInput == NULL)
     {
         LogError("Unable to allocate memory for touch_event");
         return;
     }
 
-    touch_event->input_init();
-    touch_event->event_register();
-    touch_event->start_event_poll();
+    mTouchInput->input_init();
+    mTouchInput->event_register();
+    mTouchInput->start_event_poll();
 }
 
 Uint32 periodict_timer_callback(Uint32 interval, void* name);
@@ -392,8 +394,9 @@ double degreesToRadians(double degrees)
 
 void Game::handle_event(enum eGameEventEnum event)
 {
+    (void)event;
     LogDebug("Mouse position befoer rotate x: %d, y: %d", touch_x, touch_y);
-    vec2d position = {touch_x, touch_y - SCREEN_HEIGHT};
+    vec2d position = {(double)touch_x, (double)touch_y - SCREEN_HEIGHT};
     position.rotate(-90);
     touch_x = position.x + SCREEN_HEIGHT;
     touch_y = position.y + SCREEN_HEIGHT;
@@ -418,26 +421,36 @@ void Game::handle_event(enum eGameEventEnum event)
         LogDebug("Mouse down event on object %s pos: x: %d, y: %d, w: %d, h: %d", DBG_ObjectType((*object)->get_object_type()), obj_x, obj_y, obj_w, obj_h);
         (*object)->handle_event(eGAME_EVENT_MOUSE_DONW);
     }
-    // else
-    // {
-    //     for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
-    //     {
-    //         SDLGameObject *sdl_object = (SDLGameObject *)*object;
-    //         if (sdl_object->get_object_type() == eFRUIT_OBJECT)
-    //         {
-    //             FruitObject *fruit = (FruitObject *)sdl_object;
-    //             fruit->handle_event(event)e
-    //         }
-    //     }
-    // }
 }
 
 void Game::clean_up()
 {
+    LogDebug("Clean up game object");
+    for (std::vector<GameObject *>::iterator object = mGameObjectVector.begin(); object != mGameObjectVector.end(); object++)
+    {
+        delete (*object);
+    }
+
+    LogDebug("Clean up texture");
+    TextureManager::Instance()->clean_up();
+
+    LogDebug("Clean up animation");
+    AnimationManage::Instance()->clean_up();
+
+    LogDebug("Font cleanup");
+    GameFontManage::clean_up();
+
+    LogDebug("Clean up worker thread");
+    mTouchInput->input_deinit();
+
+    LogDebug("Remove timer");
     SDL_RemoveTimer(mTimerID);
+
+    LogDebug("Destroy SDL Renderer");
     SDL_DestroyRenderer(mRenderer);
+
+    LogDebug("Destroy windows");
     SDL_DestroyWindow(mWindow);
-    SDL_Quit();
 }
 
 void Game::render()

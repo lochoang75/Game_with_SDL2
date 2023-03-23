@@ -36,6 +36,11 @@ void ContainedObject:: unjoint_from_current_container()
     }
 }
 
+GameContainerObject::~GameContainerObject()
+{
+    container_deinit_anchor_point();
+}
+
 int GameContainerObject::joint_new_object(ContainedObject *target)
 {
     if (mAnchorArray == NULL || mJointArray == NULL)
@@ -100,4 +105,20 @@ b2Vec2 GameContainerObject::container_get_anchor_point(int index)
     }
     // LogDebug("Container anchor point at x: %0.4f y: %0.4f", anchor_point.x, anchor_point.y);
     return anchor_point;
+}
+
+void GameContainerObject::container_deinit_anchor_point()
+{
+    for (int i = 0; i < mTotalAnchor; i++)
+    {
+        if (mJointArray[i] != NULL)
+        {
+            Box2DPhysicalFacade::destroy_joint(mJointArray[i]);
+        }
+    }
+
+    delete mAnchorArray;
+    mAnchorArray = NULL;
+    delete mJointArray;
+    mJointArray = NULL;
 }

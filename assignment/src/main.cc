@@ -26,6 +26,7 @@ static void print_app_version()
 int main()
 {
     Game::Instance()->init("Fruit Picking");
+    print_app_version();
     Game::Instance()->load_media();
     Game::Instance()->load_animation();
     Game::Instance()->load_font();

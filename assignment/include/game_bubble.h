@@ -79,6 +79,7 @@ class GameAnswerBubble: public GameBubble
     public:
         GameAnswerBubble();
         GameAnswerBubble(const GameAnswer &answer);
+        ~GameAnswerBubble(){};
         void set_position(int x, int y);
         void set_answer(const GameAnswer &answer);
         void update() override;
@@ -110,7 +111,7 @@ class GameBubbleCreator: public BaseCreator
 class GameQuestionBubble: public GameBubble 
 {
     public:
-        ~GameQuestionBubble(){clean_up();};
+        ~GameQuestionBubble(){};
         static GameQuestionBubble *Instance();
         // void set_state(enum )
         void update() override;
